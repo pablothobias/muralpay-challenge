@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { page } from './styles';
+import { page } from '../../styles/home/index.styles';
 
 type Props = {
   value: boolean;
