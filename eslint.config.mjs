@@ -23,7 +23,6 @@ const config = [
       'dist/',
       'public/',
       'coverage/',
-      'cypress/',
       '.husky/',
       '.vscode/',
     ],
