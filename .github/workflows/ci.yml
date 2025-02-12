@@ -31,14 +31,14 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Run Prettier Check
+        run: npm run prettier:check
+
       - name: Run TypeScript Type Check
         run: npm run type-check
 
       - name: Run Unit Tests with Jest
         run: npm test -- --coverage
-
-      - name: Generate GraphQL Codegen Types
-        run: npm run graphql:codegen
 
       - name: Upload Test Coverage Report
         uses: actions/upload-artifact@v4
@@ -89,12 +89,12 @@ jobs:
           path: cypress/videos
           retention-days: 7
 
-  deploy-staging:
-    name: Deploy to Staging
+  deploy-Preview:
+    name: Deploy to Preview
     needs: [lint-and-test, e2e-tests]
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
-    environment: staging
+    environment: Preview
 
     steps:
       - name: Checkout Repository
@@ -112,17 +112,17 @@ jobs:
       - name: Build Application
         run: npm run build
 
-      - name: Deploy to Vercel (Staging)
+      - name: Deploy to Vercel (Preview)
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--scope=staging'
+          vercel-args: '--scope=Preview'
 
   deploy-production:
     name: Deploy to Production
-    needs: deploy-staging
+    needs: deploy-Preview
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
