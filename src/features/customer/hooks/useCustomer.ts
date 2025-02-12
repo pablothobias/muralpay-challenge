@@ -3,7 +3,7 @@ import {
   CustomerService,
   CustomerData,
   AccountResponse,
-} from '../services/customer.service';
+} from '@/features/customer/services/customer.service';
 
 export const useCustomer = () => {
   const [account, setAccount] = useState<AccountResponse | null>(null);

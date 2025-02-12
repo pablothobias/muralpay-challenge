@@ -6,7 +6,7 @@ const endpoints = {
   create: '/customers',
 } as const;
 
-export const schemas = {
+const schemas = {
   account: z.object({
     balance: z.number().nonnegative(),
     walletAddress: z.string().min(1),
@@ -23,7 +23,7 @@ export const schemas = {
 export type AccountResponse = z.infer<typeof schemas.account>;
 export type CustomerData = z.infer<typeof schemas.customer>;
 
-export class CustomerServiceError extends Error {
+class CustomerServiceError extends Error {
   constructor(
     message: string,
     public readonly code: string,
@@ -34,7 +34,7 @@ export class CustomerServiceError extends Error {
   }
 }
 
-export async function createCustomerAccount(
+async function createCustomerAccount(
   data: CustomerData,
 ): Promise<AccountResponse> {
   try {
@@ -67,3 +67,9 @@ export async function createCustomerAccount(
     );
   }
 }
+
+export const CustomerService = {
+  createCustomerAccount,
+  CustomerServiceError,
+  schemas,
+};
