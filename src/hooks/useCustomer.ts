@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import {
-  CustomerService,
-  CustomerData,
-  AccountResponse,
-} from '@/features/customer/services/customer.service';
+import CustomerService from '@/features/customer/services';
+import { AccountResponse, CustomerData } from '@/features/customer/schemas';
 
 export const useCustomer = () => {
   const [account, setAccount] = useState<AccountResponse | null>(null);

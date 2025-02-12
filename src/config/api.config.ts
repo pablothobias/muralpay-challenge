@@ -54,13 +54,11 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
     }),
   });
 
-  // Request interceptor
   instance.interceptors.request.use(
     createRequestInterceptor(config),
     createErrorHandler('request'),
   );
 
-  // Response interceptor
   instance.interceptors.response.use(
     (response: AxiosResponse) => response,
     createErrorHandler('response'),
@@ -69,9 +67,8 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
   return instance;
 };
 
-// Create the default instance
 const apiClient = createApiClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL as string,
+  baseURL: process.env.BASE_API_URL as string,
   timeout: 10000,
   headers: new AxiosHeaders({ ...DEFAULT_HEADERS }),
 });
