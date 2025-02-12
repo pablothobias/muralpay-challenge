@@ -53,7 +53,13 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <meta charSet="UTF-8" />
+          <meta name="description" content="FE Challenge by Muralpay" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta property="og:title" content="Muralpay Challenge" />
+          <meta property="og:description" content="FE Challenge by Muralpay" />
+        </Head>
         <body>
           <Main />
           <NextScript />
