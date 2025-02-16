@@ -1,5 +1,5 @@
 import { HomeHero } from '@/components';
-import { containerStyles } from '@/components/pages/home/styles';
+import { containerStyles } from '@/styles/pages/home/styles';
 
 export const metadata = {
   title: 'Mural Pay',
