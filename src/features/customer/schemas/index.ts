@@ -19,3 +19,10 @@ export type CustomerSchema = z.infer<typeof schemas.customer>;
 
 export type AccountResponse = z.infer<typeof schemas.account>;
 export type CustomerData = z.infer<typeof schemas.customer>;
+
+export const customerSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email format'),
+});
+
+export type CustomerFormValues = z.infer<typeof customerSchema>;

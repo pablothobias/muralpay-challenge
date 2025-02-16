@@ -1,23 +1,12 @@
-import { type FC } from 'react';
-import { page } from '../../styles/home/index.styles';
+import { HomeHero } from '@/components/pages/home/HomeHero';
+import { containerStyles } from '@/components/pages/home';
 
-type Props = {
-  value: boolean;
-};
-
-const Home: FC<Props> = ({ value }) => {
-  console.log(value);
+const HomePage = () => {
   return (
-    <div css={page}>
-      <h1>Home</h1>
-    </div>
+    <main css={containerStyles}>
+      <HomeHero />
+    </main>
   );
 };
 
-export default Home;
-
-export async function getServerSideProps() {
-  return {
-    props: { value: true },
-  };
-}
+export default HomePage;
