@@ -1,3 +1,5 @@
+import { errorTextCss, inputGroupCss } from './styles';
+
 export interface InputProps {
   type?:
     | 'text'
@@ -9,17 +11,34 @@ export interface InputProps {
     | 'datetime-local';
   placeholder?: string;
   value?: string;
+  htmlFor?: string;
+  label?: string;
+  error?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ type = 'text', placeholder, value, onChange }: InputProps) => {
+const Input = ({
+  type = 'text',
+  htmlFor,
+  label,
+  placeholder,
+  value,
+  error,
+  onChange,
+  ...props
+}: InputProps) => {
   return (
-    <input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-    />
+    <div css={inputGroupCss}>
+      {label && <label htmlFor={htmlFor}>{label}</label>}
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        {...props}
+      />
+      {error && <p css={errorTextCss}>{error}</p>}
+    </div>
   );
 };
 

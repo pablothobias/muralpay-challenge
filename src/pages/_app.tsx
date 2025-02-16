@@ -1,11 +1,14 @@
 'use client';
 
-import type { AppProps } from 'next/app';
 import { useEffect, useState, type FC } from 'react';
+import type { AppProps } from 'next/app';
+import 'react-toastify/dist/ReactToastify.css';
 import { Global } from '@emotion/react';
 import { globalStyles } from '@/styles/';
 import { ThemeProvider } from '@emotion/react';
 import { lightTheme, darkTheme } from '@/styles/theme';
+import { GlobalLayout } from '@/components';
+import { ToastContainer } from 'react-toastify';
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   const [theme, setTheme] = useState(lightTheme);
@@ -21,7 +24,10 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <ThemeProvider theme={theme}>
       <Global styles={globalStyles} />
-      <Component {...pageProps} />
+      <GlobalLayout>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </GlobalLayout>
     </ThemeProvider>
   );
 };

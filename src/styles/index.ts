@@ -67,17 +67,4 @@ export const globalStyles = (theme: ThemeType) => css`
   h6 {
     font-weight: bold;
   }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: var(--spacing-md);
-  }
-
-  .card {
-    background: var(--muted);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
 `;

@@ -9,7 +9,8 @@ import axios, {
 interface ApiClientConfig extends InternalAxiosRequestConfig {
   baseURL: string;
   timeout?: number;
-  authToken?: string;
+  transferKey?: string;
+  apiKey?: string;
 }
 
 type ErrorHandler = (error: AxiosError) => Promise<never>;
@@ -31,15 +32,19 @@ const createErrorHandler =
     throw error;
   };
 
-const createRequestInterceptor = (config: ApiClientConfig) => {
+const createRequestInterceptor = () => {
   return async (reqConfig: InternalAxiosRequestConfig) => {
-    if (!reqConfig.url?.startsWith('https')) {
-      throw new Error('Insecure protocol - must use HTTPS');
+    const url = reqConfig.url?.toLowerCase() || '';
+
+    const apiKey = url.includes('transfer')
+      ? process.env.NEXT_PUBLIC_TRANSFER_KEY
+      : process.env.NEXT_PUBLIC_API_KEY;
+
+    if (!apiKey) {
+      throw new Error('API key not found');
     }
 
-    if (config.authToken) {
-      reqConfig.headers.Authorization = `Bearer ${config.authToken}`;
-    }
+    reqConfig.headers.Authorization = `Bearer ${apiKey}`;
     return reqConfig;
   };
 };
@@ -55,7 +60,7 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
   });
 
   instance.interceptors.request.use(
-    createRequestInterceptor(config),
+    createRequestInterceptor(),
     createErrorHandler('request'),
   );
 
@@ -68,7 +73,7 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
 };
 
 const apiClient = createApiClient({
-  baseURL: process.env.BASE_API_URL as string,
+  baseURL: process.env.NEXT_PUBLIC_BASE_API_URL as string,
   timeout: 10000,
   headers: new AxiosHeaders({ ...DEFAULT_HEADERS }),
 });

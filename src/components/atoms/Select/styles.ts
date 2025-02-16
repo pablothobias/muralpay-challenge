@@ -1,6 +1,7 @@
+import { shadows } from '@/styles/variables';
 import { css } from '@emotion/react';
 
-export const inputGroupCss = css`
+export const selectGroupCss = css`
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -11,7 +12,7 @@ export const inputGroupCss = css`
     margin-bottom: var(--spacing-xs);
   }
 
-  input {
+  select {
     padding: var(--spacing-sm);
     border-radius: var(--border-radius);
     border: 1px solid var(--border);
@@ -19,27 +20,17 @@ export const inputGroupCss = css`
     color: var(--foreground);
     outline: none;
     transition: border 0.2s ease-in-out;
+    cursor: pointer;
 
     &:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 5px rgba(0, 112, 243, 0.5);
+      box-shadow: ${shadows.primary.md};
     }
-  }
-`;
 
-export const inputStyles = () => css`
-  padding: var(--spacing-md);
-  font-size: var(--font-size-base);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border);
-  background: var(--muted);
-  color: var(--foreground);
-  outline: none;
-  transition: 0.2s all;
-
-  &:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 5px rgba(0, 112, 243, 0.5);
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
   }
 `;
 

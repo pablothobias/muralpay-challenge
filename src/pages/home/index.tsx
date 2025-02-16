@@ -1,5 +1,10 @@
-import { HomeHero } from '@/components/pages/home/HomeHero';
-import { containerStyles } from '@/components/pages/home';
+import { HomeHero } from '@/components';
+import { containerStyles } from '@/components/pages/home/styles';
+
+export const metadata = {
+  title: 'Mural Pay',
+  description: 'Your modern payment solution for seamless transactions',
+};
 
 const HomePage = () => {
   return (

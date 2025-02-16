@@ -1,6 +1,5 @@
-// src/styles/theme.ts
 import { colors, typography, spacing, borderRadius } from './variables';
-import '@emotion/react'; // Import Emotion's default Theme type
+import '@emotion/react';
 
 export const lightTheme = {
   colors: {
