@@ -1,9 +1,9 @@
 import axios, {
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-  AxiosResponse,
   AxiosError,
   AxiosHeaders,
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
 } from 'axios';
 
 interface ApiClientConfig extends InternalAxiosRequestConfig {
@@ -59,10 +59,7 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
     }),
   });
 
-  instance.interceptors.request.use(
-    createRequestInterceptor(),
-    createErrorHandler('request'),
-  );
+  instance.interceptors.request.use(createRequestInterceptor(), createErrorHandler('request'));
 
   instance.interceptors.response.use(
     (response: AxiosResponse) => response,

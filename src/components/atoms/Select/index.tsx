@@ -1,26 +1,26 @@
-import { selectGroupCss, errorTextCss } from './styles';
+import { errorTextCss, selectGroupCss } from './styles';
 
-export interface SelectOption {
+export type SelectOption = {
   value: string;
   label: string;
-}
+};
 
-export interface SelectProps {
+export type SelectProps = {
   options: SelectOption[];
   value?: string;
-  htmlFor?: string;
   label?: string;
+  id?: string;
   placeholder?: string;
   error?: string;
   disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
+};
 
 const Select = ({
   options,
   value,
-  htmlFor,
   label,
+  id,
   placeholder,
   error,
   disabled,
@@ -29,8 +29,12 @@ const Select = ({
 }: SelectProps) => {
   return (
     <div css={selectGroupCss}>
-      {label && <label htmlFor={htmlFor}>{label}</label>}
-      <select value={value} onChange={onChange} disabled={disabled} {...props}>
+      {label && (
+        <label htmlFor={id} {...props}>
+          {label}
+        </label>
+      )}
+      <select id={id} value={value} onChange={onChange} disabled={disabled} {...props}>
         {placeholder && <option value="">{placeholder}</option>}
         {options.map((option) => (
           <option key={option.value} value={option.value}>

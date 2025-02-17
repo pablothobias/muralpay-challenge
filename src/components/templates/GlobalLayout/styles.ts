@@ -1,11 +1,11 @@
-import { colors } from '@/styles/variables';
+import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
 
-export const layoutStyles = css`
+export const layoutStyles = (theme: ThemeType) => css`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: ${colors.white};
+  background-color: ${theme.colors.background};
 `;
 
 export const mainStyles = css`

@@ -1,14 +1,10 @@
 'use client';
 
-import { Button, Input, LoadingSpinner, Select } from '@/components';
+import { Button, Input, Select } from '@/components';
 import { type OrganizationSchema } from '@/features/organization/types';
 import { OrganizationType } from '@/utils/constants';
 import { type FormEventHandler } from 'react';
-import {
-  type FieldErrors,
-  type UseFormRegister,
-  type UseFormWatch,
-} from 'react-hook-form';
+import { type FieldErrors, type UseFormRegister, type UseFormWatch } from 'react-hook-form';
 import { containerCss, formCss, pageContainer, titleCss } from './styles';
 
 type RegisterPageProps = {
@@ -34,15 +30,13 @@ const RegisterPage = ({
   const organizationType = watch('organizationType');
   const isIndividual = organizationType === OrganizationType.INDIVIDUAL;
 
-  if (loading) return <LoadingSpinner />;
-
   return (
     <div css={pageContainer}>
       <section css={containerCss}>
         <h1 css={titleCss}>Create a New organization</h1>
         <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
           <Select
-            htmlFor="organizationType"
+            id="organizationType"
             label="Organization Type"
             placeholder="Select an organization type"
             options={[
@@ -54,7 +48,7 @@ const RegisterPage = ({
           />
 
           <Input
-            htmlFor="name"
+            id="name"
             label="Name"
             type="text"
             placeholder={isIndividual ? 'John' : 'Sun Tree Capital LLC'}
@@ -64,7 +58,7 @@ const RegisterPage = ({
 
           {isIndividual && (
             <Input
-              htmlFor="lastName"
+              id="lastName"
               label="Last Name"
               type="text"
               placeholder="Doe"
@@ -75,7 +69,7 @@ const RegisterPage = ({
 
           {isIndividual && (
             <Input
-              htmlFor="email"
+              id="email"
               label="E-mail"
               type="email"
               placeholder="johndoe@test.com"
@@ -84,12 +78,7 @@ const RegisterPage = ({
             />
           )}
 
-          <Button
-            type="submit"
-            variant="secondary"
-            size="medium"
-            disabled={loading}
-          >
+          <Button type="submit" variant="secondary" size="medium" disabled={loading}>
             Create Organization
           </Button>
         </form>

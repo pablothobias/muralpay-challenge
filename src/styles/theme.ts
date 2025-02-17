@@ -1,21 +1,20 @@
-import {
-  colors,
-  typography,
-  spacing,
-  borderRadius,
-  shadows,
-} from './variables';
 import '@emotion/react';
+import { borderRadius, colors, shadows, spacing, typography } from './variables';
 
 export const lightTheme = {
   colors: {
-    background: colors.white,
-    foreground: colors.foreground,
-    primary: colors.primary,
-    secondary: colors.secondary,
-    muted: colors.muted,
-    border: colors.border,
-    error: colors.error,
+    background: colors.background.light,
+    foreground: colors.foreground.light,
+    primary: colors.primary.light,
+    secondary: colors.secondary.light,
+    accent: colors.accent,
+    muted: colors.muted.light,
+    border: colors.border.light,
+    error: colors.error.light,
+    warning: colors.warning.light,
+    success: colors.success.light,
+    info: colors.info.light,
+    neutral: colors.neutral,
   },
   typography,
   spacing,
@@ -25,13 +24,18 @@ export const lightTheme = {
 
 export const darkTheme = {
   colors: {
-    background: colors.dark.background,
-    foreground: colors.dark.foreground,
-    primary: colors.white,
-    secondary: colors.secondary,
-    muted: colors.dark.muted,
-    border: colors.dark.border,
-    error: colors.error,
+    background: colors.background.dark,
+    foreground: colors.foreground.dark,
+    primary: colors.primary.dark,
+    secondary: colors.secondary.dark,
+    accent: colors.accent,
+    muted: colors.muted.dark,
+    border: colors.border.dark,
+    error: colors.error.dark,
+    warning: colors.warning.dark,
+    success: colors.success.dark,
+    info: colors.info.dark,
+    neutral: colors.neutral,
   },
   typography,
   spacing,

@@ -1,27 +1,20 @@
 import { errorTextCss, inputGroupCss, inputStyles } from './styles';
 
-export interface InputProps {
-  type?:
-    | 'text'
-    | 'password'
-    | 'email'
-    | 'number'
-    | 'date'
-    | 'time'
-    | 'datetime-local';
+export type InputProps = {
+  type?: 'text' | 'password' | 'email' | 'number' | 'date' | 'time' | 'datetime-local';
   placeholder?: string;
   value?: string;
-  htmlFor?: string;
   label?: string;
+  id?: string;
   error?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+};
 
 const Input = ({
   type = 'text',
-  htmlFor,
   label,
   placeholder,
+  id,
   value,
   error,
   onChange,
@@ -29,9 +22,14 @@ const Input = ({
 }: InputProps) => {
   return (
     <div css={inputGroupCss}>
-      {label && <label htmlFor={htmlFor}>{label}</label>}
+      {label && (
+        <label htmlFor={id} {...props}>
+          {label}
+        </label>
+      )}
       <input
         css={inputStyles}
+        id={id}
         type={type}
         placeholder={placeholder}
         value={value}

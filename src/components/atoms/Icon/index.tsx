@@ -1,10 +1,10 @@
 import { FiLogIn, FiLogOut, FiSearch, FiUser } from 'react-icons/fi';
 
-export interface IconProps {
+export type IconProps = {
   name: 'search' | 'user' | 'logout' | 'login';
   size?: number;
   color?: string;
-}
+};
 
 const Icon = ({ name, size = 24, color = 'var(--foreground)' }: IconProps) => {
   const icons = {

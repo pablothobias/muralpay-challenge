@@ -1,18 +1,18 @@
-import { useEffect, useRef, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
-import { useTheme } from '@emotion/react';
 import { Card } from '@/components';
+import { useTheme } from '@emotion/react';
+import { ReactNode, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
 import {
-  modalOverlayCss,
-  modalContentWrapperCss,
-  modalHeaderCss,
   closeButtonCss,
   modalBodyCss,
+  modalContentWrapperCss,
   modalFooterCss,
+  modalHeaderCss,
+  modalOverlayCss,
 } from './styles';
 
-export interface ModalProps {
+export type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   title: string;
@@ -21,7 +21,7 @@ export interface ModalProps {
   size?: 'small' | 'medium' | 'large';
   closeOnOverlayClick?: boolean;
   closeOnEsc?: boolean;
-}
+};
 
 const Modal = ({
   isOpen,
@@ -88,11 +88,7 @@ const Modal = ({
         <Card>
           <div css={modalHeaderCss}>
             <h2 id="modal-title">{title}</h2>
-            <button
-              css={closeButtonCss(theme)}
-              onClick={onClose}
-              aria-label="Close modal"
-            >
+            <button css={closeButtonCss(theme)} onClick={onClose} aria-label="Close modal">
               <IoClose size={24} />
             </button>
           </div>

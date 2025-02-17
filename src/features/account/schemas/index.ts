@@ -1,15 +1,10 @@
 import { z } from 'zod';
 
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
 
 export const BlockchainEnum = z.enum(['POLYGON', 'ETHEREUM', 'BSC']);
-export const AccountStatusEnum = z.enum([
-  'ACTIVATED',
-  'PENDING',
-  'DEACTIVATED',
-]);
+export const AccountStatusEnum = z.enum(['ACTIVATED', 'PENDING', 'DEACTIVATED']);
 export const CurrencyEnum = z.enum(['USD', 'EUR', 'GBP']);
 export const PaymentRailsEnum = z.enum(['ACH', 'WIRE', 'SEPA']);
 
@@ -31,6 +26,22 @@ export const depositAccountSchema = z.object({
   paymentRails: z.array(PaymentRailsEnum).min(1),
 });
 
+export const accountResponseSchema = z.object({
+  id: z.string().regex(UUID_REGEX, 'Invalid UUID format'),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  name: z.string().min(3).max(100),
+  blockchain: BlockchainEnum,
+  address: z.union([
+    z.string().regex(ETH_ADDRESS_REGEX, 'Invalid Ethereum address'),
+    z.literal('PENDING'),
+  ]),
+  balance: balanceSchema,
+  isApiEnabled: z.boolean(),
+  isPending: z.boolean(),
+  depositAccount: depositAccountSchema.optional(),
+});
+
 export const accountSchema = z
   .object({
     name: z.string().min(3).max(100),
@@ -38,20 +49,5 @@ export const accountSchema = z
   })
   .strict();
 
-export const accountResponseSchema = z
-  .object({
-    id: z.string().regex(UUID_REGEX, 'Invalid UUID format'),
-    createdAt: z.string().datetime(),
-    updatedAt: z.string().datetime(),
-    name: z.string().min(3).max(100),
-    blockchain: BlockchainEnum,
-    address: z.union([
-      z.string().regex(ETH_ADDRESS_REGEX, 'Invalid Ethereum address'),
-      z.literal('PENDING'),
-    ]),
-    balance: balanceSchema,
-    isApiEnabled: z.boolean(),
-    isPending: z.boolean(),
-    depositAccount: depositAccountSchema.optional(),
-  })
-  .strict();
+export const accountIdResponseSchema = accountResponseSchema.strict();
+export const accountResponseArraySchema = z.array(accountResponseSchema);

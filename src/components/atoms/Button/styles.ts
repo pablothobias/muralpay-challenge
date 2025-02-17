@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 
-interface ButtonStyleProps {
+type ButtonStyleProps = {
   variant: 'primary' | 'secondary';
   size: 'small' | 'medium' | 'large';
   hasIcon: boolean;
-}
+};
 
 const sizeStyles = {
   small: css`

@@ -7,10 +7,7 @@ const ERROR_MESSAGES = {
 };
 
 const nameSchema = z.string().min(3, ERROR_MESSAGES.nameRequired);
-const organizationTypeSchema = z.enum([
-  OrganizationType.BUSINESS,
-  OrganizationType.INDIVIDUAL,
-]);
+const organizationTypeSchema = z.enum([OrganizationType.BUSINESS, OrganizationType.INDIVIDUAL]);
 
 export const organizationSchema = z.object({
   name: nameSchema,

@@ -1,11 +1,11 @@
-import { ReactNode } from 'react';
-import Header from '@/components/molecules/Header';
 import Footer from '@/components/molecules/Footer';
+import Header from '@/components/molecules/Header';
+import { ReactNode } from 'react';
 import { layoutStyles, mainStyles } from './styles';
 
-interface LayoutProps {
+type LayoutProps = {
   children: ReactNode;
-}
+};
 
 const GlobalLayout = ({ children }: LayoutProps) => {
   return (

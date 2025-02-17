@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { buttonStyles } from './styles';
 
-export interface ButtonProps {
+export type ButtonProps = {
   children: ReactNode;
   variant?: 'primary' | 'secondary';
   size?: 'small' | 'medium' | 'large';
@@ -11,7 +11,7 @@ export interface ButtonProps {
   icon?: ReactNode;
   iconPosition?: 'left' | 'right';
   className?: string;
-}
+};
 
 const Button = ({
   children,

@@ -1,40 +1,31 @@
-import { useRouter } from 'next/router';
-import { useEffect, ComponentType, useState } from 'react';
-import { useAuthStore } from '@/store/auth';
 import { LoadingSpinner } from '@/components';
+import useAuthStore from '@/store/auth';
+import { useRouter } from 'next/router';
+import { type ComponentType, useEffect } from 'react';
 
-interface AuthOptions {
+type UseAuthRedirectOptions = {
   isPrivate?: boolean;
   redirectTo?: string;
-}
+};
 
-const withAuth = <P extends object>(
-  WrappedComponent: ComponentType,
-  { isPrivate = false, redirectTo = '/register' }: AuthOptions = {},
-): ComponentType<P> => {
-  function WithAuthWrapper(props: P) {
+const withAuth = (
+  Component: ComponentType,
+  { isPrivate = false, redirectTo = '/register' }: UseAuthRedirectOptions,
+) => {
+  const AuthenticatedComponent = () => {
+    const isAuthenticated = useAuthStore((state) => state);
     const router = useRouter();
-    const { isAuthenticated } = useAuthStore();
-    const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
-      setInitialized(true);
-      if (isPrivate && initialized && !isAuthenticated) {
+      if (!isAuthenticated && isPrivate) {
         router.replace(redirectTo);
-      } else if (!isPrivate && initialized && isAuthenticated) {
-        router.replace('/home');
       }
-    }, [isAuthenticated, router, isPrivate, redirectTo, initialized]);
+    }, [isAuthenticated, router]);
 
-    if (!initialized || (isPrivate && !isAuthenticated))
-      return <LoadingSpinner />;
+    return !!isAuthenticated ? <Component /> : <LoadingSpinner />;
+  };
 
-    return <WrappedComponent {...props} />;
-  }
-
-  WithAuthWrapper.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
-
-  return WithAuthWrapper;
+  return AuthenticatedComponent;
 };
 
 export default withAuth;

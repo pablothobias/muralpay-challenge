@@ -9,16 +9,10 @@ import { useEffect, useState, type FC } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-const GlobalLayout = dynamic(
-  () => import('@/components/templates/GlobalLayout'),
-  { ssr: false },
-);
-const ToastContainer = dynamic(
-  () => import('react-toastify').then((mod) => mod.ToastContainer),
-  {
-    ssr: false,
-  },
-);
+const GlobalLayout = dynamic(() => import('@/components/templates/GlobalLayout'), { ssr: false });
+const ToastContainer = dynamic(() => import('react-toastify').then((mod) => mod.ToastContainer), {
+  ssr: false,
+});
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   const [theme, setTheme] = useState(lightTheme);

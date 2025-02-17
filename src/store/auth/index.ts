@@ -1,20 +1,53 @@
+import Cookies from 'js-cookie';
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { AuthState } from './types';
+import { persist, PersistStorage } from 'zustand/middleware';
+import { type AuthState, type User } from './types';
 
-export const useAuthStore = create<AuthState>()(
+const cookieStorage: PersistStorage<AuthState> = {
+  getItem: (name) => {
+    const storedValue = Cookies.get(name);
+    if (!storedValue) return null;
+    try {
+      return JSON.parse(storedValue);
+    } catch (error) {
+      console.error(`Error parsing cookie ${name}:`, error);
+      return null;
+    }
+  },
+  setItem: (name, value) => {
+    console.log({ name, value });
+    // Cookies.set(name, JSON.stringify(value), {
+    //   expires: 7,
+    //   secure: process.env.NODE_ENV === 'production',
+    //   sameSite: 'Strict',
+    //   path: '/',
+    // });
+  },
+  removeItem: (name) => {
+    Cookies.remove(name);
+  },
+};
+
+const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      user: undefined,
-      token: undefined,
+      user: null,
+      token: null,
       isAuthenticated: false,
-      login: (user, token) => set({ user, token, isAuthenticated: true }),
-      logout: () =>
-        set({ user: undefined, token: undefined, isAuthenticated: false }),
+
+      login: (user: User, token: string) => {
+        set({ user, token, isAuthenticated: true });
+      },
+
+      logout: () => {
+        set({ user: null, token: null, isAuthenticated: false });
+      },
     }),
     {
       name: 'auth-storage',
-      storage: createJSONStorage(() => localStorage),
+      storage: cookieStorage,
     },
   ),
 );
+
+export default useAuthStore;

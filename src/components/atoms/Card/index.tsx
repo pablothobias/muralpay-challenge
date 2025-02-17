@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
 import { useTheme } from '@emotion/react';
+import { ReactNode } from 'react';
 import {
-  cardWrapperCss,
-  cardHeaderCss,
   cardContentCss,
   cardFooterCss,
+  cardHeaderCss,
   cardVariantCss,
+  cardWrapperCss,
 } from './styles';
 
-export interface CardProps {
+export type CardProps = {
   children: ReactNode;
   title?: string;
   footer?: ReactNode;
@@ -16,7 +16,7 @@ export interface CardProps {
   className?: string;
   onClick?: () => void;
   headerActions?: ReactNode;
-}
+};
 
 const Card = ({
   children,

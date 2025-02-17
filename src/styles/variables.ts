@@ -1,17 +1,65 @@
 export const colors = {
-  primary: '#0070f3',
-  secondary: '#1db954',
-  white: '#ffffff',
-  foreground: '#171717',
-  muted: '#f3f4f6',
-  border: '#e5e7eb',
-  error: '#ff4d4d',
-
-  dark: {
-    background: '#0a0a0a',
-    foreground: '#ededed',
-    muted: '#222',
-    border: '#333',
+  primary: {
+    light: '#007AFF',
+    dark: '#0A84FF',
+  },
+  secondary: {
+    light: '#30D158',
+    dark: '#25A244',
+  },
+  accent: {
+    yellow: '#FFD60A',
+    red: '#FF453A',
+    purple: '#AF52DE',
+    cyan: '#32D4C2',
+  },
+  background: {
+    light: '#FFFFFF',
+    dark: '#181818',
+    mutedLight: '#F8F9FA',
+    mutedDark: '#202020',
+  },
+  foreground: {
+    light: '#121212',
+    dark: '#F5F5F7',
+    mutedLight: '#6B7280',
+    mutedDark: '#A1A1AA',
+  },
+  border: {
+    light: '#E5E7EB',
+    dark: '#3A3A3C',
+  },
+  muted: {
+    light: '#F3F4F6',
+    dark: '#2C2C2E',
+  },
+  error: {
+    light: '#FF3B30',
+    dark: '#FF453A',
+  },
+  warning: {
+    light: '#FFCC00',
+    dark: '#FFD60A',
+  },
+  success: {
+    light: '#28A745',
+    dark: '#30D158',
+  },
+  info: {
+    light: '#0A84FF',
+    dark: '#64D2FF',
+  },
+  neutral: {
+    '50': '#FAFAFA',
+    '100': '#F5F5F5',
+    '200': '#E5E5E5',
+    '300': '#D4D4D4',
+    '400': '#A3A3A3',
+    '500': '#737373',
+    '600': '#525252',
+    '700': '#404040',
+    '800': '#262626',
+    '900': '#171717',
   },
 };
 

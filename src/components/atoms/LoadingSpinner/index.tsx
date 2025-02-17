@@ -1,19 +1,18 @@
+import { useTheme } from '@emotion/react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { spinnerContainer } from './styles';
-import { colors } from '@/styles/variables';
 
-interface LoadingSpinnerProps {
+type LoadingSpinnerProps = {
   size?: number;
   color?: string;
-}
+};
 
-const LoadingSpinner = ({
-  size = 50,
-  color = colors.primary,
-}: LoadingSpinnerProps) => {
+const LoadingSpinner = ({ size = 50, color }: LoadingSpinnerProps) => {
+  const theme = useTheme();
+
   return (
     <div css={spinnerContainer}>
-      <ClipLoader loading size={size} color={color} />
+      <ClipLoader loading size={size} color={color || theme.colors.primary} />
     </div>
   );
 };

@@ -9,13 +9,7 @@ const Header = () => {
   return (
     <header css={headerStyles(theme)}>
       <div className="logo">
-        <Image
-          src="/assets/images/logo.jpeg"
-          alt="Mural Pay"
-          priority
-          width={50}
-          height={50}
-        />
+        <Image src="/assets/images/logo.jpeg" alt="Mural Pay" priority width={50} height={50} />
         <h1>Mural Pay</h1>
       </div>
       <nav>
