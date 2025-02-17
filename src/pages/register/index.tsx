@@ -1,21 +1,20 @@
 'use-client';
 
+import RegisterPage from '@/components/pages/register';
+import { organizationSchema } from '@/features/organization/schemas';
+import OrganizationService from '@/features/organization/services';
 import {
   OrganizationResponse,
   OrganizationSchema,
 } from '@/features/organization/types';
-import { organizationSchema } from '@/features/organization/schemas';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTheme } from '@emotion/react';
-import { useServices } from '@/utils/hooks/useServices';
-import OrganizationService from '@/features/organization/services';
-import { toast } from 'react-toastify';
-import { useEffect } from 'react';
-import { pageContainer } from './styles';
-import { useRouter } from 'next/router';
 import { useAuthStore } from '@/store/auth';
-import RegisterPage from '@/components/pages/register';
+import { useServices } from '@/utils/hooks/useServices';
+import { useTheme } from '@emotion/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const RegisterContainer = () => {
   const router = useRouter();
@@ -65,17 +64,15 @@ const RegisterContainer = () => {
   }, [error]);
 
   return (
-    <div css={pageContainer}>
-      <RegisterPage
-        register={register}
-        handleSubmit={handleSubmit}
-        onSubmit={onSubmit}
-        errors={errors}
-        loading={loading}
-        watch={watch}
-        theme={theme}
-      />
-    </div>
+    <RegisterPage
+      register={register}
+      handleSubmit={handleSubmit}
+      onSubmit={onSubmit}
+      errors={errors}
+      loading={loading}
+      watch={watch}
+      theme={theme}
+    />
   );
 };
 

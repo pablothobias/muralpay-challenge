@@ -1,14 +1,24 @@
 'use client';
 
-import { useEffect, useState, type FC } from 'react';
-import type { AppProps } from 'next/app';
-import 'react-toastify/dist/ReactToastify.css';
-import { Global } from '@emotion/react';
 import { globalStyles } from '@/styles/';
-import { ThemeProvider } from '@emotion/react';
-import { lightTheme, darkTheme } from '@/styles/theme';
-import { GlobalLayout } from '@/components';
-import { ToastContainer } from 'react-toastify';
+import { darkTheme, lightTheme } from '@/styles/theme';
+import { Global, ThemeProvider } from '@emotion/react';
+import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
+import { useEffect, useState, type FC } from 'react';
+import 'react-loading-skeleton/dist/skeleton.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+const GlobalLayout = dynamic(
+  () => import('@/components/templates/GlobalLayout'),
+  { ssr: false },
+);
+const ToastContainer = dynamic(
+  () => import('react-toastify').then((mod) => mod.ToastContainer),
+  {
+    ssr: false,
+  },
+);
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   const [theme, setTheme] = useState(lightTheme);

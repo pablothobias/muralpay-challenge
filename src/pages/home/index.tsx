@@ -1,5 +1,4 @@
 import { HomeHero, LoadingSpinner } from '@/components';
-import TransferList from '@/components/pages/home/TransferList';
 import { accountSchema } from '@/features/account/schemas';
 import AccountService from '@/features/account/services';
 import { AccountResponse, AccountSchema } from '@/features/account/types';
@@ -8,9 +7,17 @@ import { containerStyles } from '@/styles/pages/home/styles';
 import withAuth from '@/utils/functions/withAuth';
 import { useServices } from '@/utils/hooks/useServices';
 import { zodResolver } from '@hookform/resolvers/zod';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+
+const TransferList = dynamic(
+  () => import('@/components/pages/home/TransferList'),
+  {
+    loading: () => <LoadingSpinner />,
+  },
+);
 
 const HomePageContainer = () => {
   const { user } = useAuthStore();
