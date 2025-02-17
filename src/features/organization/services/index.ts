@@ -1,11 +1,7 @@
 import apiClient from '@/config/api.config';
 import { AxiosError } from 'axios';
-import {
-  type OrganizationSchema,
-  type OrganizationResponse,
-  organizationSchema,
-  organizationResponseSchema,
-} from '../schemas';
+import { organizationSchema, organizationResponseSchema } from '../schemas';
+import { type OrganizationSchema, type OrganizationResponse } from '../types';
 import {
   OrganizationServiceError,
   OrganizationValidationError,
@@ -18,6 +14,7 @@ const OrganizationService = {
   create: async (data: OrganizationSchema): Promise<OrganizationResponse> => {
     try {
       const validatedData = organizationSchema.parse(data);
+
       if (!validatedData) {
         throw new OrganizationValidationError(
           'Invalid data format',
@@ -26,7 +23,6 @@ const OrganizationService = {
       }
 
       const response = await apiClient.post(endpoints.create, validatedData);
-
       return organizationResponseSchema.parse(response.data);
     } catch (error) {
       if (error instanceof OrganizationValidationError) throw error;

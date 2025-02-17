@@ -5,7 +5,7 @@ export const layoutStyles = css`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: ${colors.background};
+  background-color: ${colors.white};
 `;
 
 export const mainStyles = css`

@@ -2,7 +2,7 @@ import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
 
 export const footerStyles = (theme: ThemeType) => css`
-  background-color: ${theme.colors.background};
+  background-color: ${theme.colors.white};
   color: ${theme.colors.primary};
   padding: 1rem;
   text-align: center;

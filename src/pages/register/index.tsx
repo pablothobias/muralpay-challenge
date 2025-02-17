@@ -1,9 +1,10 @@
-import NewOrganizationPage from '@/components/pages/organization/new';
+'use-client';
+
 import {
   OrganizationResponse,
-  organizationSchema,
   OrganizationSchema,
-} from '@/features/organization/schemas';
+} from '@/features/organization/types';
+import { organizationSchema } from '@/features/organization/schemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTheme } from '@emotion/react';
@@ -12,36 +13,46 @@ import OrganizationService from '@/features/organization/services';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { pageContainer } from './styles';
+import { useRouter } from 'next/router';
+import { useAuthStore } from '@/store/auth';
+import RegisterPage from '@/components/pages/register';
 
-const NewOrganizationContainer = () => {
+const RegisterContainer = () => {
+  const router = useRouter();
   const theme = useTheme();
-  const {
-    execute,
-    data: organization,
-    error,
-    loading,
-  } = useServices<OrganizationSchema, OrganizationResponse>(
-    (data: OrganizationSchema) => OrganizationService.create(data),
-  );
+  const store = useAuthStore();
+  const { execute, error, loading } = useServices<
+    OrganizationSchema,
+    OrganizationResponse
+  >((data: OrganizationSchema) => OrganizationService.create(data));
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<OrganizationSchema>({
     resolver: zodResolver(organizationSchema),
   });
 
   const onSubmit = async (data: OrganizationSchema) => {
     try {
-      await execute(data);
+      const response = await execute(data);
+      store.login(
+        {
+          id: response?.id,
+          name: response?.name,
+          organizationType: response?.organizationType,
+          status: response?.status,
+        },
+        process.env.NEXT_PUBLIC_API_KEY,
+      );
       toast.success('Organization created successfully!', {
         position: 'top-right',
       });
+      router.push('/home');
     } catch (error: unknown) {
-      toast.error((error as Error).message, {
-        position: 'top-right',
-      });
+      console.error(error);
     }
   };
 
@@ -55,23 +66,17 @@ const NewOrganizationContainer = () => {
 
   return (
     <div css={pageContainer}>
-      <NewOrganizationPage
+      <RegisterPage
         register={register}
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         errors={errors}
         loading={loading}
-        organization={organization}
+        watch={watch}
         theme={theme}
       />
     </div>
   );
 };
 
-export const getServerSideProps = async () => {
-  return {
-    props: { value: true },
-  };
-};
-
-export default NewOrganizationContainer;
+export default RegisterContainer;

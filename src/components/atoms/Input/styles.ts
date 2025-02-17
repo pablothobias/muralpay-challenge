@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
+import { ThemeType } from '@/styles/theme';
 
-export const inputGroupCss = css`
+export const inputGroupCss = (theme: ThemeType) => css`
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -22,12 +23,12 @@ export const inputGroupCss = css`
 
     &:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 5px rgba(0, 112, 243, 0.5);
+      box-shadow: ${theme.shadows.md};
     }
   }
 `;
 
-export const inputStyles = () => css`
+export const inputStyles = (theme: ThemeType) => css`
   padding: var(--spacing-md);
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
@@ -39,7 +40,7 @@ export const inputStyles = () => css`
 
   &:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 5px rgba(0, 112, 243, 0.5);
+    box-shadow: ${theme.shadows.md};
   }
 `;
 

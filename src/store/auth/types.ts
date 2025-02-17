@@ -1,7 +1,22 @@
 export interface AuthState {
-  user: { id: string; email: string } | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  login: (user: { id: string; email: string }, token: string) => void;
+  user?: {
+    id?: string;
+    name?: string;
+    organizationType?: string;
+    status?: string;
+    currenciesInfo?: unknown[];
+  } | null;
+  token?: string | null;
+  isAuthenticated?: boolean | null;
+  login: (
+    user: {
+      id?: string;
+      name?: string;
+      organizationType?: string;
+      status?: string;
+      currenciesInfo?: unknown[];
+    },
+    token?: string,
+  ) => void;
   logout: () => void;
 }

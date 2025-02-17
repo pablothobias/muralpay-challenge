@@ -6,7 +6,7 @@ const ERROR_MESSAGES = {
   emailRequired: 'Email is required',
 };
 
-const nameSchema = z.string().min(1, ERROR_MESSAGES.nameRequired);
+const nameSchema = z.string().min(3, ERROR_MESSAGES.nameRequired);
 const organizationTypeSchema = z.enum([
   OrganizationType.BUSINESS,
   OrganizationType.INDIVIDUAL,
@@ -14,6 +14,8 @@ const organizationTypeSchema = z.enum([
 
 export const organizationSchema = z.object({
   name: nameSchema,
+  lastName: nameSchema.optional(),
+  email: z.string().email().optional(),
   organizationType: organizationTypeSchema,
 });
 
@@ -21,10 +23,8 @@ export const organizationResponseSchema = z.object({
   id: z.string().optional(),
   name: nameSchema.optional(),
   organizationType: organizationTypeSchema.optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  status: z.boolean().optional(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+  currenciesInfo: z.array(z.any()).optional(),
+  status: z.string().optional(),
 });
-
-export type OrganizationSchema = z.infer<typeof organizationSchema>;
-export type OrganizationResponse = z.infer<typeof organizationResponseSchema>;

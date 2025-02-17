@@ -1,4 +1,4 @@
-import { errorTextCss, inputGroupCss } from './styles';
+import { errorTextCss, inputGroupCss, inputStyles } from './styles';
 
 export interface InputProps {
   type?:
@@ -31,6 +31,7 @@ const Input = ({
     <div css={inputGroupCss}>
       {label && <label htmlFor={htmlFor}>{label}</label>}
       <input
+        css={inputStyles}
         type={type}
         placeholder={placeholder}
         value={value}

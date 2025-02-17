@@ -2,15 +2,16 @@
 
 import { containerCss, formCss, titleCss } from './styles';
 import { Button, Input, LoadingSpinner, Select } from '@/components';
-import {
-  type OrganizationSchema,
-  type OrganizationResponse,
-} from '@/features/organization/schemas';
+import { type OrganizationSchema } from '@/features/organization/types';
 import { OrganizationType } from '@/utils/constants';
 import { type FormEventHandler } from 'react';
-import { type FieldErrors, type UseFormRegister } from 'react-hook-form';
+import {
+  type UseFormWatch,
+  type FieldErrors,
+  type UseFormRegister,
+} from 'react-hook-form';
 
-type NewOrganizationPageProps = {
+type RegisterPageProps = {
   register: UseFormRegister<OrganizationSchema>;
   handleSubmit: (
     onSubmit: (data: OrganizationSchema) => Promise<void>,
@@ -18,32 +19,27 @@ type NewOrganizationPageProps = {
   onSubmit: (data: OrganizationSchema) => Promise<void>;
   errors: FieldErrors<OrganizationSchema>;
   loading: boolean;
-  organization: OrganizationResponse | null;
+  watch: UseFormWatch<OrganizationSchema>;
   theme: unknown;
 };
 
-const NewOrganizationPage = ({
+const RegisterPage = ({
   register,
   handleSubmit,
   onSubmit,
+  watch,
   errors,
   loading,
-}: NewOrganizationPageProps) => {
+}: RegisterPageProps) => {
+  const organizationType = watch('organizationType');
+  const isIndividual = organizationType === OrganizationType.INDIVIDUAL;
+
   if (loading) return <LoadingSpinner />;
 
   return (
     <section css={containerCss}>
       <h1 css={titleCss}>Create a New organization</h1>
       <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          htmlFor="name"
-          label="Name"
-          type="text"
-          placeholder="Sun Tree Capital LLC"
-          {...register('name')}
-          error={errors.name?.message}
-        />
-
         <Select
           htmlFor="organizationType"
           label="Organization Type"
@@ -55,6 +51,37 @@ const NewOrganizationPage = ({
           {...register('organizationType')}
           error={errors.organizationType?.message}
         />
+
+        <Input
+          htmlFor="name"
+          label="Name"
+          type="text"
+          placeholder={isIndividual ? 'John' : 'Sun Tree Capital LLC'}
+          {...register('name')}
+          error={errors.name?.message}
+        />
+
+        {isIndividual && (
+          <Input
+            htmlFor="lastName"
+            label="Last Name"
+            type="text"
+            placeholder="Doe"
+            {...register('lastName')}
+            error={errors.lastName?.message}
+          />
+        )}
+
+        {isIndividual && (
+          <Input
+            htmlFor="email"
+            label="E-mail"
+            type="email"
+            placeholder="johndoe@test.com"
+            {...register('email')}
+            error={errors.email?.message}
+          />
+        )}
 
         <Button
           type="submit"
@@ -69,4 +96,4 @@ const NewOrganizationPage = ({
   );
 };
 
-export default NewOrganizationPage;
+export default RegisterPage;

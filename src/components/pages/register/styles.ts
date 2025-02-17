@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 
 export const containerCss = css`
   width: 500px;
-  height: 350px;
+  height: auto;
   margin: 0 auto;
   padding: var(--spacing-lg);
   background: var(--muted);

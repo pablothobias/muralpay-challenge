@@ -1,3 +1,4 @@
+import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 export const heroSectionStyles = css`
@@ -20,6 +21,11 @@ export const heroSectionStyles = css`
     margin-bottom: 2rem;
   }
 
+  strong {
+    font-weight: bold;
+    color: ${colors.primary};
+  }
+
   .buttonGroup {
     display: flex;
     flex-direction: column;
@@ -30,4 +36,11 @@ export const heroSectionStyles = css`
       flex-direction: row;
     }
   }
+`;
+
+export const infoContainer = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
 `;
