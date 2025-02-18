@@ -1,7 +1,8 @@
+import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 type ButtonStyleProps = {
-  variant: 'primary' | 'secondary';
+  variant: 'primary' | 'secondary' | 'success' | 'warning';
   size: 'small' | 'medium' | 'large';
   hasIcon: boolean;
 };
@@ -44,7 +45,36 @@ const variantStyles = {
     border: 1px solid var(--border);
 
     &:hover:not(:disabled) {
-      background: var(--muted);
+      background: ${colors.muted.dark};
+      color: ${colors.muted.light};
+    }
+
+    &:disabled {
+      color: var(--muted-foreground);
+      cursor: not-allowed;
+    }
+  `,
+  success: css`
+    background: ${colors.background.light};
+    color: ${colors.background.dark};
+
+    &:hover:not(:disabled) {
+      background: ${colors.success.dark};
+      color: ${colors.muted.light};
+    }
+
+    &:disabled {
+      color: var(--muted-foreground);
+      cursor: not-allowed;
+    }
+  `,
+  warning: css`
+    background: ${colors.background.light};
+    color: ${colors.background.dark};
+
+    &:hover:not(:disabled) {
+      background: ${colors.warning.light};
+      color: ${colors.muted.light};
     }
 
     &:disabled {

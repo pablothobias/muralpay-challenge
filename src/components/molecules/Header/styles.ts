@@ -1,6 +1,6 @@
-import { css } from '@emotion/react';
 import { ThemeType } from '@/styles/theme';
 import { shadows } from '@/styles/variables';
+import { css } from '@emotion/react';
 
 export const headerStyles = (theme: ThemeType) => css`
   background-color: ${theme.colors.background};
@@ -36,6 +36,10 @@ export const headerStyles = (theme: ThemeType) => css`
 `;
 
 export const navLinkStyles = (theme: ThemeType) => css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   color: ${theme.colors.primary};
   text-decoration: none;
   font-weight: 500;

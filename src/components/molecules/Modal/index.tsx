@@ -1,5 +1,6 @@
-import { Card } from '@/components';
+import { LoadingSpinner } from '@/components';
 import { useTheme } from '@emotion/react';
+import dynamic from 'next/dynamic';
 import { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
@@ -15,13 +16,17 @@ import {
 export type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title?: string;
   children: ReactNode;
   footer?: ReactNode;
   size?: 'small' | 'medium' | 'large';
   closeOnOverlayClick?: boolean;
   closeOnEsc?: boolean;
 };
+
+const Card = dynamic(() => import('@/components/atoms/Card'), {
+  loading: () => <LoadingSpinner />,
+});
 
 const Modal = ({
   isOpen,

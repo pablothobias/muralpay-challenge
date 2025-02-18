@@ -1,10 +1,11 @@
-import { css } from '@emotion/react';
 import { ThemeType } from '@/styles/theme';
+import { css } from '@emotion/react';
 
 export const inputGroupCss = (theme: ThemeType) => css`
   display: flex;
   flex-direction: column;
   text-align: left;
+  margin-bottom: var(--spacing-md);
 
   label {
     font-size: var(--font-size-base);
