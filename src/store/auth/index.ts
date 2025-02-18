@@ -15,12 +15,13 @@ const cookieStorage: PersistStorage<AuthState> = {
     }
   },
   setItem: (name, value) => {
-    Cookies.set(name, JSON.stringify(value), {
-      expires: 1,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
-      path: '/',
-    });
+    console.log({ name, value });
+    // Cookies.set(name, JSON.stringify(value), {
+    //   expires: 7,
+    //   secure: process.env.NODE_ENV === 'production',
+    //   sameSite: 'Strict',
+    //   path: '/',
+    // });
   },
   removeItem: (name) => {
     Cookies.remove(name);

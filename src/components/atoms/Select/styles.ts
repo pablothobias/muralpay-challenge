@@ -24,7 +24,7 @@ export const selectGroupCss = css`
 
     &:focus {
       border-color: var(--primary);
-      box-shadow: ${shadows.black.md};
+      box-shadow: ${shadows.primary.md};
     }
 
     &:disabled {

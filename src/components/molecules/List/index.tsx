@@ -11,17 +11,9 @@ type ListProps = {
   items: ListType[];
   emptyStateMessage?: string;
   className?: string;
-  applyShouldInset?: boolean;
-  onClick?: (id: string) => void;
 };
 
-function List({
-  items,
-  emptyStateMessage = 'No items to display',
-  className,
-  applyShouldInset = false,
-  onClick,
-}: ListProps) {
+function List({ items, emptyStateMessage = 'No items to display', className }: ListProps) {
   const theme = useTheme();
 
   if (items.length === 0) {
@@ -34,13 +26,9 @@ function List({
   }
 
   return (
-    <div css={listContainerCss(applyShouldInset)} className={className}>
+    <div css={listContainerCss(theme)} className={className}>
       {items.map((item: ListType) => (
-        <div
-          key={item.id as string}
-          css={listItemCss(theme)}
-          {...(onClick && { onClick: () => onClick?.(item.id) })}
-        >
+        <div key={item.id as string} css={listItemCss(theme)}>
           {item.element as ReactElement}
         </div>
       ))}

@@ -6,7 +6,7 @@ const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
 export const BlockchainEnum = z.enum(['POLYGON', 'ETHEREUM', 'BSC']);
 export const AccountStatusEnum = z.enum(['ACTIVATED', 'PENDING', 'DEACTIVATED']);
 export const CurrencyEnum = z.enum(['USD', 'EUR', 'GBP']);
-export const PaymentRailsEnum = z.enum(['ACH', 'WIRE', 'SEPA', 'ACH_PUSH']);
+export const PaymentRailsEnum = z.enum(['ACH', 'WIRE', 'SEPA']);
 
 export const balanceSchema = z.object({
   balance: z.number().min(0),

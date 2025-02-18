@@ -4,7 +4,6 @@ import { borderRadius, colors, shadows, spacing, typography } from './variables'
 export const lightTheme = {
   colors: {
     background: colors.background.light,
-    inverted: colors.inverted.light,
     foreground: colors.foreground.light,
     primary: colors.primary.light,
     secondary: colors.secondary.light,
@@ -20,13 +19,12 @@ export const lightTheme = {
   typography,
   spacing,
   borderRadius,
-  shadows: shadows.black,
+  shadows: shadows.primary,
 };
 
 export const darkTheme = {
   colors: {
     background: colors.background.dark,
-    inverted: colors.inverted.dark,
     foreground: colors.foreground.dark,
     primary: colors.primary.dark,
     secondary: colors.secondary.dark,
@@ -42,7 +40,7 @@ export const darkTheme = {
   typography,
   spacing,
   borderRadius,
-  shadows: shadows.white,
+  shadows: shadows.black,
 };
 
 export type ThemeType = typeof lightTheme;
