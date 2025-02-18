@@ -18,6 +18,17 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   const [theme, setTheme] = useState(lightTheme);
 
   useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    setTheme(savedTheme === 'dark' ? darkTheme : lightTheme);
+  }, []);
+
+  // const toggleTheme = () => {
+  //   const newTheme = theme === lightTheme ? darkTheme : lightTheme;
+  //   setTheme(newTheme);
+  //   localStorage.setItem('theme', newTheme === darkTheme ? 'dark' : 'light');
+  // };
+
+  useEffect(() => {
     let prefersDark: boolean;
     if (typeof window !== 'undefined') {
       prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

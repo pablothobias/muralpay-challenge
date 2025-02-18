@@ -1,8 +1,8 @@
-import { css } from '@emotion/react';
 import { ThemeType } from '@/styles/theme';
+import { css } from '@emotion/react';
 
 export const cardWrapperCss = (theme: ThemeType) => css`
-  background: var(--background);
+  background: ${theme.colors.neutral[300]};
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
   padding: var(--spacing-lg);
@@ -38,7 +38,6 @@ export const cardFooterCss = css`
 
 export const cardVariantCss = (theme: ThemeType) => ({
   outlined: css`
-    background: ${theme.colors.muted};
     border: 1px solid var(--border);
   `,
   elevated: css`

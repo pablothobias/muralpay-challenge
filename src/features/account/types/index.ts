@@ -14,6 +14,8 @@ export type AccountResponse = z.infer<typeof accountResponseSchema>;
 export type AccountResponseArray = z.infer<typeof accountResponseArraySchema>;
 
 export type AccountServiceType = {
-  create(data: AccountSchema): Promise<AccountResponse>;
-  get(id?: string): Promise<AccountResponse>;
+  create(data: AccountSchema): Promise<AccountResponse | undefined>;
+  get(): Promise<AccountResponseArray | undefined>;
+  getById(id?: string): Promise<AccountResponse | undefined>;
+  handleError(error: unknown): undefined;
 };
