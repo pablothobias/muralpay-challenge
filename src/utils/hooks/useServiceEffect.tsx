@@ -7,7 +7,6 @@ export type UseServiceType<ResponseType> = {
 };
 type ServiceFunctionType<RequestType, ResponseType> = (
   params?: RequestType,
-  signal?: AbortSignal,
 ) => Promise<ResponseType | null>;
 
 export function useServiceEffect<RequestType, ResponseType>(
@@ -18,14 +17,10 @@ export function useServiceEffect<RequestType, ResponseType>(
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [response, setResponse] = useState<ResponseType | null>(null);
-  const controller = new AbortController();
-  const { signal } = controller;
-
-  useEffect(() => console.log(loading), [loading]);
 
   useEffect(() => {
     async function execute() {
-      const response = await serviceFunction(data, signal);
+      const response = await serviceFunction(data);
       setResponse(response);
     }
 

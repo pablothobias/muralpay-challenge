@@ -19,10 +19,6 @@ export const colors = {
     mutedLight: '#F8F9FA',
     mutedDark: '#202020',
   },
-  inverted: {
-    light: '#181818',
-    dark: '#FFFFFF',
-  },
   foreground: {
     light: '#121212',
     dark: '#F5F5F7',
@@ -101,10 +97,10 @@ export const borderRadius = {
 };
 
 export const shadows = {
-  white: {
-    sm: '0 2px 4px #FFFFFF',
-    md: '0px 4px 8px #FFFFFF',
-    lg: '0px 6px 12px #FFFFFF',
+  primary: {
+    sm: '0 2px 4px rgba(0, 112, 243, 0.5)',
+    md: '0px 4px 8px rgba(0, 112, 243, 0.5)',
+    lg: '0px 6px 12px rgba(0, 112, 243, 0.5)',
   },
   black: {
     sm: '0px 2px 4px rgba(0, 0, 0, 0.1)',

@@ -1,15 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
-  const authStorage = req.cookies.get('auth-storage');
-  const isAuthenticated = authStorage ? JSON.parse(authStorage.value).state.isAuthenticated : false;
+  const isAuthenticated = req.cookies.get('user.isAuthenticated');
+
   const { pathname } = req.nextUrl;
 
-  if (!isAuthenticated && pathname === '/') {
-    return NextResponse.redirect(new URL('/register', req.url));
-  }
-
-  if (isAuthenticated && pathname === '/') {
+  if (isAuthenticated && pathname === '/register') {
     return NextResponse.redirect(new URL('/home', req.url));
   }
 

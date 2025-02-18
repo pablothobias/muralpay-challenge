@@ -1,7 +1,7 @@
-import { ThemeType } from '@/styles/theme';
+import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
-export const heroSectionStyles = (theme: ThemeType) => css`
+export const heroSectionStyles = css`
   padding: 4rem 0;
   text-align: center;
 
@@ -23,7 +23,18 @@ export const heroSectionStyles = (theme: ThemeType) => css`
 
   strong {
     font-weight: bold;
-    color: ${theme.colors.primary};
+    color: ${colors.primary};
+  }
+
+  .buttonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+
+    @media (min-width: 640px) {
+      flex-direction: row;
+    }
   }
 `;
 
