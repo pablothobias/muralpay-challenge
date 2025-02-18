@@ -8,6 +8,7 @@ export type UseServiceType<RequestType, ResponseType> = {
 
 type ServiceFunctionType<RequestType, ResponseType> = (
   params: RequestType,
+  signal?: AbortSignal,
 ) => Promise<ResponseType>;
 
 export function useServiceOnAction<RequestType, ResponseType>(
@@ -19,15 +20,17 @@ export function useServiceOnAction<RequestType, ResponseType>(
 
   const execute = useCallback(
     async (params: RequestType): Promise<ResponseType | undefined> => {
-      setLoading(true);
-      setError(null);
+      const controller = new AbortController();
+      const { signal } = controller;
 
       try {
-        const response = await serviceFunction(params);
+        setLoading(true);
+        setError(null);
+        const response = await serviceFunction(params, signal);
         return response;
       } catch (err) {
-        const errorInstance = err instanceof Error ? err : new Error('Unknown error occurred');
-        setError(errorInstance);
+        if (signal.aborted) return;
+        setError(err instanceof Error ? err : new Error('Unknown error'));
         return undefined;
       } finally {
         setLoading(false);
