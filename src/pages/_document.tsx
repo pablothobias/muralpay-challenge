@@ -1,15 +1,9 @@
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  DocumentContext,
-} from 'next/document';
-import createEmotionServer from '@emotion/server/create-instance';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-import React from 'react';
+import createEmotionServer from '@emotion/server/create-instance';
 import { AppProps } from 'next/app';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import React from 'react';
 
 function createEmotionCache() {
   return createCache({ key: 'css', prepend: true });
@@ -43,23 +37,14 @@ export default class MyDocument extends Document {
 
     return {
       ...initialProps,
-      styles: [
-        ...React.Children.toArray(initialProps.styles),
-        ...emotionStyleTags,
-      ],
+      styles: [...React.Children.toArray(initialProps.styles), ...emotionStyleTags],
     };
   }
 
   render() {
     return (
       <Html lang="en">
-        <Head>
-          <meta charSet="UTF-8" />
-          <meta name="description" content="FE Challenge by Muralpay" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta property="og:title" content="Muralpay Challenge" />
-          <meta property="og:description" content="FE Challenge by Muralpay" />
-        </Head>
+        <Head />
         <body>
           <Main />
           <NextScript />
