@@ -28,6 +28,14 @@ const config: Config = {
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
+  coverageThreshold: {
+    global: {
+      branches: 60,
+      functions: 60,
+      lines: 60,
+      statements: 60,
+    },
+  },
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
