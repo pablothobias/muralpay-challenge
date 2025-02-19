@@ -35,7 +35,7 @@ const RegisterContainer = () => {
   );
 
   useEffect(() => {
-    // router.prefetch('/register');
+    router.prefetch('/register');
   }, [router]);
 
   useEffect(() => {
@@ -60,11 +60,13 @@ const RegisterContainer = () => {
         },
         process.env.NEXT_PUBLIC_API_KEY!,
       );
+
       toast.success('Organization created successfully!', {
         position: 'top-right',
       });
 
       Cookies.set('user', JSON.stringify({ ...response, isAuthenticated: true }), { expires: 1 });
+      Cookies.set('on-behalf-of', response.id!);
       router.push('/home');
     } catch (error) {
       toast.error((error as Error).message, {

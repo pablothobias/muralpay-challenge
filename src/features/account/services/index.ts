@@ -24,7 +24,7 @@ const AccountService: AccountServiceType = {
       });
       return accountResponseSchema.parse(response.data);
     } catch (error) {
-      return AccountService.handleError(error);
+      return AccountService.handleError(error, 'Failed to create account');
     }
   },
   get: async (signal?: AbortSignal): Promise<AccountResponseArray | undefined> => {
@@ -32,7 +32,7 @@ const AccountService: AccountServiceType = {
       const response = await apiClient.get(API_ENDPOINTS.ACCOUNTS, { ...(signal && { signal }) });
       return accountResponseArraySchema.parse(response.data);
     } catch (error) {
-      return AccountService.handleError(error);
+      return AccountService.handleError(error, 'Failed to get accounts');
     }
   },
   getById: async (id?: string, signal?: AbortSignal): Promise<AccountResponse | undefined> => {
@@ -42,15 +42,14 @@ const AccountService: AccountServiceType = {
       });
       return accountResponseSchema.parse(response.data);
     } catch (error) {
-      return AccountService.handleError(error);
+      return AccountService.handleError(error, 'Failed to get account');
     }
   },
-  handleError: (error: unknown) => {
+  handleError: (error: unknown, defaultMessage: string) => {
     logError(error, 'AccountService.create');
-
     if (error instanceof AxiosError)
       throw new AccountServiceError(
-        error.response?.data?.message || 'Failed to get account',
+        error.response?.data?.message || defaultMessage,
         ERROR_TYPES.API_ERROR,
         error,
       );

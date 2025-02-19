@@ -20,7 +20,7 @@ export const lightTheme = {
   typography,
   spacing,
   borderRadius,
-  shadows: shadows.black,
+  shadows: shadows,
 };
 
 export const darkTheme = {
@@ -42,7 +42,7 @@ export const darkTheme = {
   typography,
   spacing,
   borderRadius,
-  shadows: shadows.white,
+  shadows: shadows,
 };
 
 export type ThemeType = typeof lightTheme;

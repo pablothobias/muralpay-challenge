@@ -12,7 +12,10 @@ import {
 } from '../types';
 
 const OrganizationService: OrganizationServiceType = {
-  create: async (data: OrganizationSchema): Promise<OrganizationResponse> => {
+  create: async (
+    data: OrganizationSchema,
+    signal?: AbortSignal,
+  ): Promise<OrganizationResponse | undefined> => {
     try {
       const validatedData = organizationSchema.parse(data);
 
@@ -20,20 +23,22 @@ const OrganizationService: OrganizationServiceType = {
         throw new OrganizationValidationError('Invalid data format', ERROR_TYPES.VALIDATION);
       }
 
-      const response = await apiClient.post(API_ENDPOINTS.ORGANIZATION, validatedData);
+      const response = await apiClient.post(API_ENDPOINTS.ORGANIZATION, validatedData, {
+        ...(signal && { signal }),
+      });
       return organizationResponseSchema.parse(response.data);
     } catch (error) {
-      return OrganizationService.handleError(error);
+      return OrganizationService.handleError(error, 'Failed to create organization organization');
     }
   },
-  handleError: (error: unknown) => {
+  handleError: (error: unknown, defaultMessage: string) => {
     logError(error, 'OrganizationService.create');
 
     if (error instanceof ZodError)
       throw new OrganizationValidationError(error.message, ERROR_TYPES.VALIDATION, error);
     else if (error instanceof AxiosError)
       throw new OrganizationServiceError(
-        error.response?.data?.message || 'Failed to create organization organization',
+        error.response?.data?.message || defaultMessage,
         ERROR_TYPES.API_ERROR,
         error,
       );

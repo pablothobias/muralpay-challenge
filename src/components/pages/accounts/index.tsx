@@ -6,9 +6,11 @@ import { type FieldErrors, type UseFormRegister } from 'react-hook-form';
 import { sectionContainer, sectionHeader } from './styles';
 
 const AccountList = dynamic(() => import('@/components/pages/accounts/AccountList'), {
+  ssr: false,
   loading: () => <LoadingSpinner />,
 });
 const Modal = dynamic(() => import('@/components/molecules/Modal'), {
+  ssr: false,
   loading: () => <LoadingSpinner />,
 });
 
@@ -50,6 +52,7 @@ const AccountsPage = ({ accounts, loading, register, errors, handleSubmit }: Acc
         }
       >
         <Input
+          id="name"
           label="Name"
           type="text"
           placeholder="John"
@@ -58,6 +61,7 @@ const AccountsPage = ({ accounts, loading, register, errors, handleSubmit }: Acc
         />
 
         <Input
+          id="description"
           label="Description"
           type="text"
           placeholder="Description ..."

@@ -1,8 +1,7 @@
 'use client';
 
 import { Button, Input, Select } from '@/components';
-import { type OrganizationSchema } from '@/features/organization/types';
-import { OrganizationType } from '@/utils/constants';
+import { OrganizationType, type OrganizationSchema } from '@/features/organization/types';
 import { type FormEventHandler } from 'react';
 import { type FieldErrors, type UseFormRegister, type UseFormWatch } from 'react-hook-form';
 import { containerCss, formCss, pageContainer, titleCss } from './styles';

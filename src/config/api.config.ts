@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import Cookies from 'js-cookie';
 
 interface ApiClientConfig extends InternalAxiosRequestConfig {
   baseURL: string;
@@ -36,13 +37,18 @@ const createRequestInterceptor = () => {
   return async (reqConfig: InternalAxiosRequestConfig) => {
     const url = reqConfig.url?.toLowerCase() || '';
 
-    const apiKey = url.includes('transfer')
-      ? process.env.NEXT_PUBLIC_TRANSFER_KEY
-      : process.env.NEXT_PUBLIC_API_KEY;
+    const apiKey =
+      url === '/transfer-requests/execute' || url === '/transfer-requests/cancel'
+        ? process.env.NEXT_PUBLIC_TRANSFER_KEY
+        : process.env.NEXT_PUBLIC_API_KEY;
 
     if (!apiKey) {
       throw new Error('API key not found');
     }
+
+    const onBehalfOf = Cookies.get('on-behalf-of');
+
+    if (onBehalfOf) reqConfig.headers['on-behalf-of'] = onBehalfOf;
 
     reqConfig.headers.Authorization = `Bearer ${apiKey}`;
     return reqConfig;

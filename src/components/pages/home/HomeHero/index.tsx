@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { heroSectionStyles } from './styles';
 
 const Card = dynamic(() => import('@/components/atoms/Card'), {
+  ssr: false,
   loading: () => <LoadingSpinner />,
 });
 

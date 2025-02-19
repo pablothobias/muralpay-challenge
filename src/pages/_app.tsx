@@ -1,12 +1,11 @@
 'use client';
 
 import { globalStyles } from '@/styles/';
-import { darkTheme, lightTheme } from '@/styles/theme';
-import { Global, ThemeProvider } from '@emotion/react';
+import { ToggleThemeProvider } from '@/utils/context/toggleThemeContext';
+import { Global } from '@emotion/react';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
-import { useEffect, useState, type FC } from 'react';
-import 'react-loading-skeleton/dist/skeleton.css';
+import { type FC } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 
 const GlobalLayout = dynamic(() => import('@/components/templates/GlobalLayout'), { ssr: false });
@@ -15,35 +14,14 @@ const ToastContainer = dynamic(() => import('react-toastify').then((mod) => mod.
 });
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
-  const [theme, setTheme] = useState(lightTheme);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    setTheme(savedTheme === 'dark' ? darkTheme : lightTheme);
-  }, []);
-
-  // const toggleTheme = () => {
-  //   const newTheme = theme === lightTheme ? darkTheme : lightTheme;
-  //   setTheme(newTheme);
-  //   localStorage.setItem('theme', newTheme === darkTheme ? 'dark' : 'light');
-  // };
-
-  useEffect(() => {
-    let prefersDark: boolean;
-    if (typeof window !== 'undefined') {
-      prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? darkTheme : lightTheme);
-    }
-  }, []);
-
   return (
-    <ThemeProvider theme={theme}>
+    <ToggleThemeProvider>
       <Global styles={globalStyles} />
       <GlobalLayout>
         <Component {...pageProps} />
         <ToastContainer />
       </GlobalLayout>
-    </ThemeProvider>
+    </ToggleThemeProvider>
   );
 };
 

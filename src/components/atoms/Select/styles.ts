@@ -1,4 +1,4 @@
-import { shadows } from '@/styles/variables';
+import { colors, shadows } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 export const selectGroupCss = css`
@@ -8,7 +8,7 @@ export const selectGroupCss = css`
 
   label {
     font-size: var(--font-size-base);
-    color: var(--foreground);
+    color: ${colors.background.dark};
     margin-bottom: var(--spacing-xs);
   }
 
@@ -16,15 +16,16 @@ export const selectGroupCss = css`
     padding: var(--spacing-sm);
     border-radius: var(--border-radius);
     border: 1px solid var(--border);
-    background: var(--background);
-    color: var(--foreground);
+    margin-bottom: var(--spacing-md);
+    background: ${colors.background.light};
+    color: ${colors.background.dark};
     outline: none;
     transition: border 0.2s ease-in-out;
     cursor: pointer;
 
     &:focus {
       border-color: var(--primary);
-      box-shadow: ${shadows.black.md};
+      box-shadow: ${shadows.md};
     }
 
     &:disabled {

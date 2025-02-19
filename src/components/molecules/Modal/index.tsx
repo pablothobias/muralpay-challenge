@@ -25,6 +25,7 @@ export type ModalProps = {
 };
 
 const Card = dynamic(() => import('@/components/atoms/Card'), {
+  ssr: false,
   loading: () => <LoadingSpinner />,
 });
 

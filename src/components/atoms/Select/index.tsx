@@ -10,7 +10,7 @@ export type SelectProps = {
   value?: string;
   label?: string;
   id?: string;
-  placeholder?: string;
+  placeholder: string;
   error?: string;
   disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -27,6 +27,7 @@ const Select = ({
   onChange,
   ...props
 }: SelectProps) => {
+  const placeholderOption = { value: '', label: placeholder };
   return (
     <div css={selectGroupCss}>
       {label && (
@@ -35,8 +36,7 @@ const Select = ({
         </label>
       )}
       <select id={id} value={value} onChange={onChange} disabled={disabled} {...props}>
-        {placeholder && <option value="">{placeholder}</option>}
-        {options.map((option) => (
+        {[placeholderOption, ...options].map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

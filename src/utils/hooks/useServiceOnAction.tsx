@@ -9,7 +9,7 @@ export type UseServiceType<RequestType, ResponseType> = {
 type ServiceFunctionType<RequestType, ResponseType> = (
   params: RequestType,
   signal?: AbortSignal,
-) => Promise<ResponseType>;
+) => Promise<ResponseType | undefined>;
 
 export function useServiceOnAction<RequestType, ResponseType>(
   serviceFunction: ServiceFunctionType<RequestType, ResponseType>,

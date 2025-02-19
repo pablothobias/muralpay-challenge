@@ -16,7 +16,7 @@ export const containerCss = css`
   padding: var(--spacing-lg);
   background: var(--muted);
   border-radius: var(--border-radius);
-  box-shadow: ${shadows.black.md};
+  box-shadow: ${shadows.md};
   text-align: center;
 `;
 

@@ -17,5 +17,5 @@ export type AccountServiceType = {
   create(data: AccountSchema): Promise<AccountResponse | undefined>;
   get(): Promise<AccountResponseArray | undefined>;
   getById(id?: string): Promise<AccountResponse | undefined>;
-  handleError(error: unknown): undefined;
+  handleError(error: unknown, defaultMessage: string): undefined;
 };
