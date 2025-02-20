@@ -1,28 +1,23 @@
 import { LoadingSpinner } from '@/components';
 import AccountsPage from '@/components/pages/accounts';
 import { accountSchema } from '@/features/account/schemas';
-import AccountService from '@/features/account/services';
-import { AccountSchema } from '@/features/account/types';
+import { AccountResponseArray, AccountSchema } from '@/features/account/types';
 import useAccountStore from '@/store/account';
-import { useServiceOnAction } from '@/utils/hooks/useServiceOnAction';
+import { useAccountActions } from '@/store/account/hooks';
+import { AccountState } from '@/store/account/types';
+import { useLoading } from '@/utils/context/LoadingContext';
+import { useToast } from '@/utils/context/ToastContext';
+import withAuth from '@/utils/functions/withAuth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 
 const AccountsContainerPage = () => {
-  const accountsStore = useAccountStore((state) => state);
-  const {
-    loading: createAccountLoading,
-    error: createAccountError,
-    execute,
-  } = useServiceOnAction(AccountService.create);
+  const { refreshAccounts, createAccount } = useAccountActions();
+  const { showSuccess, showError } = useToast();
+  const { setLoadingState, isLoading } = useLoading();
 
-  const {
-    loading: getAccountsLoading,
-    error: getAccountsError,
-    execute: getAccountsExecute,
-  } = useServiceOnAction(AccountService.get);
+  const [accounts, setAccounts] = useState<AccountResponseArray>([]);
 
   const {
     register,
@@ -32,46 +27,42 @@ const AccountsContainerPage = () => {
     resolver: zodResolver(accountSchema),
   });
 
-  const handleCreateAccount = async (data: AccountSchema) => {
-    if (!data) return;
+  useEffect(() => {
+    setLoadingState('createAccount', useAccountStore.getState().loading);
+    (async function refreshAccountsData() {
+      setLoadingState('refreshAccounts', useAccountStore.getState().loading);
+      await refreshAccounts();
+    })();
 
-    const response = await execute(data);
-    if (response) {
-      toast.success('Account created successfully!');
-      refreshAccountList();
-    } else {
-      console.error(createAccountError);
-      toast.error('Failed to create account');
+    const unsubscribeAccounts = useAccountStore.subscribe((state: AccountState) => {
+      setLoadingState('refreshAccounts', state.loading);
+      setAccounts(state.accounts || []);
+    });
+    const unsubscribe = useAccountStore.subscribe((state: AccountState) =>
+      setLoadingState('createAccount', state.loading),
+    );
+
+    return () => {
+      unsubscribeAccounts();
+      unsubscribe();
+    };
+  }, []);
+
+  const handleCreateAccount = async (data: AccountSchema) => {
+    try {
+      const response = await createAccount(data);
+      if (response) showSuccess('account', 'Account created successfully!');
+    } catch (error) {
+      showError('account', (error as Error).message || 'Failed to create account');
     }
   };
-
-  const refreshAccountList = useCallback(async () => {
-    try {
-      const response = await getAccountsExecute(undefined);
-      if (response) {
-        accountsStore.setAccountsState(response, false, undefined);
-      }
-    } catch (error: unknown) {
-      let message;
-      if (error instanceof Error) message = error.message;
-      else message = 'An unknown error occurred';
-
-      console.error(getAccountsError);
-      accountsStore.setAccountsState([], getAccountsLoading, getAccountsError?.message);
-      toast.error(message);
-    }
-  }, [getAccountsExecute, accountsStore, getAccountsError, getAccountsLoading]);
-
-  const isLoading = useMemo(() => {
-    return accountsStore.loading || createAccountLoading || getAccountsLoading;
-  }, [accountsStore.loading, createAccountLoading, getAccountsLoading]);
 
   if (isLoading) return <LoadingSpinner />;
 
   return (
     <AccountsPage
       loading={isLoading}
-      accounts={accountsStore.accounts!}
+      accounts={accounts}
       register={register}
       errors={errors}
       handleSubmit={handleSubmit(handleCreateAccount)}
@@ -79,4 +70,4 @@ const AccountsContainerPage = () => {
   );
 };
 
-export default AccountsContainerPage;
+export default withAuth(AccountsContainerPage, { isPrivate: true, redirectTo: '/register' });

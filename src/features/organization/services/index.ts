@@ -18,28 +18,27 @@ const OrganizationService: OrganizationServiceType = {
   ): Promise<OrganizationResponse | undefined> => {
     try {
       const validatedData = organizationSchema.parse(data);
-
-      if (!validatedData) {
-        throw new OrganizationValidationError('Invalid data format', ERROR_TYPES.VALIDATION);
-      }
-
       const response = await apiClient.post(API_ENDPOINTS.ORGANIZATION, validatedData, {
         ...(signal && { signal }),
       });
       return organizationResponseSchema.parse(response.data);
     } catch (error) {
-      return OrganizationService.handleError(error, 'Failed to create organization organization');
+      return OrganizationService.handleError(error, 'Failed to create organization');
     }
   },
   handleError: (error: unknown, defaultMessage: string) => {
     logError(error, 'OrganizationService.create');
 
-    if (error instanceof ZodError)
-      throw new OrganizationValidationError(error.message, ERROR_TYPES.VALIDATION, error);
-    else if (error instanceof AxiosError)
+    if (error instanceof AxiosError)
       throw new OrganizationServiceError(
         error.response?.data?.message || defaultMessage,
         ERROR_TYPES.API_ERROR,
+        error,
+      );
+    else if (error instanceof ZodError)
+      throw new OrganizationValidationError(
+        error.message || defaultMessage,
+        ERROR_TYPES.VALIDATION,
         error,
       );
     else

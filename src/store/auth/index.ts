@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { create } from 'zustand';
-import { devtools, persist, PersistStorage } from 'zustand/middleware';
+import { devtools, persist, PersistStorage, subscribeWithSelector } from 'zustand/middleware';
 import { type AuthState, type User } from './types';
 
 const cookieStorage: PersistStorage<AuthState> = {
@@ -30,24 +30,26 @@ const cookieStorage: PersistStorage<AuthState> = {
 
 const useAuthStore = create<AuthState>()(
   devtools(
-    persist(
-      (set) => ({
-        user: null,
-        token: null,
-        isAuthenticated: false,
+    subscribeWithSelector(
+      persist(
+        (set) => ({
+          user: null,
+          isAuthenticated: false,
+          login: (user: User) => set({ user, isAuthenticated: true }),
 
-        login: (user: User, token: string) => {
-          set({ user, token, isAuthenticated: true });
-        },
+          logout: () => {
+            set({ user: null, isAuthenticated: false });
 
-        logout: () => {
-          set({ user: null, token: null, isAuthenticated: false });
+            cookieStorage.removeItem('auth-storage');
+            cookieStorage.removeItem('user');
+            cookieStorage.removeItem('on-behalf-of');
+          },
+        }),
+        {
+          name: 'auth-storage',
+          storage: cookieStorage,
         },
-      }),
-      {
-        name: 'auth-storage',
-        storage: cookieStorage,
-      },
+      ),
     ),
   ),
 );

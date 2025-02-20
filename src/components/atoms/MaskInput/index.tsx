@@ -26,7 +26,7 @@ const MaskInput = forwardRef(
         'phone',
         <InputMask
           key={`${name}-phone`}
-          id="phone"
+          id={`${name}-id`}
           mask="+99 99999-9999"
           css={inputStyles}
           {...props}
@@ -41,7 +41,7 @@ const MaskInput = forwardRef(
           key={`${name}-currency`}
           {...props}
           css={inputStyles}
-          id="currency"
+          id={`${name}-id`}
           prefix="$ "
           placeholder="$ 0.00"
           defaultValue={0}

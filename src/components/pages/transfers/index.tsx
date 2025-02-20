@@ -1,15 +1,10 @@
 import { Button, LoadingSpinner } from '@/components';
 import CreateTransferModalContent from '@/components/organisms/CreateTransferModalContent';
-import TransferService from '@/features/transfer/services';
-import {
-  TransferListResponseSchema,
-  TransferResponse,
-  TransferStatus,
-} from '@/features/transfer/types';
+import { TransferResponse, TransferStatus } from '@/features/transfer/types';
 import useAccountStore from '@/store/account';
-import { formatCurrency } from '@/utils/functions/formatCurrency';
-import { useServiceEffect } from '@/utils/hooks/useServiceEffect';
-import { useServiceOnAction } from '@/utils/hooks/useServiceOnAction';
+import useTransferStore from '@/store/transfer';
+import { useTransferActions } from '@/store/transfer/hooks';
+import { formatCurrency, RECIPIENT_TRANSFER_TYPE } from '@/utils/functions/formatCurrency';
 import dynamic from 'next/dynamic';
 import { FC, useCallback, useEffect, useState } from 'react';
 import {
@@ -51,33 +46,30 @@ const Modal = dynamic(() => import('@/components/molecules/Modal'), {
 
 const TransfersPage: FC = () => {
   const accounts = useAccountStore((state) => state.accounts);
+  const { refreshTransfers, executeTransfer, cancelTransfer } = useTransferActions();
+
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
-  const [transfers, setTransfers] = useState<TransferListResponseSchema>();
+  const [transfersState, setTransfersState] = useState(() => {
+    const { transfers, loading, error } = useTransferStore.getInitialState();
+    return {
+      transfers,
+      loading,
+      error,
+    };
+  });
 
-  const { loading: initialLoading, error: initialError } = useServiceEffect(
-    undefined,
-    () => TransferService.get(),
-    setTransfers,
-    [],
-  );
+  useEffect(() => {
+    const unsubscribe = useTransferStore.subscribe(
+      (state) => ({
+        transfers: state.transfers,
+        loading: state.loading,
+        error: state.error,
+      }),
+      setTransfersState,
+    );
 
-  const {
-    execute: getTransfers,
-    loading: refreshLoading,
-    error: refreshError,
-  } = useServiceOnAction(TransferService.get);
-
-  const {
-    execute: executeTransfer,
-    loading: transferLoading,
-    error: transferError,
-  } = useServiceOnAction(TransferService.execute);
-
-  const {
-    execute: cancelTransfer,
-    loading: cancelLoading,
-    error: cancelError,
-  } = useServiceOnAction(TransferService.cancel);
+    return () => unsubscribe();
+  }, []);
 
   const handleError = useCallback((error: Error) => {
     toast.error(error.message, {
@@ -87,53 +79,33 @@ const TransfersPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (initialError) handleError(initialError as Error);
-    if (refreshError) handleError(refreshError as Error);
-    if (transferError) handleError(transferError as Error);
-    if (cancelError) handleError(cancelError as Error);
-  }, [initialError, refreshError, transferError, cancelError, handleError]);
-
-  const refreshTransfers = async () => {
-    try {
-      const response = await getTransfers(undefined);
-      if (response) setTransfers(response);
-    } catch (error) {
-      handleError(error as Error);
-    }
-  };
+    refreshTransfers().catch(handleError);
+  }, [handleError, refreshTransfers]);
 
   const handleExecuteTransfer = useCallback(
     async (transferId: string) => {
       try {
-        const response = await executeTransfer(transferId);
-
-        if (!response) return;
-
-        refreshTransfers();
+        await executeTransfer(transferId);
       } catch (error) {
         handleError(error as Error);
       }
     },
-    [refreshTransfers, handleError],
+    [executeTransfer, handleError],
   );
 
   const handleCancelTransfer = useCallback(
     async (transferId: string) => {
       try {
-        const response = await cancelTransfer(transferId);
-
-        if (!response) return;
-
-        refreshTransfers();
+        await cancelTransfer(transferId);
       } catch (error) {
         handleError(error as Error);
       }
     },
-    [refreshTransfers, handleError],
+    [cancelTransfer, handleError],
   );
 
   const renderRecipientInfo = useCallback((recipient: TransferResponse['recipientsInfo'][0]) => {
-    const isFiat = recipient.recipientTransferType === 'FIAT';
+    const isFiat = recipient.recipientTransferType === RECIPIENT_TRANSFER_TYPE.FIAT;
     const amount = isFiat
       ? formatCurrency(
           recipient.fiatDetails?.fiatAmount || 0,
@@ -208,8 +180,7 @@ const TransfersPage: FC = () => {
     );
   }, []);
 
-  if (initialLoading || refreshLoading || transferLoading || cancelLoading)
-    return <LoadingSpinner />;
+  if (transfersState.loading) return <LoadingSpinner />;
 
   return (
     <div css={pageContainerCss}>
@@ -226,12 +197,15 @@ const TransfersPage: FC = () => {
         </div>
 
         <div css={transferListCss}>
-          {transfers?.results.map((transfer) => (
+          {transfersState?.transfers?.results.map((transfer) => (
             <div css={transferCardCss} key={transfer.id}>
               <div css={cardHeaderCss}>
                 <div css={leftContentRowCss}>
                   <h4>
-                    {accounts.find((account) => account.id === transfer.payoutAccountId)?.name}
+                    {
+                      (accounts || []).find((account) => account.id === transfer.payoutAccountId)
+                        ?.name
+                    }
                   </h4>
                   <h5 css={memoTextCss}>{transfer.memo}</h5>
                   <div css={cardMetadataCss}>
@@ -284,10 +258,7 @@ const TransfersPage: FC = () => {
         onClose={() => setIsTransferModalOpen(false)}
         title="New Transfer"
       >
-        <CreateTransferModalContent
-          refreshTransfers={refreshTransfers}
-          setModalOpen={setIsTransferModalOpen}
-        />
+        <CreateTransferModalContent setModalOpen={setIsTransferModalOpen} />
       </Modal>
     </div>
   );
