@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
   const isAuthenticated = authStorage ? JSON.parse(authStorage.value).state.isAuthenticated : false;
   const { pathname } = req.nextUrl;
 
-  if (!isAuthenticated && pathname === '/') {
+  if (!isAuthenticated && pathname !== '/register') {
     return NextResponse.redirect(new URL('/register', req.url));
   }
 

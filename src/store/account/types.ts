@@ -1,6 +1,6 @@
-import { AccountResponseArray } from '@/features/account/types';
+import { type AccountResponseArray } from '@/features/account/types';
 
-export type Accounts = AccountResponseArray;
+export type Accounts = AccountResponseArray | [] | undefined;
 
 export type AccountState = {
   loading: boolean;

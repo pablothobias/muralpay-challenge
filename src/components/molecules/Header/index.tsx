@@ -2,12 +2,15 @@ import Icon from '@/components/atoms/Icon';
 import LoadingSpinner from '@/components/atoms/LoadingSpinner';
 import useAccountStore from '@/store/account';
 import useAuthStore from '@/store/auth';
+import useOrganizationStore from '@/store/organization';
+import useTransferStore from '@/store/transfer';
 import { useToggleTheme } from '@/utils/context/toggleThemeContext';
 import { useTheme } from '@emotion/react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { headerStyles, navLinkStyles } from './styles';
+import { useEffect, useState } from 'react';
 
 const Button = dynamic(() => import('@/components/atoms/Button'), {
   ssr: false,
@@ -17,8 +20,21 @@ const Button = dynamic(() => import('@/components/atoms/Button'), {
 const Header = () => {
   const theme = useTheme();
   const { toggleTheme } = useToggleTheme();
-  const { isAuthenticated, logout } = useAuthStore((state) => state);
-  const { onLogout } = useAccountStore((state) => state);
+  const { logout } = useAuthStore((state) => state);
+  const accountStoreOnLogout = useAccountStore((state) => state.onLogout);
+  const organizationStoreOnLogout = useOrganizationStore((state) => state.onLogout);
+  const transferStoreOnLogout = useTransferStore((state) => state.onLogout);
+
+  const [isAuthenticatedValue, setIsAuthenticatedValue] = useState(false);
+
+  useEffect(() => {
+    const unsubscribeAuth = useAuthStore.subscribe(
+      (state) => state.isAuthenticated,
+      (isAuthenticated) => setIsAuthenticatedValue(isAuthenticated || false),
+    );
+
+    return () => unsubscribeAuth();
+  }, []);
 
   return (
     <header css={headerStyles(theme)}>
@@ -27,7 +43,7 @@ const Header = () => {
         <h1>Mural Pay</h1>
       </div>
       <nav>
-        {isAuthenticated && (
+        {isAuthenticatedValue && (
           <>
             <Link href="/" css={navLinkStyles(theme)}>
               <Icon name="home" size={15} />
@@ -45,7 +61,9 @@ const Header = () => {
               href="/"
               onClick={() => {
                 logout();
-                onLogout();
+                accountStoreOnLogout();
+                transferStoreOnLogout();
+                organizationStoreOnLogout();
               }}
               css={navLinkStyles(theme)}
             >

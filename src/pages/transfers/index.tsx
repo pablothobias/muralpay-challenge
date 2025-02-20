@@ -1,7 +1,8 @@
-import TransfersPage from '@/components/pages/transfers';
+import { TransfersPage } from '@/components';
+import withAuth from '@/utils/functions/withAuth';
 
-const TransfersContainerPage = () => {
+const TransferContainerPage = () => {
   return <TransfersPage />;
 };
 
-export default TransfersContainerPage;
+export default withAuth(TransferContainerPage, { isPrivate: true, redirectTo: '/register' });

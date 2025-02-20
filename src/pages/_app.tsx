@@ -1,6 +1,8 @@
 'use client';
 
 import { globalStyles } from '@/styles/';
+import { LoadingProvider } from '@/utils/context/LoadingContext';
+import { ToastProvider } from '@/utils/context/ToastContext';
 import { ToggleThemeProvider } from '@/utils/context/toggleThemeContext';
 import { Global } from '@emotion/react';
 import type { AppProps } from 'next/app';
@@ -16,11 +18,15 @@ const ToastContainer = dynamic(() => import('react-toastify').then((mod) => mod.
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <ToggleThemeProvider>
-      <Global styles={globalStyles} />
-      <GlobalLayout>
-        <Component {...pageProps} />
-        <ToastContainer />
-      </GlobalLayout>
+      <LoadingProvider>
+        <ToastProvider>
+          <Global styles={globalStyles} />
+          <GlobalLayout>
+            <Component {...pageProps} />
+            <ToastContainer />
+          </GlobalLayout>
+        </ToastProvider>
+      </LoadingProvider>
     </ToggleThemeProvider>
   );
 };

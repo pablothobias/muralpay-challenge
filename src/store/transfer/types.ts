@@ -1,6 +1,6 @@
-import { TransferSchema } from '@/features/transfer/types';
+import { TransferListResponseSchema } from '@/features/transfer/types';
 
-export type Transfers = TransferSchema[];
+export type Transfers = TransferListResponseSchema | { results: []; total: number } | undefined;
 
 export type TransferState = {
   loading: boolean;

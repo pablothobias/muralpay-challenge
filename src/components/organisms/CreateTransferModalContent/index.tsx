@@ -5,9 +5,13 @@ import MaskInput from '@/components/atoms/MaskInput';
 import Select from '@/components/atoms/Select';
 import { type AccountResponse } from '@/features/account/types';
 import { transferSchema } from '@/features/transfer/schemas';
-import TransferService from '@/features/transfer/services';
 import type { TransferSchema } from '@/features/transfer/types';
 import useAccountStore from '@/store/account';
+import { AccountState } from '@/store/account/types';
+import useTransferStore from '@/store/transfer';
+import { useTransferActions } from '@/store/transfer/hooks';
+import { useLoading } from '@/utils/context/LoadingContext';
+import { useToast } from '@/utils/context/ToastContext';
 import {
   ACC_TYPE,
   BLOCKCHAIN,
@@ -17,11 +21,9 @@ import {
   RECIPIENT_TRANSFER_TYPE,
   RECIPIENT_TYPE,
 } from '@/utils/functions/formatCurrency';
-import { useServiceOnAction } from '@/utils/hooks/useServiceOnAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { ctaContainerCss, formGroupCss, formTitleCss, recipientsInfoContainerCss } from './styles';
 
 type CreateTransferModalContentProps = {
@@ -29,25 +31,32 @@ type CreateTransferModalContentProps = {
   refreshTransfers?: () => Promise<void>;
 };
 
-const CreateTransferModalContent = ({
-  setModalOpen,
-  refreshTransfers,
-}: CreateTransferModalContentProps) => {
-  const accountsStore = useAccountStore((state) => state);
-
-  const { execute, loading, error } = useServiceOnAction(TransferService.create);
-
+const CreateTransferModalContent = ({ setModalOpen }: CreateTransferModalContentProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [accountState, setAccountState] = useState<AccountState>();
+  const { createTransfer } = useTransferActions();
 
-  useEffect(() => () => setSelectedIndex(-1), []);
+  const { showSuccess, showError } = useToast();
+  const { isLoading, setLoadingState } = useLoading();
 
   useEffect(() => {
-    if (error) {
-      toast.error((error as Error).message, {
-        position: 'top-right',
-      });
-    }
-  }, [error]);
+    setLoadingState('createTransfer', useTransferStore.getState().loading);
+    setLoadingState('account', useAccountStore.getState().loading);
+
+    const unsubscribeTransfer = useTransferStore.subscribe((state) =>
+      setLoadingState('createTransfer', state.loading),
+    );
+
+    const unsubscribeAccount = useAccountStore.subscribe((state) => {
+      setAccountState(state);
+      setLoadingState('account', state.loading);
+    });
+
+    return () => {
+      unsubscribeTransfer();
+      unsubscribeAccount();
+    };
+  }, [setLoadingState]);
 
   const {
     register,
@@ -62,18 +71,14 @@ const CreateTransferModalContent = ({
     name: 'recipientsInfo',
   });
 
-  const onSubmit = (data: TransferSchema) => {
+  const onSubmit = async (data: TransferSchema) => {
     try {
-      execute(data);
-      toast.success('Transfer created successfully!', {
-        position: 'top-right',
-      });
-      refreshTransfers?.();
+      const response = await createTransfer(data);
+      if (response) showSuccess('transfer', 'Transfer created successfully!');
       setModalOpen(false);
     } catch (error) {
-      toast.error((error as Error).message, {
-        position: 'top-right',
-      });
+      const message = error instanceof Error ? error.message : 'Failed to create transfer';
+      showError('transfer', message);
     }
   };
 
@@ -86,7 +91,7 @@ const CreateTransferModalContent = ({
             id="payoutAccountId"
             label="Account"
             placeholder="Select an account"
-            options={accountsStore.accounts.map((account: AccountResponse) => ({
+            options={(accountState?.accounts || []).map((account: AccountResponse) => ({
               value: account.id,
               label: `${account.name} ${account.address}`,
             }))}
@@ -438,7 +443,7 @@ const CreateTransferModalContent = ({
         )}
         <div css={ctaContainerCss}>
           <Button
-            disabled={loading}
+            disabled={isLoading}
             type="button"
             variant="secondary"
             icon={<Icon name="plus" size={15} />}
@@ -484,7 +489,7 @@ const CreateTransferModalContent = ({
             Add Recipient
           </Button>
           <Button
-            disabled={loading}
+            disabled={isLoading}
             icon={<Icon name="play" size={15} />}
             type="submit"
             variant="success"
@@ -493,7 +498,7 @@ const CreateTransferModalContent = ({
           </Button>
           {selectedIndex >= 0 && (
             <Button
-              disabled={loading}
+              disabled={isLoading}
               type="button"
               variant="danger"
               icon={<Icon name="trash" size={15} />}

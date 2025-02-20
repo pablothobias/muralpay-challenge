@@ -25,3 +25,4 @@ export { default as AccountsPage } from './pages/accounts';
 export { default as AccountList } from './pages/accounts/AccountList';
 export { default as HomeHero } from './pages/home/HomeHero';
 export { default as RegisterPage } from './pages/register';
+export { default as TransfersPage } from './pages/transfers';
