@@ -3,6 +3,8 @@ export const API_ENDPOINTS = {
   ACCOUNTS: '/accounts',
   TRANSFERS: '/transfers',
   TRANSFER_REQUESTS: '/transfer-requests',
+  TRANSFER_REQUESTS_EXECUTE: '/transfer-requests/execute',
+  TRANSFER_REQUESTS_CANCEL: '/transfer-requests/cancel',
 };
 
 export const ERROR_TYPES = {

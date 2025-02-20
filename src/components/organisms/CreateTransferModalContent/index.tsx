@@ -24,10 +24,18 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { ctaContainerCss, formGroupCss, formTitleCss, recipientsInfoContainerCss } from './styles';
 
-const CreateTransferModalContent = () => {
+type CreateTransferModalContentProps = {
+  setModalOpen: (bool: boolean) => void;
+  refreshTransfers?: () => Promise<void>;
+};
+
+const CreateTransferModalContent = ({
+  setModalOpen,
+  refreshTransfers,
+}: CreateTransferModalContentProps) => {
   const accountsStore = useAccountStore((state) => state);
 
-  const { execute, loading, error } = useServiceOnAction(TransferService.create, []);
+  const { execute, loading, error } = useServiceOnAction(TransferService.create);
 
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
@@ -49,16 +57,25 @@ const CreateTransferModalContent = () => {
     formState: { errors },
   } = useForm<TransferSchema>({ resolver: zodResolver(transferSchema) });
 
-  const recipientTransferType = watch(`recipientsInfo.${selectedIndex}.recipientTransferType`);
-  const isBlockchainSelected = recipientTransferType === RECIPIENT_TRANSFER_TYPE.BLOCKCHAIN;
-  const isFiatSelected = recipientTransferType === RECIPIENT_TRANSFER_TYPE.FIAT;
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'recipientsInfo',
   });
 
-  const onSubmit = (data: TransferSchema) => execute(data);
+  const onSubmit = (data: TransferSchema) => {
+    try {
+      execute(data);
+      toast.success('Transfer created successfully!', {
+        position: 'top-right',
+      });
+      refreshTransfers?.();
+      setModalOpen(false);
+    } catch (error) {
+      toast.error((error as Error).message, {
+        position: 'top-right',
+      });
+    }
+  };
 
   return (
     <>
@@ -66,6 +83,7 @@ const CreateTransferModalContent = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <span css={formGroupCss}>
           <Select
+            id="payoutAccountId"
             label="Account"
             placeholder="Select an account"
             options={accountsStore.accounts.map((account: AccountResponse) => ({
@@ -107,6 +125,7 @@ const CreateTransferModalContent = () => {
 
                 <span css={formGroupCss}>
                   <Select
+                    id={`recipientsInfo.${index}.currencyCode`}
                     options={[
                       { value: CURRENCY.COP, label: `COP ${currencyFlags.COP}` },
                       { value: CURRENCY.USD, label: `USD ${currencyFlags.USD}` },
@@ -153,7 +172,6 @@ const CreateTransferModalContent = () => {
                   <MaskInput<TransferSchema>
                     control={control}
                     name={`recipientsInfo.${index}.phoneNumber`}
-                    id={`phoneNumber`}
                     type="phone"
                     label="Phone Number"
                     placeholder="Enter phone number"
@@ -162,136 +180,123 @@ const CreateTransferModalContent = () => {
                 </span>
                 <span css={formGroupCss}>
                   <Select
+                    id={`recipientsInfo.${index}.recipientTransferType`}
+                    placeholder="Select recipient transfer detail"
+                    label="Recipient Transfer Detail"
                     options={[
                       { value: RECIPIENT_TRANSFER_TYPE.FIAT, label: 'FIAT' },
                       { value: RECIPIENT_TRANSFER_TYPE.BLOCKCHAIN, label: 'CRYPTO' },
                     ]}
-                    placeholder="Select recipient transfer detail"
-                    label="Recipient Transfer Detail"
                     {...register(`recipientsInfo.${index}.recipientTransferType`)}
                     error={errors.recipientsInfo?.[index]?.recipientTransferType?.message}
                   />
                 </span>
                 <span css={formGroupCss}>
                   <Select
+                    id={`recipientsInfo.${index}.recipientType`}
+                    placeholder="Select recipient type"
+                    label="Recipient Type"
                     options={[
                       { value: RECIPIENT_TYPE.INDIVIDUAL, label: 'Individual' },
                       { value: RECIPIENT_TYPE.BUSINESS, label: 'Business' },
                     ]}
-                    placeholder="Select recipient type"
-                    label="Recipient Type"
                     {...register(`recipientsInfo.${index}.recipientType`)}
                     error={errors.recipientsInfo?.[index]?.recipientType?.message}
                   />
                 </span>
-                {isFiatSelected && (
+                {watch(`recipientsInfo.${index}.recipientTransferType`) ===
+                  RECIPIENT_TRANSFER_TYPE.FIAT && (
                   <>
                     <h4 css={formTitleCss}>Contact Details</h4>
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.bankName`}
+                        id={`recipientsInfo.${index}.bankDetails.bankName`}
                         type="text"
                         label="Bank Name"
                         placeholder="Enter bank name"
-                        {...register(`recipientsInfo.${index}.bankContactDetails.bankName`)}
-                        error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.bankName?.message
-                        }
+                        {...register(`recipientsInfo.${index}.bankDetails.bankName`)}
+                        error={errors.recipientsInfo?.[index]?.bankDetails?.bankName?.message}
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.bankAccountOwnerName`}
+                        id={`recipientsInfo.${index}.bankDetails.bankAccountOwnerName`}
                         type="text"
                         label="Bank Account Owner Name"
                         placeholder="Enter account owner name"
-                        {...register(
-                          `recipientsInfo.${index}.bankContactDetails.bankAccountOwnerName`,
-                        )}
+                        {...register(`recipientsInfo.${index}.bankDetails.bankAccountOwnerName`)}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.bankAccountOwnerName
-                            ?.message
+                          errors.recipientsInfo?.[index]?.bankDetails?.bankAccountOwnerName?.message
                         }
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Select
+                        id={`recipientsInfo.${index}.bankDetails.accountType`}
                         placeholder="Select account type"
                         label="Account Type"
                         options={[
                           { value: ACC_TYPE.SAVINGS, label: 'SAVINGS' },
                           { value: ACC_TYPE.CHECKING, label: 'CHECKING' },
                         ]}
-                        {...register(`recipientsInfo.${index}.bankContactDetails.accountType`)}
-                        error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.accountType?.message
-                        }
+                        {...register(`recipientsInfo.${index}.bankDetails.accountType`)}
+                        error={errors.recipientsInfo?.[index]?.bankDetails?.accountType?.message}
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.bankAccountNumber`}
+                        id={`recipientsInfo.${index}.bankDetails.bankAccountNumber`}
                         type="text"
                         label="Bank Account Number"
                         placeholder="Enter bank account number"
-                        {...register(
-                          `recipientsInfo.${index}.bankContactDetails.bankAccountNumber`,
-                        )}
+                        {...register(`recipientsInfo.${index}.bankDetails.bankAccountNumber`)}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.bankAccountNumber
-                            ?.message
+                          errors.recipientsInfo?.[index]?.bankDetails?.bankAccountNumber?.message
                         }
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.bankRoutingNumber`}
+                        id={`recipientsInfo.${index}.bankDetails.bankRoutingNumber`}
                         type="text"
                         label="Bank Routing Number"
                         placeholder="Enter bank routing number"
-                        {...register(
-                          `recipientsInfo.${index}.bankContactDetails.bankRoutingNumber`,
-                        )}
+                        {...register(`recipientsInfo.${index}.bankDetails.bankRoutingNumber`)}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.bankRoutingNumber
-                            ?.message
+                          errors.recipientsInfo?.[index]?.bankDetails?.bankRoutingNumber?.message
                         }
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.bankCode`}
+                        id={`recipientsInfo.${index}.bankDetails.bankCode`}
                         type="text"
                         label="Bank Code"
                         placeholder="Enter bank code"
-                        {...register(`recipientsInfo.${index}.bankContactDetails.bankCode`)}
-                        error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.bankCode?.message
-                        }
+                        {...register(`recipientsInfo.${index}.bankDetails.bankCode`)}
+                        error={errors.recipientsInfo?.[index]?.bankDetails?.bankCode?.message}
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.documentNumber`}
+                        id={`recipientsInfo.${index}.bankDetails.documentNumber`}
                         type="text"
                         label="Document Number"
                         placeholder="Enter document number"
-                        {...register(`recipientsInfo.${index}.bankContactDetails.documentNumber`)}
-                        error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.documentNumber
-                            ?.message
-                        }
+                        {...register(`recipientsInfo.${index}.bankDetails.documentNumber`)}
+                        error={errors.recipientsInfo?.[index]?.bankDetails?.documentNumber?.message}
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Select
+                        id={`recipientsInfo.${index}.bankDetails.documentType`}
                         options={[
                           { value: DOC_TYPE.NATIONAL_ID, label: 'National ID' },
                           { value: DOC_TYPE.PASSPORT, label: 'Passport' },
@@ -299,10 +304,8 @@ const CreateTransferModalContent = () => {
                         ]}
                         placeholder="Select document type"
                         label="Document Type"
-                        {...register(`recipientsInfo.${index}.bankContactDetails.documentType`)}
-                        error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.documentType?.message
-                        }
+                        {...register(`recipientsInfo.${index}.bankDetails.documentType`)}
+                        error={errors.recipientsInfo?.[index]?.bankDetails?.documentType?.message}
                       />
                     </span>
 
@@ -310,63 +313,59 @@ const CreateTransferModalContent = () => {
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.physicalAddress.address1`}
+                        id={`recipientsInfo.${index}.bankDetails.physicalAddress.address1`}
                         type="text"
                         label="Address 1"
                         placeholder="Enter address 1"
                         {...register(
-                          `recipientsInfo.${index}.bankContactDetails.physicalAddress.address1`,
+                          `recipientsInfo.${index}.bankDetails.physicalAddress.address1`,
                         )}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.physicalAddress
-                            ?.address1?.message
+                          errors.recipientsInfo?.[index]?.bankDetails?.physicalAddress?.address1
+                            ?.message
                         }
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.physicalAddress.address2`}
+                        id={`recipientsInfo.${index}.bankDetails.physicalAddress.address2`}
                         type="text"
                         label="Address 2"
                         placeholder="Enter address 2"
                         {...register(
-                          `recipientsInfo.${index}.bankContactDetails.physicalAddress.address2`,
+                          `recipientsInfo.${index}.bankDetails.physicalAddress.address2`,
                         )}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.physicalAddress
-                            ?.address2?.message
+                          errors.recipientsInfo?.[index]?.bankDetails?.physicalAddress?.address2
+                            ?.message
                         }
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.physicalAddress.country`}
+                        id={`recipientsInfo.${index}.bankDetails.physicalAddress.country`}
                         type="text"
                         label="Country"
                         placeholder="Enter country"
-                        {...register(
-                          `recipientsInfo.${index}.bankContactDetails.physicalAddress.country`,
-                        )}
+                        {...register(`recipientsInfo.${index}.bankDetails.physicalAddress.country`)}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.physicalAddress
-                            ?.country?.message
+                          errors.recipientsInfo?.[index]?.bankDetails?.physicalAddress?.country
+                            ?.message
                         }
                       />
                     </span>
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.physicalAddress.state`}
+                        id={`recipientsInfo.${index}.bankDetails.physicalAddress.state`}
                         type="text"
                         label="State"
                         placeholder="Enter state"
-                        {...register(
-                          `recipientsInfo.${index}.bankContactDetails.physicalAddress.state`,
-                        )}
+                        {...register(`recipientsInfo.${index}.bankDetails.physicalAddress.state`)}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.physicalAddress?.state
+                          errors.recipientsInfo?.[index]?.bankDetails?.physicalAddress?.state
                             ?.message
                         }
                       />
@@ -374,15 +373,13 @@ const CreateTransferModalContent = () => {
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.physicalAddress.city`}
+                        id={`recipientsInfo.${index}.bankDetails.physicalAddress.city`}
                         type="text"
                         label="City"
                         placeholder="Enter city"
-                        {...register(
-                          `recipientsInfo.${index}.bankContactDetails.physicalAddress.city`,
-                        )}
+                        {...register(`recipientsInfo.${index}.bankDetails.physicalAddress.city`)}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.physicalAddress?.city
+                          errors.recipientsInfo?.[index]?.bankDetails?.physicalAddress?.city
                             ?.message
                         }
                       />
@@ -390,23 +387,20 @@ const CreateTransferModalContent = () => {
 
                     <span css={formGroupCss}>
                       <Input
-                        id={`recipientsInfo.${index}.bankContactDetails.physicalAddress.zip`}
+                        id={`recipientsInfo.${index}.bankDetails.physicalAddress.zip`}
                         type="text"
                         label="Zip"
                         placeholder="Enter zip code"
-                        {...register(
-                          `recipientsInfo.${index}.bankContactDetails.physicalAddress.zip`,
-                        )}
+                        {...register(`recipientsInfo.${index}.bankDetails.physicalAddress.zip`)}
                         error={
-                          errors.recipientsInfo?.[index]?.bankContactDetails?.physicalAddress?.zip
-                            ?.message
+                          errors.recipientsInfo?.[index]?.bankDetails?.physicalAddress?.zip?.message
                         }
                       />
                     </span>
                   </>
                 )}
-
-                {isBlockchainSelected && (
+                {watch(`recipientsInfo.${index}.recipientTransferType`) ===
+                  RECIPIENT_TRANSFER_TYPE.BLOCKCHAIN && (
                   <>
                     <span css={formGroupCss}>
                       <Input
@@ -454,18 +448,18 @@ const CreateTransferModalContent = () => {
 
               append({
                 name: '',
-                currencyCode: 'USD',
+                currencyCode: 'COP',
                 tokenAmount: 0,
                 email: '',
                 dateOfBirth: '',
                 phoneNumber: '',
                 recipientTransferType: 'BLOCKCHAIN',
                 recipientType: 'INDIVIDUAL',
-                bankContactDetails: {
+                bankDetails: {
                   bankName: '',
                   bankAccountOwnerName: '',
-                  currencyCode: '',
-                  accountType: 'CHECKING',
+                  currencyCode: 'COP',
+                  accountType: 'SAVINGS',
                   bankAccountNumber: '',
                   bankRoutingNumber: '',
                   bankCode: '',

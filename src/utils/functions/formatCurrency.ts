@@ -2,6 +2,7 @@ export const CURRENCY = {
   COP: 'COP',
   USD: 'USD',
   EUR: 'EUR',
+  XBT: 'XBT',
 };
 
 export const DOC_TYPE = {
@@ -43,7 +44,8 @@ export const formatCurrency = (amount: number, currency: string) => {
     COP: 'es-CO',
     USD: 'en-US',
     EUR: 'en_GB',
+    XBT: 'en-US',
   };
 
-  return `${Intl.NumberFormat(mappedCurrencyValues[currency], { style: 'currency', currency }).format(amount)}`;
+  return `${Intl.NumberFormat(mappedCurrencyValues[currency], { style: 'currency', currency: currency }).format(amount)}`;
 };

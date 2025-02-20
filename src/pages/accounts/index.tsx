@@ -16,13 +16,13 @@ const AccountsContainerPage = () => {
     loading: createAccountLoading,
     error: createAccountError,
     execute,
-  } = useServiceOnAction(AccountService.create, []);
+  } = useServiceOnAction(AccountService.create);
 
   const {
     loading: getAccountsLoading,
     error: getAccountsError,
     execute: getAccountsExecute,
-  } = useServiceOnAction(AccountService.get, []);
+  } = useServiceOnAction(AccountService.get);
 
   const {
     register,

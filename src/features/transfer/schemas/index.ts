@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const transferStatusEnum = z.enum(['pending', 'completed', 'failed']);
+export const transferStatusEnum = z.enum(['PENDING', 'COMPLETED', 'FAILED', 'IN_REVIEW']);
 export const transferCurrencyEnum = z.enum(['COP', 'USD', 'EUR']);
 export const transferRecipientEnum = z.enum(['SAVINGS', 'CHECKING']);
 
@@ -13,7 +13,7 @@ export const physicalAddressSchema = z.object({
   zip: z.string(),
 });
 
-export const bankContactDetailsSchema = z.object({
+export const bankDetailsSchema = z.object({
   bankName: z.string(),
   bankAccountOwnerName: z.string(),
   currencyCode: z.string(),
@@ -40,7 +40,7 @@ export const recipientInfoSchema = z.object({
   phoneNumber: z.string(),
   recipientTransferType: z.enum(['FIAT', 'BLOCKCHAIN']),
   recipientType: z.enum(['INDIVIDUAL', 'BUSINESS']),
-  bankContactDetails: bankContactDetailsSchema,
+  bankDetails: bankDetailsSchema,
   walletDetails: walletDetailsSchema,
 });
 
@@ -52,12 +52,40 @@ export const transferSchema = z.object({
 
 export const transferResponseSchema = z.object({
   id: z.string(),
-  status: transferStatusEnum,
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  payoutAccountId: z.string(),
+  memo: z.string(),
+  status: z.string(),
+  recipientsInfo: z.array(
+    z.object({
+      id: z.string(),
+      createdAt: z.string(),
+      updatedAt: z.string(),
+      recipientTransferType: z.string(),
+      tokenAmount: z.number(),
+      fiatDetails: z
+        .object({
+          withdrawalRequestStatus: z.string(),
+          currencyCode: z.string(),
+          fiatAmount: z.number(),
+          transactionFee: z.number(),
+          exchangeFeePercentage: z.number(),
+          exchangeRate: z.number(),
+          feeTotal: z.number(),
+        })
+        .optional(),
+      blockchainDetails: z
+        .object({
+          blockchain: z.string(),
+          walletAddress: z.string(),
+        })
+        .optional(),
+    }),
+  ),
 });
 
 export const transferListResponseSchema = z.object({
   results: z.array(transferResponseSchema),
   total: z.number(),
 });
-
-export const transferResponseArraySchema = z.array(transferResponseSchema);

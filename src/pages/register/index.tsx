@@ -31,7 +31,6 @@ const RegisterContainer = () => {
 
   const { execute, error, loading } = useServiceOnAction<OrganizationSchema, OrganizationResponse>(
     OrganizationService.create,
-    [],
   );
 
   useEffect(() => {

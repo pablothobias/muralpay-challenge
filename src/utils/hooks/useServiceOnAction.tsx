@@ -1,4 +1,4 @@
-import { type DependencyList, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export type UseServiceType<RequestType, ResponseType> = {
   execute: (params: RequestType) => Promise<ResponseType | undefined>;
@@ -13,7 +13,6 @@ type ServiceFunctionType<RequestType, ResponseType> = (
 
 export function useServiceOnAction<RequestType, ResponseType>(
   serviceFunction: ServiceFunctionType<RequestType, ResponseType>,
-  dependencies: DependencyList = [],
 ): UseServiceType<RequestType, ResponseType> {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -36,7 +35,7 @@ export function useServiceOnAction<RequestType, ResponseType>(
         setLoading(false);
       }
     },
-    [serviceFunction, ...dependencies],
+    [serviceFunction],
   );
 
   return { execute, loading, error };

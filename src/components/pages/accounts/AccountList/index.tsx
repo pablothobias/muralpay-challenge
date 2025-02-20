@@ -31,6 +31,14 @@ const AccountInfoModalContent = dynamic(
   },
 );
 
+const CreateTransferModalContent = dynamic(
+  () => import('@/components/organisms/CreateTransferModalContent'),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+  },
+);
+
 const Modal = dynamic(() => import('@/components/molecules/Modal'), {
   ssr: false,
   loading: () => <LoadingSpinner />,
@@ -81,7 +89,7 @@ const AccountList = ({ accounts, loading }: AccountListProps) => {
           isOpen={isOpen}
           onClose={() => setOpen(false)}
           title={title}
-          size="medium"
+          size="large"
           footer={
             <>
               <Button variant="warning" onClick={() => setOpen(false)}>
@@ -149,8 +157,7 @@ const AccountList = ({ accounts, loading }: AccountListProps) => {
         isOpen: isTransferModalOpen,
         setOpen: setIsTransferModalOpen,
         onSave: () => {},
-        // content: <CreateTransferModalContent />,
-        content: <></>,
+        content: <CreateTransferModalContent setModalOpen={setIsTransferModalOpen} />,
       })}
       {renderModal({
         title: selectedAccount?.name,

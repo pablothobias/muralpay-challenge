@@ -1,26 +1,48 @@
 import { Button, LoadingSpinner } from '@/components';
 import CreateTransferModalContent from '@/components/organisms/CreateTransferModalContent';
 import TransferService from '@/features/transfer/services';
-import { TransferListResponse } from '@/features/transfer/types';
+import {
+  TransferListResponseSchema,
+  TransferResponse,
+  TransferStatus,
+} from '@/features/transfer/types';
+import useAccountStore from '@/store/account';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
 import { useServiceEffect } from '@/utils/hooks/useServiceEffect';
+import { useServiceOnAction } from '@/utils/hooks/useServiceOnAction';
 import dynamic from 'next/dynamic';
-import { FC, useEffect, useMemo, useState } from 'react';
-import { IoSwapHorizontalOutline } from 'react-icons/io5';
+import { FC, useCallback, useEffect, useState } from 'react';
+import {
+  IoCardOutline,
+  IoDocumentTextOutline,
+  IoSwapHorizontalOutline,
+  IoSwapVerticalOutline,
+  IoTimeOutline,
+  IoTrendingUpOutline,
+  IoWalletOutline,
+} from 'react-icons/io5';
+import { MdAccountBalanceWallet } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import {
-  rowLeftContentCss,
-  rowMiddleContentCss,
-  rowRightContentCss,
-  sectionContainer,
-  sectionHeader,
-  transferRowCss,
-  transfersPageCss,
+  amountTextCss,
+  buttonCss,
+  cardHeaderCss,
+  cardMetadataCss,
+  detailTextCss,
+  feeDetailsCss,
+  feeItemCss,
+  headerCss,
+  leftContentRowCss,
+  memoTextCss,
+  pageContainerCss,
+  recipientCardCss,
+  recipientHeaderCss,
+  recipientInfoCss,
+  statusBadgeCss,
+  transferCardCss,
+  transferListCss,
+  transfersContainerCss,
 } from './styles';
-
-const List = dynamic(() => import('@/components/molecules/List'), {
-  ssr: false,
-  loading: () => <LoadingSpinner />,
-});
 
 const Modal = dynamic(() => import('@/components/molecules/Modal'), {
   ssr: false,
@@ -28,99 +50,245 @@ const Modal = dynamic(() => import('@/components/molecules/Modal'), {
 });
 
 const TransfersPage: FC = () => {
+  const accounts = useAccountStore((state) => state.accounts);
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
-  const [transfers, setTransfers] = useState<TransferListResponse | undefined>(undefined);
-  const { loading, error } = useServiceEffect(
+  const [transfers, setTransfers] = useState<TransferListResponseSchema>();
+
+  const { loading: initialLoading, error: initialError } = useServiceEffect(
     undefined,
     () => TransferService.get(),
     setTransfers,
     [],
   );
 
+  const {
+    execute: getTransfers,
+    loading: refreshLoading,
+    error: refreshError,
+  } = useServiceOnAction(TransferService.get);
+
+  const {
+    execute: executeTransfer,
+    loading: transferLoading,
+    error: transferError,
+  } = useServiceOnAction(TransferService.execute);
+
+  const {
+    execute: cancelTransfer,
+    loading: cancelLoading,
+    error: cancelError,
+  } = useServiceOnAction(TransferService.cancel);
+
+  const handleError = useCallback((error: Error) => {
+    toast.error(error.message, {
+      position: 'top-right',
+      autoClose: 3000,
+    });
+  }, []);
+
   useEffect(() => {
-    if (error) {
-      toast.error((error as Error).message, {
-        position: 'top-right',
-      });
+    if (initialError) handleError(initialError as Error);
+    if (refreshError) handleError(refreshError as Error);
+    if (transferError) handleError(transferError as Error);
+    if (cancelError) handleError(cancelError as Error);
+  }, [initialError, refreshError, transferError, cancelError, handleError]);
+
+  const refreshTransfers = async () => {
+    try {
+      const response = await getTransfers(undefined);
+      if (response) setTransfers(response);
+    } catch (error) {
+      handleError(error as Error);
     }
-  }, [error]);
+  };
 
-  const mountTransfersRows = useMemo(() => {
-    return transfers?.results?.map((item) => ({
-      id: item.id,
-      element: (
-        <div css={transferRowCss} key={item.id}>
-          <div css={rowLeftContentCss}>
-            {Array(4).map((_, index) => (
-              <h3 key={index}>Iha {index}</h3>
-            ))}
-          </div>
+  const handleExecuteTransfer = useCallback(
+    async (transferId: string) => {
+      try {
+        const response = await executeTransfer(transferId);
 
-          <div css={rowMiddleContentCss}>
-            <h6>Banana</h6>
-            {/* <span css={transferBadgeCss(item.status)}>
-              {item.status === TransferStatus.COMPLETED ? (
-                <Icon name="check" size={20} color="#fff" />
-              ) : item.status === TransferStatus.FAILED ? (
-                <Icon name="error" size={20} color="#fff" />
-              ) : (
-                <Icon name="refresh" size={20} color="#fff" />
-              )}
+        if (!response) return;
+
+        refreshTransfers();
+      } catch (error) {
+        handleError(error as Error);
+      }
+    },
+    [refreshTransfers, handleError],
+  );
+
+  const handleCancelTransfer = useCallback(
+    async (transferId: string) => {
+      try {
+        const response = await cancelTransfer(transferId);
+
+        if (!response) return;
+
+        refreshTransfers();
+      } catch (error) {
+        handleError(error as Error);
+      }
+    },
+    [refreshTransfers, handleError],
+  );
+
+  const renderRecipientInfo = useCallback((recipient: TransferResponse['recipientsInfo'][0]) => {
+    const isFiat = recipient.recipientTransferType === 'FIAT';
+    const amount = isFiat
+      ? formatCurrency(
+          recipient.fiatDetails?.fiatAmount || 0,
+          recipient.fiatDetails?.currencyCode || 'USD',
+        )
+      : formatCurrency(recipient.tokenAmount || 0, 'XBT');
+
+    return (
+      <div key={recipient.id} css={recipientCardCss}>
+        <div css={recipientHeaderCss}>
+          <div css={cardMetadataCss}>
+            {isFiat ? <IoWalletOutline size={20} /> : <MdAccountBalanceWallet size={20} />}
+            <span>
+              {isFiat
+                ? 'Fiat Transfer'
+                : `Blockchain Transfer (${recipient.blockchainDetails?.blockchain})`}
             </span>
-            <p>
-              Account number:&nbsp;<strong>{item.accountId}</strong>
-            </p>
-            <div>
-              <span>{currencyFlags[item.currency]}</span>&nbsp;
-              {`${formatCurrency(item.amount, item.currency)}`}
-            </div>
-            {item.status === TransferStatus.PENDING && (
-              <Button css={transferButtonCss} onClick={() => effectuateTransaction(item.id)}>
-                Dispatch
-              </Button>
-            )} */}
           </div>
-
-          <div css={rowRightContentCss}>
-            {Array(3).map((_, index) => (
-              <h3 key={index}>Hey {index}</h3>
-            ))}
-          </div>
+          <span css={amountTextCss}>{amount}</span>
         </div>
-      ),
-    }));
-  }, [transfers]);
 
-  if (loading) return <LoadingSpinner />;
+        {isFiat && recipient.fiatDetails && (
+          <div css={feeDetailsCss}>
+            <div css={feeItemCss}>
+              <span>Exchange Rate</span>
+              <span css={cardMetadataCss}>
+                <IoTrendingUpOutline size={16} />
+                {recipient.fiatDetails.exchangeRate.toFixed(2)}
+              </span>
+            </div>
+            <div css={feeItemCss}>
+              <span>Transaction Fee</span>
+              <span css={cardMetadataCss}>
+                <IoCardOutline size={16} />
+                {recipient.fiatDetails.transactionFee}%
+              </span>
+            </div>
+            <div css={feeItemCss}>
+              <span>Exchange Fee</span>
+              <span css={cardMetadataCss}>
+                <IoSwapVerticalOutline size={16} />
+                {recipient.fiatDetails.exchangeFeePercentage}%
+              </span>
+            </div>
+            <div css={feeItemCss}>
+              <span>Total Fees</span>
+              <span css={cardMetadataCss}>
+                <IoWalletOutline size={16} />
+                {formatCurrency(recipient.fiatDetails.feeTotal, recipient.fiatDetails.currencyCode)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {!isFiat && recipient.blockchainDetails && (
+          <div css={detailTextCss}>
+            <MdAccountBalanceWallet size={16} />
+            <span>Wallet: {recipient.blockchainDetails.walletAddress}</span>
+          </div>
+        )}
+
+        <div css={cardMetadataCss}>
+          <IoTimeOutline size={16} />
+          <span>
+            Created:{' '}
+            {Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(
+              new Date(recipient.createdAt),
+            )}
+          </span>
+        </div>
+      </div>
+    );
+  }, []);
+
+  if (initialLoading || refreshLoading || transferLoading || cancelLoading)
+    return <LoadingSpinner />;
 
   return (
-    <div css={transfersPageCss}>
-      <section css={sectionContainer}>
-        <div css={sectionHeader}>
+    <div css={pageContainerCss}>
+      <div css={transfersContainerCss}>
+        <div css={headerCss}>
           <h1>Transfers</h1>
           <Button
-            variant="secondary"
+            variant="primary"
             onClick={() => setIsTransferModalOpen(true)}
             icon={<IoSwapHorizontalOutline />}
           >
             New Transfer
           </Button>
         </div>
-        <List
-          items={mountTransfersRows!}
-          loading={false}
-          className="transfers-list"
-          onClick={(id: string) => console.log('Transfer clicked:', id)}
+
+        <div css={transferListCss}>
+          {transfers?.results.map((transfer) => (
+            <div css={transferCardCss} key={transfer.id}>
+              <div css={cardHeaderCss}>
+                <div css={leftContentRowCss}>
+                  <h4>
+                    {accounts.find((account) => account.id === transfer.payoutAccountId)?.name}
+                  </h4>
+                  <h5 css={memoTextCss}>{transfer.memo}</h5>
+                  <div css={cardMetadataCss}>
+                    <IoDocumentTextOutline size={16} />
+                    <span>ID: {transfer.id}</span>
+                  </div>
+                  <div css={cardMetadataCss}>
+                    <IoTimeOutline size={16} />
+                    <span>
+                      Created:{' '}
+                      {Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(
+                        new Date(transfer.createdAt),
+                      )}
+                    </span>
+                  </div>
+                  <span css={statusBadgeCss(transfer.status)}>
+                    {transfer.status.replace('_', ' ')}
+                  </span>
+                </div>
+                {transfer.status === TransferStatus.IN_REVIEW && (
+                  <Button
+                    css={buttonCss}
+                    variant="success"
+                    onClick={() => handleExecuteTransfer(transfer.id)}
+                    icon={<IoSwapHorizontalOutline />}
+                  >
+                    Execute transfer
+                  </Button>
+                )}
+                {transfer.status === TransferStatus.PENDING && (
+                  <Button
+                    css={buttonCss}
+                    variant="danger"
+                    onClick={() => handleCancelTransfer(transfer.id)}
+                    icon={<IoSwapHorizontalOutline />}
+                  >
+                    Cancel transfer
+                  </Button>
+                )}
+              </div>
+
+              <div css={recipientInfoCss}>{transfer.recipientsInfo.map(renderRecipientInfo)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Modal
+        isOpen={isTransferModalOpen}
+        onClose={() => setIsTransferModalOpen(false)}
+        title="New Transfer"
+      >
+        <CreateTransferModalContent
+          refreshTransfers={refreshTransfers}
+          setModalOpen={setIsTransferModalOpen}
         />
-        <Modal
-          isOpen={isTransferModalOpen}
-          onClose={() => setIsTransferModalOpen(false)}
-          title="New Transfer"
-          size="medium"
-        >
-          <CreateTransferModalContent />
-        </Modal>
-      </section>
+      </Modal>
     </div>
   );
 };
