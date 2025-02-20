@@ -1,4 +1,4 @@
-import { OrganizationType } from '@/utils/constants';
+import { OrganizationType } from '@/features/organization/types';
 import { z } from 'zod';
 
 const ERROR_MESSAGES = {

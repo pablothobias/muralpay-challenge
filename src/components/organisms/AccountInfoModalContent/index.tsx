@@ -36,12 +36,6 @@ const AccountInfoModalContent: React.FC<AccountInfoModalContentProps> = ({ accou
         <div css={infoItemCss(theme)}>
           <strong>API Enabled:</strong> <span>{account.isApiEnabled ? 'Yes' : 'No'}</span>
         </div>
-        <div css={infoItemCss(theme)}>
-          <strong>Created At:</strong> <span>{new Date(account.createdAt).toLocaleString()}</span>
-        </div>
-        <div css={infoItemCss(theme)}>
-          <strong>Updated At:</strong> <span>{new Date(account.updatedAt).toLocaleString()}</span>
-        </div>
       </div>
       <div css={footerCss(theme)}></div>
     </div>

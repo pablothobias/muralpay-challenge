@@ -10,7 +10,7 @@ export const headerStyles = (theme: ThemeType) => css`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${theme.colors.border};
-  box-shadow: ${shadows.black.md};
+  box-shadow: ${shadows.md};
 
   .logo {
     display: flex;

@@ -2,7 +2,7 @@ import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 type ButtonStyleProps = {
-  variant: 'primary' | 'secondary' | 'success' | 'warning';
+  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   size: 'small' | 'medium' | 'large';
   hasIcon: boolean;
 };
@@ -55,6 +55,7 @@ const variantStyles = {
     }
   `,
   success: css`
+    border: 1px solid ${colors.neutral[500]};
     background: ${colors.background.light};
     color: ${colors.background.dark};
 
@@ -69,11 +70,27 @@ const variantStyles = {
     }
   `,
   warning: css`
+    border: 1px solid ${colors.neutral[500]};
     background: ${colors.background.light};
     color: ${colors.background.dark};
 
     &:hover:not(:disabled) {
       background: ${colors.warning.light};
+      color: ${colors.muted.light};
+    }
+
+    &:disabled {
+      color: var(--muted-foreground);
+      cursor: not-allowed;
+    }
+  `,
+  danger: css`
+    border: 1px solid ${colors.neutral[500]};
+    background: ${colors.background.light};
+    color: ${colors.background.dark};
+
+    &:hover:not(:disabled) {
+      background: ${colors.error.light};
       color: ${colors.muted.light};
     }
 

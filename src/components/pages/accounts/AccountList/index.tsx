@@ -1,5 +1,4 @@
 import { Button, Icon, List, LoadingSpinner } from '@/components';
-import AccountInfoModalContent from '@/components/organisms/AccountInfoModalContent';
 import { AccountResponse } from '@/features/account/types';
 import { useTheme } from '@emotion/react';
 import dynamic from 'next/dynamic';
@@ -13,21 +12,35 @@ import {
   useState,
 } from 'react';
 import { IoSwapHorizontalOutline } from 'react-icons/io5';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 import {
   accountBalance,
   accountItemRightRow,
   accountListContainerCss,
   accountListHeaderCss,
   contentCss,
-  emptyStateCss,
   rightContentCss,
   statusCss,
   statusFontCss,
 } from './styles';
 
+const AccountInfoModalContent = dynamic(
+  () => import('@/components/organisms/AccountInfoModalContent'),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+  },
+);
+
+const CreateTransferModalContent = dynamic(
+  () => import('@/components/organisms/CreateTransferModalContent'),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+  },
+);
+
 const Modal = dynamic(() => import('@/components/molecules/Modal'), {
+  ssr: false,
   loading: () => <LoadingSpinner />,
 });
 
@@ -62,11 +75,13 @@ const AccountList = ({ accounts, loading }: AccountListProps) => {
       isOpen,
       setOpen,
       title,
+      onSave,
       content,
     }: {
       isOpen: boolean;
       setOpen: Dispatch<SetStateAction<boolean>>;
       title?: string;
+      onSave: () => void;
       content: ReactNode;
     }) => {
       return (
@@ -74,13 +89,15 @@ const AccountList = ({ accounts, loading }: AccountListProps) => {
           isOpen={isOpen}
           onClose={() => setOpen(false)}
           title={title}
-          size="medium"
+          size="large"
           footer={
             <>
               <Button variant="warning" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="success">Save</Button>
+              <Button variant="success" onClick={onSave}>
+                Save
+              </Button>
             </>
           }
         >
@@ -88,7 +105,7 @@ const AccountList = ({ accounts, loading }: AccountListProps) => {
         </Modal>
       );
     },
-    [isTransferModalOpen, isAccountModalOpen],
+    [],
   );
 
   const mountAccountsRows = (account: AccountResponse) => ({
@@ -122,45 +139,33 @@ const AccountList = ({ accounts, loading }: AccountListProps) => {
     setAccountRows(() => accounts?.map((account) => mountAccountsRows(account)));
   }, [accounts]);
 
-  if (loading) return <Skeleton circle height={50} width={50} />;
-
   return (
     <div css={accountListContainerCss(theme)}>
-      {accounts?.length ? (
-        <>
-          <div css={accountListHeaderCss}>
-            <h2>Accounts</h2>
-            <Button
-              variant="secondary"
-              onClick={() => setIsTransferModalOpen(true)}
-              icon={<IoSwapHorizontalOutline />}
-            >
-              New Transfer
-            </Button>
-          </div>
-          <List
-            items={accountRows}
-            emptyStateMessage="No transfers yet. Start by making your first transfer!"
-            onClick={selectAccount}
-          />
-          {renderModal({
-            isOpen: isTransferModalOpen,
-            setOpen: setIsTransferModalOpen,
-            title: 'Transfer',
-            content: 'Transfer',
-          })}
-          {renderModal({
-            isOpen: isAccountModalOpen,
-            setOpen: setIsAccountModalOpen,
-            title: selectedAccount?.name,
-            content: <AccountInfoModalContent account={selectedAccount!} />,
-          })}
-        </>
-      ) : (
-        <div css={emptyStateCss(theme)}>
-          <h2>No accounts yet. Start by creating your first account!</h2>
-        </div>
-      )}
+      <div css={accountListHeaderCss}>
+        <h2>Accounts</h2>
+        <Button
+          variant="secondary"
+          onClick={() => setIsTransferModalOpen(true)}
+          icon={<IoSwapHorizontalOutline />}
+        >
+          New Transfer
+        </Button>
+      </div>
+      <List loading={loading} items={accountRows} onClick={selectAccount} />
+      {renderModal({
+        title: 'New Transfer',
+        isOpen: isTransferModalOpen,
+        setOpen: setIsTransferModalOpen,
+        onSave: () => {},
+        content: <CreateTransferModalContent setModalOpen={setIsTransferModalOpen} />,
+      })}
+      {renderModal({
+        title: selectedAccount?.name,
+        isOpen: isAccountModalOpen,
+        setOpen: setIsAccountModalOpen,
+        onSave: () => {},
+        content: <AccountInfoModalContent account={selectedAccount!} />,
+      })}
     </div>
   );
 };

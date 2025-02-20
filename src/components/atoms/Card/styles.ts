@@ -1,8 +1,9 @@
 import { ThemeType } from '@/styles/theme';
+import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 export const cardWrapperCss = (theme: ThemeType) => css`
-  background: ${theme.colors.neutral[300]};
+  background: ${theme.colors.neutral[50]};
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
   padding: var(--spacing-lg);
@@ -14,19 +15,19 @@ export const cardWrapperCss = (theme: ThemeType) => css`
   }
 `;
 
-export const cardHeaderCss = css`
+export const cardHeaderCss = (theme: ThemeType) => css`
   margin-bottom: var(--spacing-md);
 
   h2,
   h3,
   h4 {
-    color: var(--foreground);
+    color: ${theme.colors.inverted};
     margin: 0;
   }
 `;
 
 export const cardContentCss = css`
-  color: var(--foreground);
+  color: ${colors.background.dark};
 `;
 
 export const cardFooterCss = css`

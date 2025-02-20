@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie';
 import { create } from 'zustand';
-import { persist, PersistStorage } from 'zustand/middleware';
+import { devtools, persist, PersistStorage } from 'zustand/middleware';
 import { type AuthState, type User } from './types';
 
 const cookieStorage: PersistStorage<AuthState> = {
   getItem: (name) => {
     const storedValue = Cookies.get(name);
-    if (!storedValue) return null;
+    if (!storedValue || typeof window === 'undefined') return null;
     try {
       return JSON.parse(storedValue);
     } catch (error) {
@@ -15,37 +15,40 @@ const cookieStorage: PersistStorage<AuthState> = {
     }
   },
   setItem: (name, value) => {
-    Cookies.set(name, JSON.stringify(value), {
-      expires: 1,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
-      path: '/',
-    });
+    if (typeof window !== 'undefined')
+      Cookies.set(name, JSON.stringify(value), {
+        expires: 1,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        path: '/',
+      });
   },
   removeItem: (name) => {
-    Cookies.remove(name);
+    if (typeof window !== 'undefined') Cookies.remove(name);
   },
 };
 
 const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
+  devtools(
+    persist(
+      (set) => ({
+        user: null,
+        token: null,
+        isAuthenticated: false,
 
-      login: (user: User, token: string) => {
-        set({ user, token, isAuthenticated: true });
-      },
+        login: (user: User, token: string) => {
+          set({ user, token, isAuthenticated: true });
+        },
 
-      logout: () => {
-        set({ user: null, token: null, isAuthenticated: false });
+        logout: () => {
+          set({ user: null, token: null, isAuthenticated: false });
+        },
+      }),
+      {
+        name: 'auth-storage',
+        storage: cookieStorage,
       },
-    }),
-    {
-      name: 'auth-storage',
-      storage: cookieStorage,
-    },
+    ),
   ),
 );
 

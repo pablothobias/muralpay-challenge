@@ -1,44 +1,41 @@
+import React, { forwardRef } from 'react';
 import { errorTextCss, inputGroupCss, inputStyles } from './styles';
 
-export type InputProps = {
-  type?: 'text' | 'password' | 'email' | 'number' | 'date' | 'time' | 'datetime-local';
+type InputProps = {
+  type?: 'text' | 'password' | 'email' | 'number' | 'date' | 'time' | 'currency' | 'phone';
   placeholder?: string;
-  value?: string;
-  label?: string;
-  id?: string;
-  error?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+  id: string;
+  value?: string;
+  error?: string;
 };
 
-const Input = ({
-  type = 'text',
-  label,
-  placeholder,
-  id,
-  value,
-  error,
-  onChange,
-  ...props
-}: InputProps) => {
-  return (
-    <div css={inputGroupCss}>
-      {label && (
-        <label htmlFor={id} {...props}>
-          {label}
-        </label>
-      )}
-      <input
-        css={inputStyles}
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        {...props}
-      />
-      {error && <p css={errorTextCss}>{error}</p>}
-    </div>
-  );
-};
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ type = 'text', label, id, placeholder, value, onChange, error, ...props }, ref) => {
+    return (
+      <div css={inputGroupCss}>
+        {label && (
+          <label htmlFor={id} {...props}>
+            {label}
+          </label>
+        )}
+        <input
+          css={inputStyles}
+          id={id}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          step="any"
+          ref={ref}
+          {...props}
+        />
+        {error && <p css={errorTextCss}>{error}</p>}
+      </div>
+    );
+  },
+);
 
+Input.displayName = 'Input';
 export default Input;

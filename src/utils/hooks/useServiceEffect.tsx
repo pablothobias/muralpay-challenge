@@ -13,6 +13,8 @@ type ServiceFunctionType<RequestType, ResponseType> = (
 export function useServiceEffect<RequestType, ResponseType>(
   data: RequestType,
   serviceFunction: ServiceFunctionType<RequestType, ResponseType>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  callback: any,
   dependencies: DependencyList = [],
 ): UseServiceType<ResponseType> {
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,12 +23,11 @@ export function useServiceEffect<RequestType, ResponseType>(
   const controller = new AbortController();
   const { signal } = controller;
 
-  useEffect(() => console.log(loading), [loading]);
-
   useEffect(() => {
     async function execute() {
       const response = await serviceFunction(data, signal);
       setResponse(response);
+      callback(response);
     }
 
     try {

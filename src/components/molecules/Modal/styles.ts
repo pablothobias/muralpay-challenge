@@ -1,4 +1,5 @@
 import { ThemeType } from '@/styles/theme';
+import { colors } from '@/styles/variables';
 import { css, keyframes } from '@emotion/react';
 
 const fadeIn = keyframes`
@@ -49,18 +50,18 @@ export const modalContentWrapperCss = (theme: ThemeType) => css`
   }
 `;
 
-export const modalHeaderCss = css`
+export const modalHeaderCss = (theme: ThemeType) => css`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: var(--spacing-md);
   margin-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid ${theme.colors.border};
 
   h2 {
     margin: 0;
     font-size: var(--font-size-lg);
-    color: var(--background);
+    color: ${colors.background.dark};
   }
 `;
 
