@@ -19,10 +19,6 @@ export const colors = {
     mutedLight: '#F8F9FA',
     mutedDark: '#202020',
   },
-  inverted: {
-    light: '#181818',
-    dark: '#FFFFFF',
-  },
   foreground: {
     light: '#121212',
     dark: '#F5F5F7',

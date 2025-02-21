@@ -11,17 +11,18 @@ export const loadingContainerCss = css`
   background: ${colors.neutral[200]};
 `;
 
-export const listContainerCss = (theme: ThemeType) => css`
+export const listContainerCss = (applyShouldInset: boolean) => css`
   width: 100%;
   border-radius: 0 0 8px 8px;
   overflow-y: auto;
-  background: ${theme.colors.background};
+  background: ${colors.neutral[400]};
+  ${applyShouldInset && { 'box-shadow': `inset 0px 0px 18px -4px rgba(0,0,0,0.75)` }};
 `;
 
 export const listItemCss = (theme: ThemeType) => css`
   display: flex;
   align-items: center;
-  padding: var(--spacing-md);
+  padding: 10px 20px;
   border-bottom: 1px solid ${theme.colors.border};
   transition: all 0.2s ease-in-out;
   cursor: pointer;

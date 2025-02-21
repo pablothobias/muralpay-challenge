@@ -4,5 +4,4 @@ const logError = (error: unknown, context: string) => {
     stack: error instanceof Error ? error.stack : undefined,
   });
 };
-
 export default logError;

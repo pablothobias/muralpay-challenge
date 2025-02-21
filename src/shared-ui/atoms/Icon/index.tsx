@@ -1,4 +1,3 @@
-import { useTheme } from '@emotion/react';
 import {
   FiCheckCircle,
   FiCreditCard,
@@ -36,10 +35,7 @@ export type IconProps = {
   color?: string;
 };
 
-const Icon = ({ name, size = 24, color }: IconProps) => {
-  const theme = useTheme();
-  if (!color) color = theme.colors.primary;
-
+const Icon = ({ name, size = 24, color = 'var(--foreground)' }: IconProps) => {
   const icons = {
     search: <FiSearch size={size} color={color} />,
     user: <FiUser size={size} color={color} />,

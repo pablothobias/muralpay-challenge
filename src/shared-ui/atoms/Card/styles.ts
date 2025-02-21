@@ -21,7 +21,7 @@ export const cardHeaderCss = (theme: ThemeType) => css`
   h2,
   h3,
   h4 {
-    color: ${theme.colors.inverted};
+    color: ${theme.colors.foreground};
     margin: 0;
   }
 `;
