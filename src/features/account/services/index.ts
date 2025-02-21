@@ -1,55 +1,60 @@
 import apiClient from '@/config/api.config';
-import { ERROR_TYPES } from '@/utils/constants';
+import { API_ENDPOINTS, ERROR_TYPES } from '@/utils/constants';
 import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
 import { AccountServiceError, AccountValidationError } from '../errors';
 import { accountResponseArraySchema, accountResponseSchema, accountSchema } from '../schemas';
 import { AccountResponse, AccountResponseArray, AccountSchema } from '../types';
-
-const endpoint = '/accounts' as const;
+import logError from '@/utils/functions/logError';
 
 const AccountService = {
-  create: async (data: AccountSchema): Promise<AccountResponse | null> => {
+  create: async (data: AccountSchema, signal?: AbortSignal): Promise<AccountResponse | null> => {
     try {
       const validatedData = accountSchema.parse(data);
 
-      if (!validatedData) {
-        throw new AccountValidationError('Invalid data format', ERROR_TYPES.VALIDATION);
-      }
-
-      const response = await apiClient.post(endpoint, validatedData);
+      const response = await apiClient.post(API_ENDPOINTS.ACCOUNTS, validatedData, {
+        ...(signal && { signal }),
+      });
       return accountResponseSchema.parse(response.data);
     } catch (error) {
-      return AccountService.handleError(error);
+      return AccountService.handleError(error, 'Failed to create account');
     }
   },
-  get: async (): Promise<AccountResponseArray> => {
+  get: async (signal?: AbortSignal): Promise<AccountResponseArray> => {
     try {
-      const response = await apiClient.get(endpoint);
+      const response = await apiClient.get(API_ENDPOINTS.ACCOUNTS, {
+        ...(signal && { signal }),
+      });
       return accountResponseArraySchema.parse(response.data);
     } catch (error) {
-      return AccountService.handleError(error);
+      return AccountService.handleError(error, 'Failed to get accounts');
     }
   },
-  getById: async (id: string): Promise<AccountResponse> => {
+  getById: async (id: string, signal?: AbortSignal): Promise<AccountResponse> => {
     try {
-      const response = await apiClient.get(`${endpoint}/${id}`);
+      const response = await apiClient.get(`${API_ENDPOINTS.ACCOUNTS}/${id}`, {
+        ...(signal && { signal }),
+      });
       return accountResponseSchema.parse(response.data);
     } catch (error) {
-      return AccountService.handleError(error);
+      return AccountService.handleError(error, 'Failed to get account');
     }
   },
-  handleError: (error: unknown) => {
-    console.error(error);
+  handleError: (error: unknown, defaultMessage: string) => {
+    logError(error, 'AccountService.create');
 
-    if (error instanceof AxiosError) {
+    if (error instanceof AxiosError)
       throw new AccountServiceError(
-        error.response?.data?.message || 'Failed to get account',
+        error.response?.data?.message || defaultMessage,
         ERROR_TYPES.API_ERROR,
         error,
       );
-    } else if (error instanceof ZodError) {
-      throw new AccountValidationError(error.message, ERROR_TYPES.VALIDATION);
+    else if (error instanceof ZodError) {
+      throw new AccountValidationError(
+        error?.message || defaultMessage,
+        ERROR_TYPES.API_ERROR,
+        error,
+      );
     } else {
       throw new AccountServiceError('Unexpected error occurred', ERROR_TYPES.UNKNOWN_ERROR, error);
     }

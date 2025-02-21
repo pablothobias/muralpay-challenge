@@ -1,15 +1,18 @@
 export type User = {
-  id?: string;
+  id: string;
   name?: string;
   organizationType?: string;
   status?: string;
-  currenciesInfo?: unknown[];
+  currenciesInfo?: {
+    id: string;
+    name: string;
+    code: string;
+  }[];
 };
 
 export type AuthState = {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean | null;
-  login: (user: User, token: string) => void;
+  login: (user: User) => void;
   logout: () => void;
 };

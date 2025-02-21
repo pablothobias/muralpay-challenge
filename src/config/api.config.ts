@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import Cookies from 'js-cookie';
 
 interface ApiClientConfig extends InternalAxiosRequestConfig {
   baseURL: string;
@@ -34,17 +35,11 @@ const createErrorHandler =
 
 const createRequestInterceptor = () => {
   return async (reqConfig: InternalAxiosRequestConfig) => {
-    const url = reqConfig.url?.toLowerCase() || '';
+    const onBehalfOf = Cookies.get('on-behalf-of');
+    if (onBehalfOf) reqConfig.headers['on-behalf-of'] = onBehalfOf;
 
-    const apiKey = url.includes('transfer')
-      ? process.env.NEXT_PUBLIC_TRANSFER_KEY
-      : process.env.NEXT_PUBLIC_API_KEY;
-
-    if (!apiKey) {
-      throw new Error('API key not found');
-    }
-
-    reqConfig.headers.Authorization = `Bearer ${apiKey}`;
+    reqConfig.headers['mural-account-api-key'] = process.env.NEXT_PUBLIC_TRANSFER_KEY!;
+    reqConfig.headers.Authorization = `Bearer ${process.env.NEXT_PUBLIC_API_KEY!}`;
     return reqConfig;
   };
 };

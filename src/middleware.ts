@@ -5,7 +5,11 @@ export function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
-  if (isAuthenticated && pathname === '/register') {
+  if (!isAuthenticated && pathname !== '/register') {
+    return NextResponse.redirect(new URL('/register', req.url));
+  }
+
+  if (isAuthenticated && pathname === '/') {
     return NextResponse.redirect(new URL('/home', req.url));
   }
 

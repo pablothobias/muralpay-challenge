@@ -1,28 +1,29 @@
-import { LoadingSpinner } from '@/components';
 import useAuthStore from '@/store/auth';
 import { useRouter } from 'next/router';
-import { type ComponentType, useEffect } from 'react';
+import { useEffect } from 'react';
+import { type NextPage } from 'next';
 
 type UseAuthRedirectOptions = {
   isPrivate?: boolean;
   redirectTo?: string;
 };
-
 const withAuth = (
-  Component: ComponentType,
+  Page: NextPage,
   { isPrivate = false, redirectTo = '/register' }: UseAuthRedirectOptions,
 ) => {
   const AuthenticatedComponent = () => {
-    const isAuthenticated = useAuthStore((state) => state);
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const router = useRouter();
 
     useEffect(() => {
-      if (!isAuthenticated && isPrivate) {
+      if (isPrivate && !isAuthenticated) {
         router.replace(redirectTo);
       }
     }, [isAuthenticated, router]);
 
-    return !!isAuthenticated ? <Component /> : <LoadingSpinner />;
+    if (isPrivate && !isAuthenticated) return null;
+
+    return <Page />;
   };
 
   return AuthenticatedComponent;
