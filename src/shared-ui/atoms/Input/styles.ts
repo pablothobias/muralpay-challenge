@@ -17,7 +17,7 @@ export const inputGroupCss = (theme: ThemeType) => css`
     padding: var(--spacing-sm);
     border-radius: var(--border-radius);
     border: 1px solid var(--border);
-    background: ${colors.inverted.dark};
+    background: ${colors.foreground.dark};
     color: ${colors.background.dark};
     outline: none;
     transition: border 0.2s ease-in-out;
@@ -34,7 +34,7 @@ export const inputStyles = (theme: ThemeType) => css`
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
-  background: ${theme.colors.inverted};
+  background: ${theme.colors.foreground};
   color: ${theme.colors.background};
   outline: none;
   transition: 0.2s all;

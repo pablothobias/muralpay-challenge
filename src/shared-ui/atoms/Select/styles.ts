@@ -57,7 +57,7 @@ export const inputGroupCss = (theme: ThemeType) => css`
     padding: var(--spacing-sm);
     border-radius: var(--border-radius);
     border: 1px solid var(--border);
-    background: ${colors.inverted.dark};
+    background: ${colors.foreground.dark};
     color: ${colors.background.dark};
     outline: none;
     transition: border 0.2s ease-in-out;

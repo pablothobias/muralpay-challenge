@@ -35,7 +35,7 @@ export const selectCss = css`
   border: 1px solid ${colors.border};
   border-radius: 4px;
   font-size: ${typography.fontSize.base};
-  background: ${colors.inverted.dark};
+  background: ${colors.foreground.dark};
   color: ${colors.background.dark};
 
   &:focus {
