@@ -64,10 +64,10 @@ export const emptyStateCss = (theme: ThemeType) => css`
   width: 100%;
   padding: var(--spacing-xl);
   text-align: center;
-  color: ${theme.colors.inverted};
+  color: ${theme.colors.foreground};
 
   svg {
     margin-bottom: var(--spacing-md);
-    color: ${theme.colors.inverted};
+    color: ${theme.colors.foreground};
   }
 `;

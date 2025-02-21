@@ -22,7 +22,9 @@ const AccountService = {
   },
   get: async (signal?: AbortSignal): Promise<AccountResponseArray> => {
     try {
-      const response = await apiClient.get(API_ENDPOINTS.ACCOUNTS, { ...(signal && { signal }) });
+      const response = await apiClient.get(API_ENDPOINTS.ACCOUNTS, {
+        ...(signal && { signal }),
+      });
       return accountResponseArraySchema.parse(response.data);
     } catch (error) {
       return AccountService.handleError(error, 'Failed to get accounts');

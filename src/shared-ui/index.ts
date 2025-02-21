@@ -13,10 +13,6 @@ export { default as Footer } from './molecules/Footer';
 export { default as Modal } from './molecules/Modal';
 export { default as List } from './molecules/List';
 
-//organisms
-export { default as AccountInfoModalContent } from '../components/accounts/AccountInfoModalContent';
-export { default as CreateTransferModalContent } from '../components/transfer/CreateTransferModalContent';
-
 //templates
 export { default as GlobalLayout } from './templates/GlobalLayout';
 
