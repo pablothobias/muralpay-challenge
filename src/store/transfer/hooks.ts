@@ -33,10 +33,12 @@ export const useTransferActions = () => {
 
   const executeTransfer = async (transferId: string) => {
     try {
-      const response = await TransferService.execute(transferId);
-      await refreshTransfers();
-      return response;
+      setTransfersState(undefined, true, undefined);
+      await TransferService.execute(transferId);
+      const response = await refreshTransfers();
+      setTransfersState(response, false, undefined);
     } catch (error) {
+      setTransfersState(undefined, false, (error as Error).message);
       throw error;
     }
   };

@@ -1,7 +1,7 @@
 'use client';
 
-import { LoadingSpinner } from '@/components';
-import RegisterPage from '@/components/pages/register';
+import { LoadingSpinner } from '@/shared-ui';
+import RegisterPage from '@/shared-ui/pages/register';
 import { organizationSchema } from '@/features/organization/schemas';
 import { OrganizationSchema } from '@/features/organization/types';
 import useAuthStore from '@/store/auth';
@@ -53,7 +53,7 @@ const RegisterContainer = () => {
       unsubscribe();
       unsubscribeAuth();
     };
-  }, []);
+  }, [setLoadingState]);
 
   const onSubmit = async (data: OrganizationSchema) => {
     try {

@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
-  const authStorage = req.cookies.get('auth-storage');
-  const isAuthenticated = authStorage ? JSON.parse(authStorage.value).state.isAuthenticated : false;
+  const isAuthenticated = req.cookies.get('user.isAuthenticated');
+
   const { pathname } = req.nextUrl;
 
   if (!isAuthenticated && pathname !== '/register') {
