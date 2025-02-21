@@ -1,6 +1,5 @@
 import apiClient from '@/config/api.config';
 import { API_ENDPOINTS, ERROR_TYPES } from '@/utils/constants';
-import logError from '@/utils/functions/logError';
 import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
 import { OrganizationServiceError, OrganizationValidationError } from '../errors';
@@ -10,6 +9,7 @@ import {
   type OrganizationResponse,
   type OrganizationSchema,
 } from '../types';
+import logError from '@/utils/functions/logError';
 
 const OrganizationService: OrganizationServiceType = {
   create: async (

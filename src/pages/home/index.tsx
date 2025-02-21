@@ -1,6 +1,6 @@
 'use client';
 
-import { HomeHero } from '@/components';
+import { HomeHero } from '@/shared-ui';
 import { containerStyles } from '@/styles/pages/home/styles';
 import withAuth from '@/utils/functions/withAuth';
 

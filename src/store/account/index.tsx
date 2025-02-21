@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist, subscribeWithSelector } from 'zustand/middleware';
-import { Accounts, type AccountState } from './types';
+import { type AccountState } from './types';
 
 const useAccountStore = create<AccountState>()(
   devtools(
@@ -10,7 +10,7 @@ const useAccountStore = create<AccountState>()(
           accounts: [],
           loading: false,
           error: null,
-          setAccountsState: (accounts: Accounts, loading: boolean, error: string | undefined) =>
+          setAccountsState: (accounts, loading, error) =>
             set({ accounts: [...accounts!], loading, error }),
           onLogout: () => set({ accounts: [], loading: false, error: null }),
         }),

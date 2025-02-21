@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useState, useCallback } from 'react';
 
 type LoadingState = boolean | undefined;
 type LoadingStates = Record<string, LoadingState>;
@@ -18,24 +18,24 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
 
   const isLoading = Object.values(loadingStates).some((state) => state === true);
 
-  const setLoadingState = (key: string, isLoading: boolean) => {
+  const setLoadingState = useCallback((key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({
       ...prev,
       [key]: isLoading,
     }));
-  };
+  }, []);
 
-  const clearLoadingState = (key: string) => {
+  const clearLoadingState = useCallback((key: string) => {
     setLoadingStates((prev) => {
       const newState = { ...prev };
       delete newState[key];
       return newState;
     });
-  };
+  }, []);
 
-  const clearAllLoadingStates = () => {
+  const clearAllLoadingStates = useCallback(() => {
     setLoadingStates({});
-  };
+  }, []);
 
   return (
     <LoadingContext.Provider
