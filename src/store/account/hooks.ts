@@ -7,9 +7,11 @@ export const useAccountActions = () => {
   const setAccountsState = useAccountStore((state) => state.setAccountsState);
 
   const refreshAccounts = async () => {
+    const { signal } = new AbortController();
+
     try {
       setAccountsState([], true, undefined);
-      const response = await AccountService.get();
+      const response = await AccountService.get(signal);
       setAccountsState(response, false, undefined);
       return response;
     } catch (error) {
@@ -19,9 +21,11 @@ export const useAccountActions = () => {
   };
 
   const createAccount = async (data: AccountSchema) => {
+    const { signal } = new AbortController();
+
     try {
       setAccountsState([], true, undefined);
-      await AccountService.create(data);
+      await AccountService.create(data, signal);
       const response: Accounts = await refreshAccounts();
       setAccountsState(response, false, undefined);
       return response;

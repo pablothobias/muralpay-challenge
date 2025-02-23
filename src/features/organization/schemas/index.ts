@@ -1,5 +1,7 @@
-import { OrganizationType } from '@/features/organization/types';
 import { z } from 'zod';
+import { RECIPIENT_TYPE } from '@/utils/constants';
+
+const OrganizationType = RECIPIENT_TYPE;
 
 const ERROR_MESSAGES = {
   nameRequired: 'Name is required',

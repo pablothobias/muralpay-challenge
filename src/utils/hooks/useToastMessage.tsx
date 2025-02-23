@@ -46,7 +46,7 @@ export const useToastMessage = (initialStates: ToastStates = {}, options: UseToa
   const showToast = useCallback((key: string, type: ToastType, message: string) => {
     setToastStates((prev) => ({
       ...prev,
-      [key]: { type, message },
+      [key]: { type, message: `${message} - [${key}]` },
     }));
   }, []);
 

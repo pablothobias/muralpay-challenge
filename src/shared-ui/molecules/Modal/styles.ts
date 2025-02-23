@@ -1,5 +1,4 @@
 import { ThemeType } from '@/styles/theme';
-import { colors } from '@/styles/variables';
 import { css, keyframes } from '@emotion/react';
 
 const fadeIn = keyframes`
@@ -32,7 +31,7 @@ export const modalOverlayCss = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 99;
   animation: ${fadeIn} 0.2s ease-out;
 `;
 
@@ -60,7 +59,7 @@ export const modalHeaderCss = (theme: ThemeType) => css`
   h2 {
     margin: 0;
     font-size: var(--font-size-lg);
-    color: ${colors.background.dark};
+    color: ${theme.colors.foreground};
   }
 `;
 
@@ -69,12 +68,12 @@ export const closeButtonCss = (theme: ThemeType) => css`
   border: none;
   padding: var(--spacing-sm);
   cursor: pointer;
-  color: var(--foreground);
+  color: ${theme.colors.background}
   transition: all 0.2s;
   border-radius: var(--border-radius);
 
   &:hover {
-    background: var(--muted);
+    background: 'red';
   }
 
   &:focus {

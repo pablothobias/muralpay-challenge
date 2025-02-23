@@ -1,3 +1,4 @@
+import { ThemeType } from '@/styles/theme';
 import { colors, spacing, typography } from '@/styles/variables';
 import { css } from '@emotion/react';
 
@@ -11,17 +12,11 @@ export const containerCss = css`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-export const formTitleCss = css`
+export const formTitleCss = (theme: ThemeType) => css`
   font-size: ${typography.fontSize.xl};
   font-weight: ${typography.fontWeight.bold};
-  margin-bottom: ${spacing.md};
-  color: ${colors.primary};
-`;
-
-export const formGroupCss = css`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: ${spacing.md};
+  margin: ${spacing.md} 0;
+  color: ${theme.colors.primary};
 `;
 
 export const recipientsInfoContainerCss = css`
@@ -49,4 +44,5 @@ export const ctaContainerCss = css`
   gap: ${spacing.md};
   justify-content: flex-start;
   width: 100%;
+  margin-top: ${spacing.lg};
 `;

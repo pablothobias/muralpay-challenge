@@ -3,12 +3,12 @@ import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 export const cardWrapperCss = (theme: ThemeType) => css`
-  background: ${theme.colors.neutral[50]};
+  background-color: ${theme.colors.foreground};
   border-radius: var(--border-radius);
-  border: 1px solid var(--border);
+  border: 1px solid ${theme.colors.foreground};
   padding: var(--spacing-lg);
   transition: all 0.2s ease-in-out;
-  box-shadow: ${theme.shadows.sm};
+  box-shadow: ${theme.shadows.md};
 
   &:hover {
     box-shadow: ${theme.shadows.lg};
@@ -21,7 +21,7 @@ export const cardHeaderCss = (theme: ThemeType) => css`
   h2,
   h3,
   h4 {
-    color: ${theme.colors.foreground};
+    color: ${theme.colors.background};
     margin: 0;
   }
 `;
@@ -40,7 +40,7 @@ export const cardFooterCss = css`
 export const cardVariantCss = (theme: ThemeType) => ({
   outlined: css`
     background: ${theme.colors.muted};
-    border: 1px solid var(--border);
+    border: 1px solid ${theme.colors.background};
   `,
   elevated: css`
     border: none;

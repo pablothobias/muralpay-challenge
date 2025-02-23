@@ -1,14 +1,13 @@
 import { ThemeType } from '@/styles/theme';
-import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
-export const loadingContainerCss = css`
+export const loadingContainerCss = (theme: ThemeType) => css`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   min-height: 50vh;
-  background: ${colors.neutral[200]};
+  background: ${theme.colors.neutral[200]};
 `;
 
 export const listContainerCss = (theme: ThemeType) => css`
@@ -21,23 +20,39 @@ export const listContainerCss = (theme: ThemeType) => css`
 export const listItemCss = (theme: ThemeType) => css`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 15vh;
+  margin: 0 auto;
   padding: var(--spacing-md);
-  border-bottom: 1px solid ${theme.colors.border};
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 
   &:hover {
-    color: ${colors.neutral[50]};
-    background: ${colors.neutral[600]};
+    color: ${theme.colors.neutral[50]};
+    background: ${theme.colors.neutral[400]};
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+    transform: perspective(0) translate3d(0, 0, 0);
+    height: 20vh;
+
+    svg {
+      color: ${theme.colors.neutral[50]} !important;
+    }
   }
 
   &:nth-of-type(even) {
-    background-color: ${colors.background.light};
-    color: ${colors.background.dark};
+    background-color: ${theme.colors.muted};
+    color: ${theme.colors.foreground};
 
     &:hover {
-      color: ${colors.neutral[50]};
-      background-color: ${colors.neutral[600]};
+      color: ${theme.colors.neutral[50]};
+      background: ${theme.colors.neutral[400]};
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+      transform: perspective(0) translate3d(0, 0, 0);
+
+      svg {
+        color: ${theme.colors.neutral[50]} !important;
+      }
     }
   }
 
@@ -54,20 +69,4 @@ export const iconWrapperCss = css`
   height: 40px;
   border-radius: 50%;
   margin-right: var(--spacing-md);
-`;
-
-export const emptyStateCss = (theme: ThemeType) => css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: var(--spacing-xl);
-  text-align: center;
-  color: ${theme.colors.foreground};
-
-  svg {
-    margin-bottom: var(--spacing-md);
-    color: ${theme.colors.foreground};
-  }
 `;

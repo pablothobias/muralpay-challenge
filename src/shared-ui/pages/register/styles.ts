@@ -1,4 +1,4 @@
-import { shadows } from '@/styles/variables';
+import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
 
 export const pageContainer = css`
@@ -9,14 +9,14 @@ export const pageContainer = css`
   height: 75vh;
 `;
 
-export const containerCss = css`
+export const cardContainerCss = (theme: ThemeType) => css`
   width: 500px;
   height: auto;
   margin: 0 auto;
   padding: var(--spacing-lg);
   background: var(--muted);
   border-radius: var(--border-radius);
-  box-shadow: ${shadows.md};
+  box-shadow: ${theme.shadows.md};
   text-align: center;
 `;
 

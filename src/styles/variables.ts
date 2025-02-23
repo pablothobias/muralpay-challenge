@@ -19,6 +19,10 @@ export const colors = {
     mutedLight: '#F8F9FA',
     mutedDark: '#202020',
   },
+  invertedLight: {
+    light: '#d0d0d0',
+    dark: '#A1A1AA',
+  },
   foreground: {
     light: '#121212',
     dark: '#F5F5F7',
@@ -61,6 +65,10 @@ export const colors = {
     '800': '#262626',
     '900': '#171717',
   },
+  foregroundPrimary: {
+    light: '#121212',
+    dark: '#D4D4D4',
+  },
 };
 
 export const typography = {
@@ -97,8 +105,16 @@ export const borderRadius = {
 };
 
 export const shadows = {
-  sm: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-  md: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-  lg: '0px 6px 12px rgba(0, 0, 0, 0.15)',
-  xl: '0px 8px 12px rgba(0, 0, 0, 0.15)',
+  dark: {
+    sm: '0px 2px 4px rgba(96, 95, 95, 0.3)',
+    md: '0px 4px 8px rgba(96, 95, 95, 0.3)',
+    lg: '0px 6px 12px rgba(96, 95, 95, 0.15)',
+    xl: '0px 8px 12px rgba(96, 95, 95, 0.15)',
+  },
+  light: {
+    sm: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    md: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+    lg: '0px 6px 12px rgba(0, 0, 0, 0.15)',
+    xl: '0px 8px 12px rgba(0, 0, 0, 0.15)',
+  },
 };

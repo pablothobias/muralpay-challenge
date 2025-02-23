@@ -8,9 +8,11 @@ export const useOrganizationActions = () => {
   const { login } = useAuthStore((state) => state);
 
   const createOrganization = async (data: OrganizationSchema) => {
+    const { signal } = new AbortController();
+
     try {
       setLoggedOrganization(undefined, true, undefined);
-      const response = await OrganizationService.create(data);
+      const response = await OrganizationService.create(data, signal);
       if (response) {
         login({ ...response });
         setLoggedOrganization(response, false, undefined);

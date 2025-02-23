@@ -1,6 +1,6 @@
 {
   "name": "muralpay-challenge",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
+    "@emotion/jest": "^11.13.0",
     "@emotion/server": "^11.11.0",
     "@eslint/eslintrc": "^3",
     "@testing-library/dom": "^10.4.0",

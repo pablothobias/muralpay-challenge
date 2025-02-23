@@ -1,10 +1,19 @@
 'use client';
 
-import { Button, Input, Select } from '@/shared-ui';
-import { OrganizationType, type OrganizationSchema } from '@/features/organization/types';
+import { Button, Input, LoadingSpinner, Select } from '@/shared-ui';
+import { type OrganizationSchema } from '@/features/organization/types';
 import { type FormEventHandler } from 'react';
 import { type FieldErrors, type UseFormRegister, type UseFormWatch } from 'react-hook-form';
-import { containerCss, formCss, pageContainer, titleCss } from './styles';
+import { formCss, pageContainer, titleCss, cardContainerCss } from './styles';
+import { RECIPIENT_TYPE } from '@/utils/constants';
+import dynamic from 'next/dynamic';
+
+const Card = dynamic(() => import('@/shared-ui/atoms/Card'), {
+  ssr: false,
+  loading: () => <LoadingSpinner />,
+});
+
+const OrganizationType = RECIPIENT_TYPE;
 
 type RegisterPageProps = {
   register: UseFormRegister<OrganizationSchema>;
@@ -31,7 +40,7 @@ const RegisterPage = ({
 
   return (
     <div css={pageContainer}>
-      <section css={containerCss}>
+      <Card variant="outlined" css={cardContainerCss}>
         <h1 css={titleCss}>Create a New organization</h1>
         <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
           <Select
@@ -81,7 +90,7 @@ const RegisterPage = ({
             Create Organization
           </Button>
         </form>
-      </section>
+      </Card>
     </div>
   );
 };

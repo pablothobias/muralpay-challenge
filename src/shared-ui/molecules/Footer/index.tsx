@@ -1,36 +1,45 @@
 import { useTheme } from '@emotion/react';
-import { footerStyles, linkStyles, socialMediaStyles } from './styles';
+import { footerStyles, socialMediaStyles } from './styles';
+import Icon from '@/shared-ui/atoms/Icon';
+import { useResponsive } from '@/utils/context/ResponsiveContext';
 
 const Footer = () => {
   const theme = useTheme();
+  const { isMobile } = useResponsive();
+
+  const iconSize = isMobile ? 36 : 32;
 
   return (
-    <footer css={footerStyles(theme)}>
+    <footer css={footerStyles({ theme, isMobile })}>
       <div>
-        <nav>
-          <a href="/about" css={linkStyles(theme)}>
-            About Us
+        <nav css={socialMediaStyles(theme)}>
+          <a
+            href="https://www.facebook.com/people/Mural-Pay/61569599751475/#"
+            aria-label="Facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="facebook" color={theme.colors.foregroundPrimary} size={iconSize} />
           </a>
-          <a href="/contact" css={linkStyles(theme)}>
-            Contact
+          <a
+            href="https://x.com/mural_pay/"
+            aria-label="Twitter"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="twitter" color={theme.colors.foregroundPrimary} size={iconSize} />
           </a>
-          <a href="/privacy" css={linkStyles(theme)}>
-            Privacy Policy
+          <a
+            href="https://www.instagram.com/mural_pay/"
+            aria-label="Instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="instagram" color={theme.colors.foregroundPrimary} size={iconSize} />
           </a>
         </nav>
       </div>
-      <div css={socialMediaStyles(theme)}>
-        <a href="https://facebook.com" aria-label="Facebook">
-          <i className="fab fa-facebook"></i>
-        </a>
-        <a href="https://twitter.com" aria-label="Twitter">
-          <i className="fab fa-twitter"></i>
-        </a>
-        <a href="https://instagram.com" aria-label="Instagram">
-          <i className="fab fa-instagram"></i>
-        </a>
-      </div>
-      <p>© 2025 Mural Pay. All rights reserved.</p>
+      <b>© 2025 Mural Pay. All rights reserved.</b>
     </footer>
   );
 };

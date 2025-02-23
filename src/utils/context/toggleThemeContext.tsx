@@ -1,3 +1,4 @@
+import useThemeStore from '@/store/theme';
 import { darkTheme, lightTheme, ThemeType } from '@/styles/theme';
 import { ThemeProvider } from '@emotion/react';
 import { createContext, useContext, useEffect, useState } from 'react';
@@ -16,16 +17,30 @@ export const useToggleTheme = () => {
 };
 
 export const ToggleThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState(lightTheme);
+  const [theme, setTheme] = useState(() => {
+    const storedTheme = useThemeStore.getState().theme;
+    return storedTheme === 'dark' ? darkTheme : lightTheme;
+  });
+
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    setTheme(savedTheme === 'dark' ? darkTheme : lightTheme);
-  }, []);
+    const unsubscribe = useThemeStore.subscribe(
+      (state) => state.theme,
+      (newTheme) => {
+        if (newTheme === 'dark' && theme !== darkTheme) {
+          setTheme(darkTheme);
+        } else if (newTheme === 'light' && theme !== lightTheme) {
+          setTheme(lightTheme);
+        }
+      },
+    );
+
+    return () => unsubscribe();
+  }, [theme]);
 
   const toggleTheme = () => {
     const newTheme = theme === lightTheme ? darkTheme : lightTheme;
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme === darkTheme ? 'dark' : 'light');
+    useThemeStore.setState({ theme: newTheme === darkTheme ? 'dark' : 'light' });
   };
 
   return (

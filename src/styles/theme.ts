@@ -5,6 +5,7 @@ export const lightTheme = {
   colors: {
     background: colors.background.light,
     foreground: colors.foreground.light,
+    invertedLight: colors.invertedLight.light,
     primary: colors.primary.light,
     secondary: colors.secondary.light,
     accent: colors.accent,
@@ -15,17 +16,19 @@ export const lightTheme = {
     success: colors.success.light,
     info: colors.info.light,
     neutral: colors.neutral,
+    foregroundPrimary: colors.foregroundPrimary.light,
   },
   typography,
   spacing,
   borderRadius,
-  shadows: shadows,
+  shadows: shadows.light,
 };
 
 export const darkTheme = {
   colors: {
     background: colors.background.dark,
     foreground: colors.foreground.dark,
+    invertedLight: colors.invertedLight.dark,
     primary: colors.primary.dark,
     secondary: colors.secondary.dark,
     accent: colors.accent,
@@ -36,11 +39,12 @@ export const darkTheme = {
     success: colors.success.dark,
     info: colors.info.dark,
     neutral: colors.neutral,
+    foregroundPrimary: colors.foregroundPrimary.dark,
   },
   typography,
   spacing,
   borderRadius,
-  shadows: shadows,
+  shadows: shadows.dark,
 };
 
 export type ThemeType = typeof lightTheme;

@@ -15,11 +15,6 @@ export type OrganizationEmptyState = {
 };
 
 export type OrganizationServiceType = {
-  create(data: OrganizationSchema): Promise<OrganizationResponse | undefined>;
+  create(data: OrganizationSchema, signal?: AbortSignal): Promise<OrganizationResponse | undefined>;
   handleError(error: unknown, defaultMessage: string): undefined;
 };
-
-export enum OrganizationType {
-  BUSINESS = 'BUSINESS',
-  INDIVIDUAL = 'INDIVIDUAL',
-}

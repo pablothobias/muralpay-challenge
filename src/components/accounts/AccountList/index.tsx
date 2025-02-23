@@ -11,21 +11,24 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { IoSwapHorizontalOutline } from 'react-icons/io5';
 import {
-  accountBalance,
+  accountInfo,
   accountItemRightRow,
   accountListContainerCss,
   accountListHeaderCss,
   contentCss,
+  leftContentCss,
   rightContentCss,
+  statusBadgeCss,
   statusCss,
-  statusFontCss,
 } from './styles';
 import useAccountStore from '@/store/account';
 import { AccountState } from '@/store/account/types';
 import { useLoading } from '@/utils/context/LoadingContext';
+import { STATUS_TYPES } from '@/utils/constants';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
 import { useAccountActions } from '@/store/account/hooks';
+import { useToast } from '@/utils/context/ToastContext';
 
 const AccountInfoModalContent = dynamic(
   () => import('@/components/accounts/AccountInfoModalContent'),
@@ -60,18 +63,26 @@ const Status = ({ status }: { status: string }) => {
 const AccountList = () => {
   const theme = useTheme();
 
-  const { setLoadingState, isLoading } = useLoading();
-  const { refreshAccounts } = useAccountActions();
+  const { setLoadingState, isLoading, clearLoadingState } = useLoading();
 
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [accountRows, setAccountRows] = useState<AccountRowProps[]>([]);
-  const [accounts, setAccounts] = useState<AccountResponseArray>();
+  const [accounts, setAccounts] = useState<AccountResponseArray>([]);
+  const { refreshAccounts } = useAccountActions();
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse>();
+  const { showError } = useToast();
 
   useEffect(() => {
-    async function fetchInitialAccounts() {
-      await refreshAccounts();
+    async function fetchAccounts() {
+      try {
+        setLoadingState('accountsPage', true);
+        await refreshAccounts();
+      } catch (error) {
+        showError('fetchAccounts', (error as Error).message);
+      } finally {
+        setLoadingState('accountsPage', false);
+      }
     }
 
     const unsubscribe = useAccountStore.subscribe(
@@ -82,9 +93,10 @@ const AccountList = () => {
       },
     );
 
-    fetchInitialAccounts();
+    fetchAccounts();
 
     return () => {
+      clearLoadingState('accountsPage');
       unsubscribe();
     };
   }, [setLoadingState]);
@@ -131,27 +143,33 @@ const AccountList = () => {
 
   const mountAccountsRows = (account: AccountResponse) => ({
     element: (
-      <>
-        <div css={contentCss}>
+      <div css={contentCss} role="button" data-testid={`account-address-${account.id}`}>
+        <div css={leftContentCss}>
           <h3>{account.name}</h3>
           <p>{account.blockchain}</p>
         </div>
         <div css={rightContentCss}>
-          <span css={accountBalance}>
-            {account.balance.balance} {account.balance.tokenSymbol}
+          <span css={accountInfo} data-testid={`balance-${account.id}`}>
+            {formatCurrency(account.balance.balance, account.balance.tokenSymbol)}&nbsp;
+            {account.balance.tokenSymbol}&nbsp;
+            <Icon name="cash" />
           </span>
-          <small css={accountItemRightRow}>
-            <p css={statusFontCss(account.isPending ? 'PENDING' : 'ACTIVE')}>
-              {account.isPending ? 'PENDING' : 'ACTIVE'}
-            </p>
-            <Status status={account.isPending ? 'PENDING' : 'ACTIVE'} />
-          </small>
-          <small css={accountItemRightRow}>
-            <b>{account.address}</b>
-            <Icon name="card" />
-          </small>
+          <span css={accountInfo} data-testid={`address-${account.id}`}>
+            {account.address}&nbsp; <Icon name="card" />{' '}
+          </span>
+          <div css={accountItemRightRow}>
+            <span
+              css={statusBadgeCss(account.isPending ? STATUS_TYPES.PENDING : STATUS_TYPES.ACTIVE)}
+            >
+              {account.isPending ? STATUS_TYPES.PENDING : STATUS_TYPES.ACTIVE}
+              <Status
+                status={account.isPending ? STATUS_TYPES.PENDING : STATUS_TYPES.ACTIVE}
+                data-testid="account-status"
+              />
+            </span>
+          </div>
         </div>
-      </>
+      </div>
     ),
     id: account.id,
   });
@@ -167,7 +185,7 @@ const AccountList = () => {
         <Button
           variant="secondary"
           onClick={() => setIsTransferModalOpen(true)}
-          icon={<IoSwapHorizontalOutline />}
+          icon={<Icon name="swap" />}
         >
           New Transfer
         </Button>
@@ -188,7 +206,7 @@ const AccountList = () => {
         title: selectedAccount?.name || '',
         isOpen: isAccountModalOpen,
         setOpen: setIsAccountModalOpen,
-        size: 'medium',
+        size: 'large',
         content: <AccountInfoModalContent account={selectedAccount!} />,
       })}
     </div>

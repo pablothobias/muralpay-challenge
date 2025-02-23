@@ -21,7 +21,7 @@ const RegisterContainer = () => {
   const router = useRouter();
   const theme = useTheme();
   const { showSuccess, showError } = useToast();
-  const { isLoading, setLoadingState } = useLoading();
+  const { isLoading, setLoadingState, clearLoadingState } = useLoading();
 
   const { createOrganization } = useOrganizationActions();
 
@@ -38,7 +38,6 @@ const RegisterContainer = () => {
 
   useEffect(() => {
     router.prefetch('/home');
-    setLoadingState('createOrganization', !!useOrganizationStore.getState().loading);
 
     const unsubscribe = useOrganizationStore.subscribe((state: OrganizationState) =>
       setLoadingState('createOrganization', !!state.loading),
@@ -50,6 +49,7 @@ const RegisterContainer = () => {
     );
 
     return () => {
+      clearLoadingState('createOrganization');
       unsubscribe();
       unsubscribeAuth();
     };
@@ -63,8 +63,8 @@ const RegisterContainer = () => {
 
       router.push('/home');
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to create transfer';
-      showError('transfer', message);
+      const message = error instanceof Error ? error.message : 'Failed to create organization';
+      showError('organization', message);
     }
   };
 

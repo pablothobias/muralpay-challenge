@@ -9,7 +9,7 @@ export const inputGroupCss = (theme: ThemeType) => css`
 
   label {
     font-size: var(--font-size-base);
-    color: ${colors.background.dark};
+    color: ${theme.colors.foreground};
     margin-bottom: var(--spacing-xs);
   }
 
@@ -17,10 +17,14 @@ export const inputGroupCss = (theme: ThemeType) => css`
     padding: var(--spacing-sm);
     border-radius: var(--border-radius);
     border: 1px solid var(--border);
-    background: ${colors.foreground.dark};
-    color: ${colors.background.dark};
+    background: ${colors.neutral[50]};
+    color: ${colors.background.dark} !important;
     outline: none;
     transition: border 0.2s ease-in-out;
+
+    &::placeholder {
+      color: ${colors.background.dark};
+    }
 
     &:focus {
       border-color: var(--primary);
@@ -45,8 +49,8 @@ export const inputStyles = (theme: ThemeType) => css`
   }
 `;
 
-export const errorTextCss = css`
+export const errorTextCss = (theme: ThemeType) => css`
   font-size: var(--font-size-sm);
-  color: var(--error);
+  color: ${theme.colors.error};
   margin-top: var(--spacing-xs);
 `;
