@@ -9,9 +9,20 @@ type HomeStatsCardProps = {
   title: string;
   icon: IconProps['name'];
   variant?: 'info' | 'success' | 'warning' | 'danger';
+  trend?: {
+    value: number;
+    direction: 'up' | 'down';
+  };
 };
 
-const HomeStatsCard = ({ statsValue, statsLabel, title, icon, variant }: HomeStatsCardProps) => {
+const HomeStatsCard = ({
+  statsValue,
+  statsLabel,
+  title,
+  icon,
+  variant,
+  trend,
+}: HomeStatsCardProps) => {
   const theme = useTheme();
 
   return (
@@ -21,6 +32,15 @@ const HomeStatsCard = ({ statsValue, statsLabel, title, icon, variant }: HomeSta
         <h3>{title}</h3>
         <p className="stats-value">{statsValue}</p>
         <span className="stats-label">{statsLabel}</span>
+        {trend && (
+          <span
+            data-testid="trend-value"
+            className={trend.direction === 'down' ? 'negative' : 'positive'}
+          >
+            {trend.direction === 'down' ? '-' : '+'}
+            {Math.abs(trend.value)}%
+          </span>
+        )}
       </div>
     </Card>
   );

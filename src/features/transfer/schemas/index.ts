@@ -32,26 +32,52 @@ export const documentTypeEnum = z.enum([
 ]);
 
 export const physicalAddressSchema = z.object({
-  address1: z.string().min(1, 'Address line 1 is required'),
-  address2: z.string().optional(),
-  country: z.string().min(1, 'Country is required'),
+  address1: z.string().min(1, 'Address 1 is required'),
+  address2: z.string().min(1, 'Address 2 is required'),
+  country: z
+    .string()
+    .min(1, 'Country code is required')
+    .regex(/^[A-Z]{2}$/, 'Must be a valid ISO 3166-1 alpha-2 country code (e.g., US, GB, BR)'),
   state: z.string().min(1, 'State is required'),
   city: z.string().min(1, 'City is required'),
-  zip: z.string().min(1, 'ZIP code is required'),
+  postalCode: z.string().min(1, 'Postal code is required'),
 });
 
-export const bankDetailsSchema = z.object({
-  bankName: z.string().min(1, 'Bank name is required'),
-  bankAccountOwnerName: z.string().min(1, 'Account owner name is required'),
-  currencyCode: z.string().min(1, 'Currency code is required'),
-  accountType: transferRecipientEnum,
-  bankAccountNumber: z.string().min(1, 'Account number is required'),
-  bankRoutingNumber: z.string().min(1, 'Routing number is required'),
-  bankCode: z.string().min(1, 'Bank code is required'),
-  documentNumber: z.string().optional(),
-  documentType: documentTypeEnum.optional(),
-  physicalAddress: physicalAddressSchema.optional(),
-});
+const baseRecipientSchema = {
+  name: z.string().min(1, 'Name is required'),
+  currencyCode: transferCurrencyEnum,
+  tokenAmount: z.number().optional(),
+  email: z.string().email('Invalid email format'),
+  dateOfBirth: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  recipientType: recipientType,
+};
+
+export const bankDetailsSchema = z
+  .object({
+    bankName: z.string().min(1, 'Bank name is required'),
+    bankAccountOwnerName: z.string().min(1, 'Account owner name is required'),
+    currencyCode: transferCurrencyEnum,
+    accountType: transferRecipientEnum,
+    bankAccountNumber: z.string().min(1, 'Bank account number is required'),
+    bankRoutingNumber: z.string().min(1, 'Bank routing number is required'),
+    bankCode: z.string().min(1, 'Bank code is required'),
+    documentNumber: z.string().min(1, 'Document number is required'),
+    documentType: documentTypeEnum,
+    physicalAddress: physicalAddressSchema,
+    tokenAmount: z.number().optional(),
+    exchangeRate: z.number().optional(),
+    transactionFee: z.number().optional(),
+    exchangeFeePercentage: z.number().optional(),
+    feeTotal: z.number().optional(),
+  })
+  .required({
+    bankName: true,
+    bankAccountOwnerName: true,
+    accountType: true,
+    bankAccountNumber: true,
+    bankCode: true,
+  });
 
 export const walletDetailsSchema = z.object({
   walletAddress: z.string().min(1, 'Wallet address is required'),
@@ -59,26 +85,14 @@ export const walletDetailsSchema = z.object({
 });
 
 export const blockchainRecipientSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  currencyCode: transferCurrencyEnum,
-  tokenAmount: z.number().optional(),
-  email: z.string().email('Invalid email format'),
-  dateOfBirth: z.string().optional(),
-  phoneNumber: z.string().optional(),
+  ...baseRecipientSchema,
   recipientTransferType: z.literal('BLOCKCHAIN'),
-  recipientType: recipientType,
   walletDetails: walletDetailsSchema,
 });
 
 export const bankRecipientSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  currencyCode: transferCurrencyEnum,
-  tokenAmount: z.number().optional(),
-  email: z.string().email('Invalid email format'),
-  dateOfBirth: z.string().optional(),
-  phoneNumber: z.string().optional(),
+  ...baseRecipientSchema,
   recipientTransferType: z.literal('FIAT'),
-  recipientType: recipientType,
   bankDetails: bankDetailsSchema,
 });
 
@@ -99,31 +113,20 @@ export const transferResponseSchema = z.object({
   updatedAt: z.string(),
   payoutAccountId: z.string(),
   memo: z.string(),
-  status: z.string(),
+  status: transferStatusEnum,
   recipientsInfo: z.array(
     z.object({
       id: z.string(),
       createdAt: z.string(),
       updatedAt: z.string(),
-      recipientTransferType: z.string(),
+      recipientTransferType: recipientTransferTypeEnum,
       tokenAmount: z.number(),
-      fiatDetails: z
-        .object({
-          withdrawalRequestStatus: z.string(),
-          currencyCode: z.string(),
-          fiatAmount: z.number(),
-          transactionFee: z.number(),
-          exchangeFeePercentage: z.number(),
-          exchangeRate: z.number(),
-          feeTotal: z.number(),
-        })
-        .optional(),
-      blockchainDetails: z
-        .object({
-          blockchain: z.string(),
-          walletAddress: z.string(),
-        })
-        .optional(),
+      name: z.string().optional(),
+      email: z.string().optional(),
+      recipientType: recipientType.optional(),
+      currencyCode: transferCurrencyEnum.optional(),
+      bankDetails: bankDetailsSchema.optional(),
+      walletDetails: walletDetailsSchema.optional(),
     }),
   ),
 });

@@ -1,13 +1,12 @@
 import { useTheme } from '@emotion/react';
 import { Button, Icon, Input, Select } from '@/shared-ui';
 import { RecipientFormSection } from './components/RecipientFormSection';
-import { ctaContainerCss, formTitleCss } from './styles';
+import { containerCss, ctaContainerCss, formTitleCss } from './styles';
 import { useTransferForm } from '../../../utils/hooks/useTransferForm';
 import { AccountResponse } from '@/features/account/types';
 import useAccountStore from '@/store/account';
 import { formGroupCss } from './components/styles';
 import { TransferSchema } from '@/features/transfer/types';
-import { useEffect } from 'react';
 
 type CreateTransferModalContentProps = {
   setModalOpen: (bool: boolean) => void;
@@ -30,39 +29,17 @@ const CreateTransferModalContent = ({ setModalOpen }: CreateTransferModalContent
     onSubmit,
   } = useTransferForm(() => setModalOpen(false));
 
-  useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      console.log('Form validation errors:', {
-        payoutAccountId: errors.payoutAccountId?.message,
-        memo: errors.memo?.message,
-        recipientsInfo: errors.recipientsInfo?.message,
-        recipientErrors: errors.recipientsInfo?.[0],
-      });
-    }
-  }, [errors]);
-
   const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('1. Form event triggered');
     e.preventDefault();
-
-    const wrappedHandler = handleSubmit(async (data: TransferSchema) => {
-      console.log('2. Form validation passed, data:', data);
-      try {
-        await onSubmit(data);
-        console.log('3. onSubmit completed successfully');
-      } catch (error) {
-        console.error('Error in onSubmit:', error);
-      }
-    });
-
+    const wrappedHandler = handleSubmit(async (data: TransferSchema) => await onSubmit(data));
     wrappedHandler(e);
   };
 
   return (
-    <>
+    <div css={containerCss(theme)}>
       <h4 css={formTitleCss(theme)}>Create New Transfer</h4>
       <form onSubmit={formSubmitHandler}>
-        <span css={formGroupCss}>
+        <span css={formGroupCss(theme)}>
           <Select
             id="payoutAccountId"
             label="Account"
@@ -77,7 +54,7 @@ const CreateTransferModalContent = ({ setModalOpen }: CreateTransferModalContent
           />
         </span>
 
-        <span css={formGroupCss}>
+        <span css={formGroupCss(theme)}>
           <Input
             id="memo"
             label="Memo"
@@ -112,7 +89,7 @@ const CreateTransferModalContent = ({ setModalOpen }: CreateTransferModalContent
               Remove last recipient
             </Button>
           )}
-          <Button type="submit" variant="success" disabled={isLoading}>
+          <Button type="submit" variant="success" disabled={isLoading || selectedIndex < 0}>
             <Icon name="send" color={theme.colors.success} size={20} />
             Send Transfer
           </Button>
@@ -122,7 +99,7 @@ const CreateTransferModalContent = ({ setModalOpen }: CreateTransferModalContent
           </Button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

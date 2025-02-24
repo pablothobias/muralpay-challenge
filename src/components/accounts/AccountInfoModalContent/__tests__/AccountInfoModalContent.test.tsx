@@ -1,59 +1,60 @@
-import { screen, within, waitFor, render } from '@/utils/context/TestUtils';
-
+import { screen, renderWithProviders } from '@/utils/test/TestProviders';
 import AccountInfoModalContent from '../index';
 import { AccountResponse } from '@/features/account/types';
 import { mockAccount } from '@/mocks/store/account';
-import { STATUS_TYPES } from '@/utils/constants';
-import { BLOCKCHAIN } from '@/utils/constants';
 
 describe('AccountInfoModalContent', () => {
-  const renderComponent = (account: AccountResponse) =>
-    render(<AccountInfoModalContent account={account} />);
-
-  it('renders account info with theme context', async () => {
-    renderComponent(mockAccount);
-    await waitFor(() => {
-      expect(screen.getByTestId('status-value')).toHaveTextContent('Active');
-    });
-  });
+  const renderComponent = (props: { account: AccountResponse | null }) => {
+    return renderWithProviders(<AccountInfoModalContent {...props} />);
+  };
 
   describe('rendering', () => {
-    it('should render all account information correctly', async () => {
-      renderComponent(mockAccount);
+    it('should return null when account is not provided', () => {
+      const { container } = renderComponent({ account: null });
 
-      const expectedItems = [
-        { label: 'ID:', value: '123' },
-        { label: 'Blockchain:', value: BLOCKCHAIN.POLYGON },
-        { label: 'Address:', value: '0x123...abc' },
-        { label: 'Balance:', value: '100 BTX' },
-        { label: 'Status:', value: STATUS_TYPES.ACTIVE },
-        { label: 'API Enabled:', value: 'Yes' },
-      ];
-
-      await waitFor(() => {
-        expectedItems.forEach(({ label, value }) => {
-          const item = screen.getByText(label).closest('div');
-          expect(item).toBeInTheDocument();
-          expect(within(item!).getByText(value)).toBeInTheDocument();
-        });
-      });
+      expect(container).toBeEmptyDOMElement();
     });
 
-    it('should return null when account is not provided', async () => {
-      const { container } = renderComponent(null as unknown as AccountResponse);
-      expect(container).toBeEmptyDOMElement();
+    it('should render account information correctly', () => {
+      const { id, blockchain, address, balance, isPending, isApiEnabled } = mockAccount;
+
+      renderComponent({ account: mockAccount });
+
+      const statusValue = screen.getByTestId('status-value');
+      const apiEnabledValue = screen.getByTestId('api-enabled-value');
+
+      expect(screen.getByText(id)).toBeInTheDocument();
+      expect(screen.getByText(blockchain)).toBeInTheDocument();
+      expect(screen.getByText(address)).toBeInTheDocument();
+      expect(screen.getByText(`$${balance.balance}.00 ${balance.tokenSymbol}`)).toBeInTheDocument();
+      expect(statusValue).toHaveTextContent(isPending ? 'Pending' : 'Active');
+      expect(apiEnabledValue).toHaveTextContent(isApiEnabled ? 'Yes' : 'No');
     });
   });
 
   describe('status indicators', () => {
     it('should show pending status when isPending is true', () => {
-      renderComponent({
+      const pendingAccount: AccountResponse = {
         ...mockAccount,
         isPending: true,
-      });
+      };
 
-      const statusItem = screen.getByTestId('status-label').closest('div');
-      expect(within(statusItem!).getByText(STATUS_TYPES.PENDING)).toBeInTheDocument();
+      renderComponent({ account: pendingAccount });
+      const statusValue = screen.getByTestId('status-value');
+
+      expect(statusValue).toHaveTextContent('Pending');
+    });
+
+    it('should show active status when isPending is false', () => {
+      const activeAccount: AccountResponse = {
+        ...mockAccount,
+        isPending: false,
+      };
+
+      renderComponent({ account: activeAccount });
+      const statusValue = screen.getByTestId('status-value');
+
+      expect(statusValue).toHaveTextContent('Active');
     });
   });
 });

@@ -41,7 +41,8 @@ export const addressSectionStyles = (theme: ThemeType) => css`
   margin-top: var(--spacing-md);
   padding: var(--spacing-md);
   border-radius: ${theme.borderRadius.md};
-  background-color: ${theme.colors.foreground};
+  background-color: ${theme.colors.background};
+  border: 1px solid ${theme.colors.border};
 `;
 
 export const addressTitleStyles = (theme: ThemeType) => css`

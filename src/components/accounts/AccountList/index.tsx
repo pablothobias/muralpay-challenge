@@ -63,7 +63,8 @@ const Status = ({ status }: { status: string }) => {
 const AccountList = () => {
   const theme = useTheme();
 
-  const { setLoadingState, isLoading, clearLoadingState } = useLoading();
+  const { isLoading, setLoadingState, clearAllLoadingStates } = useLoading();
+  const { showError, clearAllToasts } = useToast();
 
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
@@ -71,35 +72,36 @@ const AccountList = () => {
   const [accounts, setAccounts] = useState<AccountResponseArray>([]);
   const { refreshAccounts } = useAccountActions();
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse>();
-  const { showError } = useToast();
 
   useEffect(() => {
+    const unsubscribe = useAccountStore.subscribe(
+      (state: AccountState) => state,
+      ({ accounts, loading }) => {
+        setLoadingState('refreshAccounts', !!loading);
+        setAccounts(accounts || []);
+      },
+    );
+
     async function fetchAccounts() {
+      if (isLoading) return;
       try {
-        setLoadingState('accountsPage', true);
+        setLoadingState('refreshAccounts', true);
         await refreshAccounts();
       } catch (error) {
         showError('fetchAccounts', (error as Error).message);
       } finally {
-        setLoadingState('accountsPage', false);
+        setLoadingState('refreshAccounts', false);
       }
     }
-
-    const unsubscribe = useAccountStore.subscribe(
-      (state: AccountState) => state,
-      (state) => {
-        setLoadingState('accountsPage', state.loading);
-        setAccounts(state.accounts || []);
-      },
-    );
 
     fetchAccounts();
 
     return () => {
-      clearLoadingState('accountsPage');
+      clearAllLoadingStates();
+      clearAllToasts();
       unsubscribe();
     };
-  }, [setLoadingState]);
+  }, []);
 
   const selectAccount = (accountId: string) => {
     setSelectedAccount(() => accounts!.find((acc) => acc.id === accountId));
@@ -155,17 +157,15 @@ const AccountList = () => {
             <Icon name="cash" />
           </span>
           <span css={accountInfo} data-testid={`address-${account.id}`}>
-            {account.address}&nbsp; <Icon name="card" />{' '}
+            {account.address}&nbsp; <Icon name="card" />
           </span>
           <div css={accountItemRightRow}>
             <span
               css={statusBadgeCss(account.isPending ? STATUS_TYPES.PENDING : STATUS_TYPES.ACTIVE)}
+              data-testid={`status-badge-${account.id}`}
             >
               {account.isPending ? STATUS_TYPES.PENDING : STATUS_TYPES.ACTIVE}
-              <Status
-                status={account.isPending ? STATUS_TYPES.PENDING : STATUS_TYPES.ACTIVE}
-                data-testid="account-status"
-              />
+              <Status status={account.isPending ? STATUS_TYPES.PENDING : STATUS_TYPES.ACTIVE} />
             </span>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import { ThemeType } from '@/styles/theme';
-import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 export const selectGroupCss = (theme: ThemeType) => css`
@@ -17,8 +16,6 @@ export const selectGroupCss = (theme: ThemeType) => css`
     padding: var(--spacing-sm);
     border-radius: var(--border-radius);
     border: 1px solid var(--border);
-    background: ${colors.neutral[50]};
-    color: ${colors.background.dark};
     outline: none;
     transition: border 0.2s ease-in-out;
     cursor: pointer;
@@ -40,8 +37,8 @@ export const selectStyles = (theme: ThemeType) => css`
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
-  background: ${theme.colors.foreground};
-  color: ${theme.colors.background};
+  background: ${theme.colors.background};
+  color: ${theme.colors.foreground};
   outline: none;
   transition: 0.2s all;
 

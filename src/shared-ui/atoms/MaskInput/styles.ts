@@ -1,6 +1,9 @@
 import { ThemeType } from '@/styles/theme';
 import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+import InputMask from 'react-input-mask-next';
+import CurrencyInput from 'react-currency-input-field';
 
 export const inputGroupCss = (theme: ThemeType) => css`
   display: flex;
@@ -22,6 +25,10 @@ export const inputGroupCss = (theme: ThemeType) => css`
     outline: none;
     transition: border 0.2s ease-in-out;
 
+    &::placeholder {
+      color: ${colors.neutral[400]};
+    }
+
     &:focus {
       border-color: var(--primary);
       box-shadow: ${theme.shadows.md};
@@ -29,7 +36,7 @@ export const inputGroupCss = (theme: ThemeType) => css`
   }
 `;
 
-export const inputStyles = (theme: ThemeType) => css`
+const baseInputStyles = (theme: ThemeType) => css`
   padding: var(--spacing-md);
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
@@ -43,6 +50,16 @@ export const inputStyles = (theme: ThemeType) => css`
     border-color: var(--primary);
     box-shadow: ${theme.shadows.md};
   }
+`;
+
+export const inputStyles = baseInputStyles;
+
+export const StyledInputMask = styled(InputMask)<{ theme: ThemeType }>`
+  ${({ theme }) => baseInputStyles(theme)}
+`;
+
+export const StyledCurrencyInput = styled(CurrencyInput)<{ theme: ThemeType }>`
+  ${({ theme }) => baseInputStyles(theme)}
 `;
 
 export const errorTextCss = css`

@@ -82,6 +82,7 @@ const BackgroundAnimation = memo(() => {
     return () => {
       unsubscribe();
       deactivateAnimation();
+
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [deactivateAnimation]);

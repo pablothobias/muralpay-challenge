@@ -11,7 +11,6 @@ import {
   blockchainRecipientSchema,
 } from '../schemas';
 
-// Base types from schemas
 export type TransferSchema = z.infer<typeof transferSchema>;
 export type TransferResponse = z.infer<typeof transferResponseSchema>;
 export type TRANSFER_STATUSEnum = z.infer<typeof transferStatusEnum>;
@@ -20,7 +19,6 @@ export type TransferRecipientEnum = z.infer<typeof transferRecipientEnum>;
 export type RecipientInfoSchema = z.infer<typeof recipientInfoSchema>;
 export type TransferListResponseSchema = z.infer<typeof transferListResponseSchema>;
 
-// Form-specific types
 export type BankRecipient = z.infer<typeof bankRecipientSchema>;
 export type BlockchainRecipient = z.infer<typeof blockchainRecipientSchema>;
 
@@ -34,6 +32,6 @@ export type TransferServiceType = {
   create(data: TransferSchema, signal?: AbortSignal): Promise<TransferResponse | undefined>;
   get(signal?: AbortSignal): Promise<TransferListResponseSchema | undefined>;
   execute(id: string, signal?: AbortSignal): Promise<TransferResponse | undefined>;
-  cancel(id: string, signal?: AbortSignal): Promise<TransferListResponseSchema | undefined>;
+  cancel(id: string, signal?: AbortSignal): Promise<TransferResponse | undefined>;
   handleError(error: unknown, defaultMessage: string): undefined;
 };

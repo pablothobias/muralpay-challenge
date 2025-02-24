@@ -108,21 +108,19 @@ describe('Organization Store', () => {
 
       sessionStorage.setItem('organization', JSON.stringify({ state: initialState }));
 
-      const { result } = renderHook(() => {
-        const store = useOrganizationStore();
-        act(() => {
-          useOrganizationStore.setState(initialState);
-        });
-        return store;
+      let result;
+      act(() => {
+        result = renderHook(() => useOrganizationStore()).result;
+        useOrganizationStore.setState(initialState);
       });
 
-      expect(result.current.loggedOrganization).toEqual(mockOrganization);
-      expect(result.current.organizations).toEqual(mockOrganizations);
-      expect(result.current.loading).toBe(false);
-      expect(result.current.error).toBeUndefined();
+      expect(result!.current.loggedOrganization).toEqual(mockOrganization);
+      expect(result!.current.organizations).toEqual(mockOrganizations);
+      expect(result!.current.loading).toBe(false);
+      expect(result!.current.error).toBeUndefined();
     });
 
-    it('should handle undefined values correctly', () => {
+    it('should handle undefined values correctly', async () => {
       const initialState = {
         loggedOrganization: undefined,
         organizations: { results: [], total: 0 },
@@ -132,18 +130,16 @@ describe('Organization Store', () => {
 
       sessionStorage.setItem('organization', JSON.stringify({ state: initialState }));
 
-      const { result } = renderHook(() => {
-        const store = useOrganizationStore();
-        act(() => {
-          useOrganizationStore.setState(initialState);
-        });
-        return store;
+      let result;
+      act(() => {
+        result = renderHook(() => useOrganizationStore()).result;
+        useOrganizationStore.setState(initialState);
       });
 
-      expect(result.current.loggedOrganization).toBeUndefined();
-      expect(result.current.organizations).toEqual({ results: [], total: 0 });
-      expect(result.current.loading).toBe(false);
-      expect(result.current.error).toBeUndefined();
+      expect(result!.current.loggedOrganization).toBeUndefined();
+      expect(result!.current.organizations).toEqual({ results: [], total: 0 });
+      expect(result!.current.loading).toBe(false);
+      expect(result!.current.error).toBeUndefined();
     });
   });
 });

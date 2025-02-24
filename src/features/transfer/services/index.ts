@@ -13,75 +13,99 @@ import {
 } from '../types';
 
 const TransferService: TransferServiceType = {
-  create: async (
-    data: TransferSchema,
-    signal?: AbortSignal,
-  ): Promise<TransferResponse | undefined> => {
+  create: async (data: TransferSchema, signal?: AbortSignal): Promise<TransferResponse> => {
     try {
       const validatedData = transferSchema.parse(data);
-
-      if (!validatedData) {
-        throw new TransferValidationError('Invalid data format', ERROR_TYPES.VALIDATION);
-      }
-
       const response = await apiClient.post(API_ENDPOINTS.TRANSFER_REQUESTS, validatedData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
         ...(signal && { signal }),
       });
       return transferResponseSchema.parse(response.data);
     } catch (error) {
-      return TransferService.handleError(error, 'Failed to create transfer');
+      throw TransferService.handleError(error, 'Failed to create transfer');
     }
   },
-  get: async (signal?: AbortSignal): Promise<TransferListResponseSchema | undefined> => {
+  get: async (signal?: AbortSignal): Promise<TransferListResponseSchema> => {
     try {
       const response = await apiClient.get(API_ENDPOINTS.TRANSFER_REQUESTS, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
         ...(signal && { signal }),
       });
       return transferListResponseSchema.parse(response.data);
     } catch (error) {
-      return TransferService.handleError(error, 'Failed to get transfers');
+      throw TransferService.handleError(error, 'Failed to get transfers');
     }
   },
-  execute: async (id: string, signal?: AbortSignal): Promise<TransferResponse | undefined> => {
+  execute: async (id: string, signal?: AbortSignal): Promise<TransferResponse> => {
     try {
       const response = await apiClient.post(
         API_ENDPOINTS.TRANSFER_REQUESTS_EXECUTE,
         { transferRequestId: id },
         {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+          },
           ...(signal && { signal }),
         },
       );
       return transferResponseSchema.parse(response.data);
     } catch (error) {
-      return TransferService.handleError(error, 'Failed to execute transfer');
+      throw TransferService.handleError(error, 'Failed to execute transfer');
     }
   },
-  cancel: async (
-    id: string,
-    signal?: AbortSignal,
-  ): Promise<TransferListResponseSchema | undefined> => {
+  cancel: async (id: string, signal?: AbortSignal): Promise<TransferResponse> => {
     try {
-      const response = await apiClient.get(API_ENDPOINTS.TRANSFER_REQUESTS_CANCEL, {
-        ...(signal && { signal }),
-      });
-      return transferListResponseSchema.parse(response.data);
+      const response = await apiClient.post(
+        API_ENDPOINTS.TRANSFER_REQUESTS_CANCEL,
+        { transferRequestId: id },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          ...(signal && { signal }),
+        },
+      );
+      return transferResponseSchema.parse(response.data);
     } catch (error) {
-      return TransferService.handleError(error, 'Failed to cancel transfers');
+      throw TransferService.handleError(error, 'Failed to cancel transfer');
     }
   },
-  handleError: (error: unknown, defaultMessage: string) => {
-    logError(error, 'TransferService.create');
+  handleError: (error: unknown, defaultMessage: string): never => {
+    logError(error, 'TransferService');
 
-    if (error instanceof AxiosError)
+    if (error instanceof ZodError) {
+      throw new TransferValidationError(error.message, ERROR_TYPES.VALIDATION);
+    }
+
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 404) {
+        throw new TransferServiceError('Resource not found', ERROR_TYPES.NOT_FOUND, error);
+      }
+
+      if (error.response?.status === 400) {
+        throw new TransferValidationError(
+          error.response.data?.message || defaultMessage,
+          ERROR_TYPES.VALIDATION,
+          error,
+        );
+      }
+
       throw new TransferServiceError(
         error.response?.data?.message || defaultMessage,
         ERROR_TYPES.API_ERROR,
         error,
       );
-    else if (error instanceof ZodError)
-      throw new TransferValidationError(error.message, ERROR_TYPES.VALIDATION);
-    else
-      throw new TransferServiceError('Unexpected error occurred', ERROR_TYPES.UNKNOWN_ERROR, error);
+    }
+
+    throw new TransferServiceError(defaultMessage, ERROR_TYPES.UNKNOWN_ERROR, error);
   },
 };
 

@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 const RegisterContainer = () => {
   const router = useRouter();
   const theme = useTheme();
-  const { showSuccess, showError } = useToast();
+  const { showSuccess, showError, clearAllToasts } = useToast();
   const { isLoading, setLoadingState, clearLoadingState } = useLoading();
 
   const { createOrganization } = useOrganizationActions();
@@ -52,6 +52,7 @@ const RegisterContainer = () => {
       clearLoadingState('createOrganization');
       unsubscribe();
       unsubscribeAuth();
+      clearAllToasts();
     };
   }, [setLoadingState]);
 

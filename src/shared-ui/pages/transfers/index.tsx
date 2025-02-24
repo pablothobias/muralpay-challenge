@@ -67,8 +67,8 @@ const RecipientInfoContent = memo((recipient: TransferResponse['recipientsInfo']
   const isFiat = recipient.recipientTransferType === RECIPIENT_TRANSFER_TYPE.FIAT;
   const amount = isFiat
     ? formatCurrency(
-        recipient.fiatDetails?.fiatAmount || 0,
-        recipient.fiatDetails?.currencyCode || 'USD',
+        recipient.bankDetails?.tokenAmount || 0,
+        recipient.bankDetails?.currencyCode || 'USD',
       )
     : formatCurrency(recipient.tokenAmount || 0, 'XBT');
 
@@ -79,50 +79,58 @@ const RecipientInfoContent = memo((recipient: TransferResponse['recipientsInfo']
           {isFiat ? <IoWalletOutline size={20} /> : <MdAccountBalanceWallet size={20} />}
           <span>
             {isFiat
-              ? 'Fiat Transfer'
-              : `Blockchain Transfer (${recipient.blockchainDetails?.blockchain})`}
+              ? `${recipient.bankDetails?.bankName || ''} - ${
+                  recipient.bankDetails?.bankAccountNumber || ''
+                }`
+              : recipient.walletDetails?.walletAddress || ''}
           </span>
         </div>
         <span css={amountTextCss}>{amount}</span>
       </div>
 
-      {isFiat && recipient.fiatDetails && (
+      {isFiat && recipient.bankDetails && recipient.bankDetails.exchangeRate && (
         <div css={feeDetailsCss}>
           <div css={feeItemCss}>
             <span>Exchange Rate</span>
             <span css={cardMetadataCss}>
               <IoTrendingUpOutline size={16} />
-              {recipient.fiatDetails.exchangeRate.toFixed(2)}
+              {recipient.bankDetails.exchangeRate.toFixed(2)}
             </span>
           </div>
-          <div css={feeItemCss}>
-            <span>Transaction Fee</span>
-            <span css={cardMetadataCss}>
-              <IoCardOutline size={16} />
-              {recipient.fiatDetails.transactionFee}%
-            </span>
-          </div>
-          <div css={feeItemCss}>
-            <span>Exchange Fee</span>
-            <span css={cardMetadataCss}>
-              <IoSwapVerticalOutline size={16} />
-              {recipient.fiatDetails.exchangeFeePercentage}%
-            </span>
-          </div>
-          <div css={feeItemCss}>
-            <span>Total Fees</span>
-            <span css={cardMetadataCss}>
-              <IoWalletOutline size={16} />
-              {formatCurrency(recipient.fiatDetails.feeTotal, recipient.fiatDetails.currencyCode)}
-            </span>
-          </div>
+          {recipient.bankDetails.transactionFee && (
+            <div css={feeItemCss}>
+              <span>Transaction Fee</span>
+              <span css={cardMetadataCss}>
+                <IoCardOutline size={16} />
+                {recipient.bankDetails.transactionFee}%
+              </span>
+            </div>
+          )}
+          {recipient.bankDetails.exchangeFeePercentage && (
+            <div css={feeItemCss}>
+              <span>Exchange Fee</span>
+              <span css={cardMetadataCss}>
+                <IoSwapVerticalOutline size={16} />
+                {recipient.bankDetails.exchangeFeePercentage}%
+              </span>
+            </div>
+          )}
+          {recipient.bankDetails.feeTotal && (
+            <div css={feeItemCss}>
+              <span>Total Fees</span>
+              <span css={cardMetadataCss}>
+                <IoWalletOutline size={16} />
+                {formatCurrency(recipient.bankDetails.feeTotal, recipient.bankDetails.currencyCode)}
+              </span>
+            </div>
+          )}
         </div>
       )}
 
-      {!isFiat && recipient.blockchainDetails && (
+      {!isFiat && recipient.walletDetails && (
         <div css={detailTextCss}>
           <MdAccountBalanceWallet size={16} />
-          <span>Wallet: {recipient.blockchainDetails.walletAddress}</span>
+          <span>Wallet: {recipient.walletDetails.walletAddress}</span>
         </div>
       )}
 
@@ -145,7 +153,7 @@ const TransfersPage: FC = () => {
   const accounts = useAccountStore((state) => state.accounts);
   const { executeTransfer, cancelTransfer, refreshTransfers } = useTransferActions();
 
-  const { showSuccess, showError } = useToast();
+  const { showSuccess, showError, clearAllToasts } = useToast();
   const { setLoadingState, isLoading, clearLoadingState } = useLoading();
 
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
@@ -183,6 +191,7 @@ const TransfersPage: FC = () => {
     return () => {
       controller.abort();
       clearLoadingState('transfers');
+      clearAllToasts();
     };
   }, [refreshTransfers, showError, clearLoadingState]);
 

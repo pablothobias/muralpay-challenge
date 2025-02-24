@@ -4,6 +4,7 @@ import BankDetailsFields from './BankDetailsFields';
 import { recipientsInfoContainerCss, formTitleCss } from '../styles';
 import WalletDetailsFields from './WalletDetailsFields';
 import RecipientInfoFields from './RecipientInfoFields';
+import { useTheme } from '@emotion/react';
 
 type RecipientFormSectionProps = {
   register: UseFormRegister<TransferFormSchema>;
@@ -23,23 +24,25 @@ export const RecipientFormSection = ({
     name: `recipientsInfo.${index}.recipientTransferType`,
   }) as 'FIAT' | 'BLOCKCHAIN' | undefined;
 
+  const theme = useTheme();
+
   return (
-    <div css={recipientsInfoContainerCss}>
-      <h4 css={formTitleCss}>Recipient Information</h4>
+    <div css={recipientsInfoContainerCss(theme)}>
+      <h4 css={formTitleCss(theme)}>Recipient Information</h4>
       <RecipientInfoFields register={register} index={index} errors={errors} control={control} />
 
       {recipientTransferType === 'FIAT' && (
         <>
-          <h4 css={formTitleCss}>Bank Details</h4>
+          <h4 css={formTitleCss(theme)}>Bank Details</h4>
           <BankDetailsFields register={register} index={index} errors={errors} control={control} />
         </>
       )}
 
       {recipientTransferType === 'BLOCKCHAIN' && (
-        <>
-          <h4 css={formTitleCss}>Wallet Details</h4>
+        <div css={recipientsInfoContainerCss(theme)}>
+          <h4 css={formTitleCss(theme)}>Wallet Details</h4>
           <WalletDetailsFields register={register} index={index} errors={errors} />
-        </>
+        </div>
       )}
     </div>
   );

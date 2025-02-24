@@ -9,10 +9,11 @@ export const statsCardStyles = (theme: ThemeType, variant?: string) => css`
   transition: transform 0.3s ease;
   max-width: 400px;
   cursor: pointer;
+  background: ${theme.colors.background};
 
   &:hover {
     transform: translateY(-5px);
-    background: ${theme.colors.invertedLight};
+    background: ${theme.colors.muted};
 
     .stats-value {
       color: ${variant === 'warning' ? theme.colors.warning : theme.colors.secondary} !important;
@@ -47,8 +48,27 @@ export const statsCardStyles = (theme: ThemeType, variant?: string) => css`
 
     .stats-label {
       font-size: 0.9rem;
-      color: ${theme.colors.muted};
+      color: transparent;
       transition: color 0.3s ease-in-out;
+    }
+
+    [data-testid='trend-value'] {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: ${theme.borderRadius.sm};
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-left: 0.5rem;
+
+      &.positive {
+        color: ${theme.colors.success};
+        background: ${theme.colors.success}20;
+      }
+
+      &.negative {
+        color: ${theme.colors.error};
+        background: ${theme.colors.error}20;
+      }
     }
   }
 `;

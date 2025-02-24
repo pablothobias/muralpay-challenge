@@ -12,7 +12,12 @@ const LoadingSpinner = ({ size = 50, color }: LoadingSpinnerProps) => {
 
   return (
     <div css={spinnerContainer}>
-      <ClipLoader loading size={size} color={color || theme.colors.primary} />
+      <ClipLoader
+        data-testid="loading-spinner"
+        loading
+        size={size}
+        color={color || theme.colors.primary}
+      />
     </div>
   );
 };

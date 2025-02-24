@@ -24,25 +24,17 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log the error
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
 
-    // In production, you would send this to your error tracking service
     if (process.env.NODE_ENV === 'production') {
-      // Example: Sentry.captureException(error);
-      // Example: LogRocket.captureException(error);
     }
 
-    // Update state with error details
     this.setState({ error, errorInfo });
 
-    // Clear any cached state that might be causing the error
     try {
-      // Clear localStorage items that might be corrupted
       localStorage.removeItem('theme');
       localStorage.removeItem('lastError');
 
-      // Store error details for debugging
       localStorage.setItem(
         'lastError',
         JSON.stringify({

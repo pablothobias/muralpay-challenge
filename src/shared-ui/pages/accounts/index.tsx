@@ -43,8 +43,6 @@ const AccountsPage = ({ register, errors, handleSubmit, control }: AccountsProps
     }
   };
 
-  console.log({ control });
-
   return (
     <section css={sectionContainer}>
       <div css={sectionHeader}>

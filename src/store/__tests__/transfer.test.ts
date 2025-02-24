@@ -81,7 +81,7 @@ describe('Transfer Store', () => {
       expect(persistedState.state).toEqual(state);
     });
 
-    it('should load persisted state from session storage', () => {
+    it('should load persisted state from session storage', async () => {
       const initialState = {
         transfers: mockTransfers,
         loading: false,
@@ -90,12 +90,11 @@ describe('Transfer Store', () => {
 
       sessionStorage.setItem('transfers', JSON.stringify({ state: initialState }));
 
-      const { result } = renderHook(() => {
-        const store = useTransferStore();
-        act(() => {
-          useTransferStore.setState(initialState);
-        });
-        return store;
+      const { result } = renderHook(() => useTransferStore());
+
+      await act(async () => {
+        useTransferStore.setState(initialState);
+        await new Promise((resolve) => setTimeout(resolve, 0));
       });
 
       expect(result.current.transfers).toEqual(mockTransfers);
@@ -103,7 +102,7 @@ describe('Transfer Store', () => {
       expect(result.current.error).toBeUndefined();
     });
 
-    it('should handle undefined values correctly', () => {
+    it('should handle undefined values correctly', async () => {
       const initialState = {
         transfers: undefined,
         loading: false,
@@ -112,12 +111,10 @@ describe('Transfer Store', () => {
 
       sessionStorage.setItem('transfers', JSON.stringify({ state: initialState }));
 
-      const { result } = renderHook(() => {
-        const store = useTransferStore();
-        act(() => {
-          useTransferStore.setState(initialState);
-        });
-        return store;
+      const { result } = renderHook(() => useTransferStore());
+
+      await act(() => {
+        useTransferStore.setState(initialState);
       });
 
       expect(result.current.transfers).toBeUndefined();

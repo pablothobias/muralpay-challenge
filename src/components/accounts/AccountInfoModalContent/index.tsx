@@ -5,7 +5,7 @@ import { containerCss, contentCss, infoItemCss } from './styles';
 import { formatCurrency } from '@/utils/functions/formatCurrency';
 
 export interface AccountInfoModalContentProps {
-  account: AccountResponse;
+  account?: AccountResponse | null;
 }
 
 const AccountInfoModalContent: React.FC<AccountInfoModalContentProps> = ({ account }) => {

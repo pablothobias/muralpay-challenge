@@ -127,29 +127,31 @@ const variantStyles = (theme: ThemeType) => ({
   `,
 });
 
-export const buttonStyles = ({ size, variant, theme }: ButtonStyleProps) => css`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: ${theme.borderRadius.md};
-  font-family: ${theme.typography.fontFamily};
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  white-space: nowrap;
+export const buttonStyles = ({ size, variant, theme }: ButtonStyleProps) => {
+  return css`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: ${theme.borderRadius.md};
+    font-family: ${theme.typography.fontFamily};
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
 
-  ${sizeStyles(theme)[size]}
-  ${variantStyles(theme)[variant]}
+    ${sizeStyles(theme)[size]}
+    ${variantStyles(theme)[variant]}
 
-  svg {
-    width: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
-    height: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
-  }
-
-  &:hover {
     svg {
-      color: ${theme.colors.background} !important;
+      width: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
+      height: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
     }
-  }
-`;
+
+    &:hover {
+      svg {
+        color: ${theme.colors.background} !important;
+      }
+    }
+  `;
+};

@@ -29,6 +29,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           onChange={onChange}
           disabled={disabled}
           ref={ref}
+          role="combobox"
+          data-testid={id}
           {...props}
         >
           {[placeholderOption, ...options].map((option) => (

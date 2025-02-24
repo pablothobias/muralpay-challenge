@@ -1,5 +1,5 @@
 import '@emotion/react';
-import { borderRadius, colors, shadows, spacing, typography } from './variables';
+import { borderRadius, breakpoints, colors, shadows, spacing, typography } from './variables';
 
 export const lightTheme = {
   colors: {
@@ -22,6 +22,7 @@ export const lightTheme = {
   spacing,
   borderRadius,
   shadows: shadows.light,
+  breakpoints,
 };
 
 export const darkTheme = {
@@ -45,6 +46,7 @@ export const darkTheme = {
   spacing,
   borderRadius,
   shadows: shadows.dark,
+  breakpoints,
 };
 
 export type ThemeType = typeof lightTheme;

@@ -61,7 +61,7 @@ const recipientInfoToAppend: RecipientInfo = {
       city: '',
       state: '',
       country: '',
-      zip: '',
+      postalCode: '',
     },
   },
   walletDetails: {
@@ -71,23 +71,30 @@ const recipientInfoToAppend: RecipientInfo = {
 };
 
 export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn => {
-  const { setLoadingState, clearLoadingState, isLoading } = useLoading();
+  const { setLoadingState, isLoading, clearAllLoadingStates } = useLoading();
+  const { showError, showSuccess, clearAllToasts } = useToast();
   const { createTransfer } = useTransferActions();
   const { refreshAccounts } = useAccountActions();
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const { showError, showSuccess } = useToast();
 
   useEffect(() => {
-    const controller = new AbortController();
+    let mounted = true;
 
     const fetchAccounts = async () => {
-      if (controller.signal.aborted) return;
-
       try {
-        await refreshAccounts();
+        if (mounted) {
+          try {
+            setLoadingState('fetchingAccounts', true);
+            await refreshAccounts();
+          } catch (error) {
+            showError('fetchAccounts', (error as Error).message);
+          } finally {
+            setLoadingState('fetchingAccounts', false);
+          }
+        }
       } catch (error) {
-        if (!controller.signal.aborted && error instanceof Error) {
-          showError('fetchAccounts', error.message);
+        if (mounted && error instanceof Error) {
+          showError('transferForm', error.message);
         }
       }
     };
@@ -95,8 +102,9 @@ export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn =>
     fetchAccounts();
 
     return () => {
-      controller.abort();
-      clearLoadingState('fetchAccounts');
+      clearAllLoadingStates();
+      clearAllToasts();
+      mounted = false;
     };
   }, []);
 
@@ -110,7 +118,6 @@ export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn =>
   });
 
   const onSubmit = async (data: TransferSchema) => {
-    console.log('4. Hook onSubmit called with data:', data);
     if (isLoading) return;
 
     try {
@@ -121,8 +128,7 @@ export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn =>
         onSuccess();
       }
     } catch (error) {
-      console.log(error);
-      showError('error', 'Failed to create transfer');
+      showError('transferForm', (error as Error).message);
     } finally {
       setLoadingState('createTransfer', false);
     }
@@ -146,10 +152,6 @@ export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn =>
     watch,
     register,
   } = methods;
-
-  useEffect(() => {
-    console.log('Form state:', methods.getValues());
-  }, [methods]);
 
   return {
     fields,

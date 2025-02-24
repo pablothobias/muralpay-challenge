@@ -37,7 +37,7 @@ const addressFields: AddressField[] = [
   { id: 'city', label: 'City', placeholder: 'Enter city' },
   { id: 'state', label: 'State', placeholder: 'Enter state' },
   { id: 'country', label: 'Country', placeholder: 'Enter country' },
-  { id: 'zip', label: 'ZIP Code', placeholder: 'Enter ZIP code' },
+  { id: 'postalCode', label: 'ZIP Code', placeholder: 'Enter ZIP code' },
 ];
 
 export const PhysicalAddressFields = ({ register, index, errors }: FormFieldProps) => {
@@ -57,7 +57,7 @@ export const PhysicalAddressFields = ({ register, index, errors }: FormFieldProp
       <h4 css={addressTitleStyles(theme)}>Physical Address</h4>
       <div>
         {addressFields.map((field) => (
-          <div key={field.id} css={formGroupCss}>
+          <div key={field.id} css={formGroupCss(theme)}>
             <Input
               id={`recipientsInfo.${index}.bankDetails.physicalAddress.${field.id}`}
               label={field.label}

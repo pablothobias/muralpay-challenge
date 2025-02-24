@@ -37,7 +37,7 @@ const HomePage = ({ theme, totalBalance, totalTransfers, pendingTransfers }: Hom
               <h1>
                 Welcome to
                 <strong>&nbsp;Mural Pay</strong>
-                <strong>{`, ${user?.name}.` || ', User.'}</strong>
+                <strong>{` ${user?.name}.` || ' User.'}</strong>
               </h1>
               <p>Your financial dashboard is ready for you</p>
             </div>

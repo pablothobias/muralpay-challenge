@@ -29,9 +29,14 @@ function List({ items, loading, onClick }: ListProps) {
   if (items && items.length === 0) return <EmptyList theme={theme} />;
 
   return (
-    <div css={listContainerCss(theme)}>
+    <div css={listContainerCss(theme)} role="list">
       {items.map((item: ListType) => (
-        <div key={item.id as string} css={listItemCss(theme)} onClick={() => onClick?.(item.id)}>
+        <div
+          key={item.id as string}
+          css={listItemCss(theme)}
+          onClick={() => onClick?.(item.id)}
+          role="listitem"
+        >
           {item.element as ReactElement}
         </div>
       ))}

@@ -11,6 +11,7 @@ export const ERROR_TYPES = {
   VALIDATION: 'validation',
   API_ERROR: 'api_error',
   UNKNOWN_ERROR: 'unknown_error',
+  NOT_FOUND: 'not_found',
 };
 
 export const CURRENCY = {
@@ -70,7 +71,7 @@ export const mapToCurrencyLocaleValues: Record<string, string> = {
 
 export enum STATUS_TYPES {
   PENDING = 'PENDING',
-  MPLETED = 'COMPLETED',
+  COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   IN_REVIEW = 'IN_REVIEW',
   ACTIVE = 'ACTIVE',

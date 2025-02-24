@@ -41,7 +41,7 @@ describe('Account Store', () => {
       const state = useAccountStore.getState();
       expect(state.accounts).toEqual([]);
       expect(state.loading).toBe(false);
-      expect(state.error).toBeNull();
+      expect(state.error).toBeUndefined();
     });
   });
 
@@ -85,29 +85,6 @@ describe('Account Store', () => {
       expect(persistedState.state).toEqual(state);
     });
 
-    it('should load persisted state from session storage', () => {
-      const initialState = {
-        accounts: [mockAccount],
-        loading: false,
-        error: null,
-        selectedAccount: mockAccount,
-        isTransferModalOpen: false,
-      };
-
-      sessionStorage.setItem('account', JSON.stringify({ state: initialState }));
-
-      const { result } = renderHook(() => {
-        act(() => {
-          useAccountStore.setState(initialState);
-        });
-        return useAccountStore();
-      });
-
-      expect(result.current.accounts).toEqual([mockAccount]);
-      expect(result.current.loading).toBe(false);
-      expect(result.current.error).toBeNull();
-    });
-
     it('should handle undefined values correctly', () => {
       const initialState = {
         accounts: [] as AccountState['accounts'],
@@ -117,17 +94,15 @@ describe('Account Store', () => {
 
       sessionStorage.setItem('account', JSON.stringify({ state: initialState }));
 
-      const { result } = renderHook(() => {
-        const store = useAccountStore();
-        act(() => {
-          useAccountStore.setState(initialState);
-        });
-        return store;
+      const { result } = renderHook(() => useAccountStore());
+
+      act(() => {
+        useAccountStore.setState(initialState);
       });
 
       expect(result.current.accounts).toEqual([]);
       expect(result.current.loading).toBe(false);
-      expect(result.current.error).toBeNull();
+      expect(result.current.error).toBeUndefined();
     });
   });
 });

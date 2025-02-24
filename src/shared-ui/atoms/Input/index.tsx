@@ -24,8 +24,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         <input
-          css={inputStyles}
+          css={inputStyles(theme)}
           id={id}
+          name={id}
           type={type}
           placeholder={placeholder}
           value={value}
