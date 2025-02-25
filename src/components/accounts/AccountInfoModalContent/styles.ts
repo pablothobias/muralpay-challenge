@@ -15,10 +15,8 @@ export const headerCss = (theme: ThemeType) => css`
   margin-bottom: ${theme.spacing.md};
   border-bottom: 1px solid ${theme.colors.border};
 
-  h2 {
-    margin: 0;
-    font-size: ${theme.typography.fontSize.lg};
-    color: ${theme.colors.primary};
+  span {
+    font-size: ${theme.typography.fontSize.md};
   }
 `;
 
@@ -26,18 +24,8 @@ export const contentCss = (theme: ThemeType) => css`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.md};
-  font-size: ${theme.typography.fontSize};
+  font-size: ${theme.typography.fontSize.md};
   line-height: 1.4;
-`;
-
-export const footerCss = (theme: ThemeType) => css`
-  margin-top: ${theme.spacing.md};
-  display: flex;
-  justify-content: flex-end;
-
-  button {
-    margin-left: ${theme.spacing.sm};
-  }
 `;
 
 export const infoItemCss = (theme: ThemeType) => css`
@@ -48,10 +36,10 @@ export const infoItemCss = (theme: ThemeType) => css`
 
   strong {
     flex-basis: 120px;
-    color: ${theme.colors.background};
+    color: ${theme.colors.foreground};
   }
 
   span {
-    color: ${theme.colors.background};
+    color: ${theme.colors.foreground};
   }
 `;

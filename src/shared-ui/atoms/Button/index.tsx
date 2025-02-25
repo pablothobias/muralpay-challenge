@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
 import { buttonStyles } from './styles';
+import { useTheme } from '@emotion/react';
 
 export type ButtonProps = {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'outlined';
   size?: 'small' | 'medium' | 'large';
   type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
@@ -13,7 +14,7 @@ export type ButtonProps = {
   className?: string;
 };
 
-const Button = ({
+const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'primary',
   type = 'button',
@@ -24,6 +25,7 @@ const Button = ({
   iconPosition = 'left',
   className,
 }: ButtonProps) => {
+  const theme = useTheme();
   const content = (
     <>
       {icon && iconPosition === 'left' && icon}
@@ -34,7 +36,7 @@ const Button = ({
 
   return (
     <button
-      css={buttonStyles({ size, variant, hasIcon: !!icon })}
+      css={buttonStyles({ size, variant, theme })}
       type={type}
       disabled={disabled}
       onClick={onClick}

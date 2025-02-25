@@ -1,3 +1,4 @@
+import { colors } from '@/styles/variables';
 import {
   FiCheckCircle,
   FiCreditCard,
@@ -9,11 +10,24 @@ import {
   FiPlus,
   FiRefreshCcw,
   FiSearch,
+  FiSlash,
   FiTrash,
   FiUser,
   FiUsers,
   FiXCircle,
 } from 'react-icons/fi';
+import {
+  IoCashOutline,
+  IoInformationCircleOutline,
+  IoLogoFacebook,
+  IoLogoInstagram,
+  IoLogoTwitter,
+  IoMenu,
+  IoSettingsOutline,
+  IoSwapHorizontalOutline,
+  IoClose,
+  IoSend,
+} from 'react-icons/io5';
 
 export type IconProps = {
   name:
@@ -30,27 +44,51 @@ export type IconProps = {
     | 'error'
     | 'plus'
     | 'play'
-    | 'trash';
+    | 'trash'
+    | 'cash'
+    | 'empty'
+    | 'swap'
+    | 'facebook'
+    | 'instagram'
+    | 'pending'
+    | 'twitter'
+    | 'send'
+    | 'menu'
+    | 'close'
+    | 'settings';
   size?: number;
   color?: string;
 };
 
-const Icon = ({ name, size = 24, color = 'var(--foreground)' }: IconProps) => {
+const Icon = ({ name, size = 24, color = colors.primary.dark }: IconProps) => {
+  const props = { color, size };
+
   const icons = {
-    search: <FiSearch size={size} color={color} />,
-    user: <FiUser size={size} color={color} />,
-    users: <FiUsers size={size} color={color} />,
-    logout: <FiLogOut size={size} color={color} />,
-    login: <FiLogIn size={size} color={color} />,
-    transfer: <FiDollarSign size={size} color={color} />,
-    home: <FiHome size={size} color={color} />,
-    card: <FiCreditCard size={size} color={color} />,
-    refresh: <FiRefreshCcw size={size} color={color} />,
-    check: <FiCheckCircle size={size} color={color} />,
-    error: <FiXCircle size={size} color={color} />,
-    plus: <FiPlus size={size} color={color} />,
-    play: <FiPlay size={size} color={color} />,
-    trash: <FiTrash size={size} color={color} />,
+    search: <FiSearch {...props} />,
+    user: <FiUser {...props} />,
+    users: <FiUsers {...props} />,
+    logout: <FiLogOut {...props} />,
+    login: <FiLogIn {...props} />,
+    transfer: <FiDollarSign {...props} />,
+    home: <FiHome {...props} />,
+    card: <FiCreditCard {...props} />,
+    refresh: <FiRefreshCcw {...props} />,
+    check: <FiCheckCircle {...props} />,
+    error: <FiXCircle {...props} />,
+    plus: <FiPlus {...props} />,
+    play: <FiPlay {...props} />,
+    trash: <FiTrash {...props} />,
+    cash: <IoCashOutline {...props} />,
+    swap: <IoSwapHorizontalOutline {...props} />,
+    empty: <IoInformationCircleOutline {...props} />,
+    facebook: <IoLogoFacebook {...props} />,
+    instagram: <IoLogoInstagram {...props} />,
+    twitter: <IoLogoTwitter {...props} />,
+    pending: <FiSlash {...props} />,
+    settings: <IoSettingsOutline {...props} />,
+    menu: <IoMenu {...props} />,
+    send: <IoSend {...props} />,
+    close: <IoClose {...props} />,
   };
 
   return icons[name] || null;

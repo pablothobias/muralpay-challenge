@@ -1,18 +1,23 @@
-import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
 
-export const layoutStyles = (theme: ThemeType) => css`
+export const layoutStyles = css`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: ${theme.colors.background};
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
 `;
 
 export const mainStyles = css`
   flex: 1;
-  padding: 1rem;
+  padding: 0;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
 
   @media (min-width: 768px) {
-    padding: 2rem;
+    padding: 4rem;
   }
 `;

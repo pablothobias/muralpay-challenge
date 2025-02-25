@@ -58,10 +58,6 @@ export const useToastMessage = (initialStates: ToastStates = {}, options: UseToa
     });
   }, []);
 
-  const clearAllToasts = useCallback(() => {
-    setToastStates({});
-  }, []);
-
   return {
     toastStates,
     showSuccess: (key: string, message: string) => showToast(key, 'success', message),
@@ -69,6 +65,5 @@ export const useToastMessage = (initialStates: ToastStates = {}, options: UseToa
     showInfo: (key: string, message: string) => showToast(key, 'info', message),
     showWarning: (key: string, message: string) => showToast(key, 'warning', message),
     clearToast,
-    clearAllToasts,
   };
 };

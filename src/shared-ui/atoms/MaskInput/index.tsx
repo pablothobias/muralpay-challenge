@@ -1,8 +1,7 @@
 import { ForwardedRef, forwardRef, ReactElement } from 'react';
-import CurrencyInput from 'react-currency-input-field';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
-import InputMask from 'react-input-mask-next';
-import { errorTextCss, inputGroupCss, inputStyles } from './styles';
+import { errorTextCss, inputGroupCss, StyledInputMask, StyledCurrencyInput } from './styles';
+import { useTheme } from '@emotion/react';
 
 type MaskInputProps<T extends FieldValues> = {
   type: 'currency' | 'phone';
@@ -20,27 +19,27 @@ const MaskInput = forwardRef(
     ref: ForwardedRef<HTMLInputElement>,
   ) => {
     const { field } = useController({ name, control });
+    const theme = useTheme();
 
     const InputComponent = new Map<string, ReactElement>([
       [
         'phone',
-        <InputMask
+        <StyledInputMask
           key={`${name}-phone`}
           id={`${name}-id`}
           mask="+99 99999-9999"
-          css={inputStyles}
+          theme={theme}
           {...props}
           {...field}
-          inputRef={ref}
           placeholder="+01123456789"
         />,
       ],
       [
         'currency',
-        <CurrencyInput
+        <StyledCurrencyInput
           key={`${name}-currency`}
           {...props}
-          css={inputStyles}
+          theme={theme}
           id={`${name}-id`}
           prefix="$ "
           placeholder="$ 0.00"
@@ -53,7 +52,7 @@ const MaskInput = forwardRef(
     ]);
 
     return (
-      <div css={inputGroupCss}>
+      <div css={inputGroupCss(theme)}>
         {label && (
           <label key={name} htmlFor={name} {...props}>
             {label}

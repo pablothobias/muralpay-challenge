@@ -1,5 +1,5 @@
 import { TransfersPage } from '@/shared-ui';
-import withAuth from '@/utils/functions/withAuth';
+import withAuth from '@/utils/hoc/withAuth';
 import { pageContainerCss, transfersContainerCss } from '@/shared-ui/pages/transfers/styles';
 
 const TransferContainerPage = () => {

@@ -210,6 +210,11 @@ export const transferListCss = css`
   display: grid;
   gap: ${spacing.md};
 
+  & > div:nth-of-type(even) {
+    background: ${colors.neutral[200]};
+    border: 1px solid ${colors.background.dark};
+  }
+
   @media (max-width: 768px) {
     padding: ${spacing.md};
   }

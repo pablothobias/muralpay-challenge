@@ -10,9 +10,13 @@ const useAccountStore = create<AccountState>()(
           accounts: [],
           loading: false,
           error: null,
+          isTransferModalOpen: false,
           setAccountsState: (accounts, loading, error) =>
             set({ accounts: [...accounts!], loading, error }),
-          onLogout: () => set({ accounts: [], loading: false, error: null }),
+          onLogout: () => {
+            set({ accounts: [], loading: false, error: null });
+            sessionStorage.clear();
+          },
         }),
         { name: 'account', storage: createJSONStorage(() => sessionStorage) },
       ),

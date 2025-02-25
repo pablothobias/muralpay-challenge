@@ -1,8 +1,15 @@
 import { css } from '@emotion/react';
 import { ThemeType } from '@/styles/theme';
-import { shadows } from '@/styles/variables';
 
-export const headerStyles = (theme: ThemeType) => css`
+type HeaderStylesProps = {
+  theme: ThemeType;
+  isMobile?: boolean;
+};
+
+export const headerStyles = ({ theme }: HeaderStylesProps) => css`
+  position: sticky;
+  top: 0;
+  z-index: 100;
   background-color: ${theme.colors.background};
   color: ${theme.colors.foreground};
   padding: 1rem;
@@ -10,7 +17,8 @@ export const headerStyles = (theme: ThemeType) => css`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${theme.colors.border};
-  box-shadow: ${shadows.md};
+  box-shadow: ${theme.shadows.md};
+  height: 72px;
 
   .logo {
     display: flex;
@@ -19,29 +27,52 @@ export const headerStyles = (theme: ThemeType) => css`
     font-size: 1rem;
     font-weight: bold;
   }
+`;
 
-  nav {
-    display: flex;
-    gap: 1rem;
-  }
+export const desktopNavStyles = css`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-
-    nav {
-      margin-top: 0.5rem;
-    }
+  @media (max-width: 767px) {
+    display: none;
   }
 `;
 
-export const navLinkStyles = (theme: ThemeType) => css`
+export const themeBtnStyles = css`
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+export const mobileNavLinkStyles = (theme: ThemeType) => css`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: ${theme.colors.primary};
   text-decoration: none;
   font-weight: 500;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+`;
+
+export const navLinkStyles = (theme: ThemeType) => css`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: ${theme.colors.primary};
+  text-decoration: none;
+  font-weight: 500;
+  background-color: transparent;
 
   &:hover {
     color: ${theme.colors.secondary};
     text-decoration: underline;
+
+    svg {
+      color: ${theme.colors.secondary} !important;
+    }
   }
 `;

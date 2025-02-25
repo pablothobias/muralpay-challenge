@@ -6,10 +6,10 @@ import { Accounts } from './types';
 export const useAccountActions = () => {
   const setAccountsState = useAccountStore((state) => state.setAccountsState);
 
-  const refreshAccounts = async () => {
+  const refreshAccounts = async (signal?: AbortSignal) => {
     try {
       setAccountsState([], true, undefined);
-      const response = await AccountService.get();
+      const response = await AccountService.get(signal);
       setAccountsState(response, false, undefined);
       return response;
     } catch (error) {
@@ -18,11 +18,11 @@ export const useAccountActions = () => {
     }
   };
 
-  const createAccount = async (data: AccountSchema) => {
+  const createAccount = async (data: AccountSchema, signal?: AbortSignal) => {
     try {
       setAccountsState([], true, undefined);
-      await AccountService.create(data);
-      const response: Accounts = await refreshAccounts();
+      await AccountService.create(data, signal);
+      const response: Accounts = await refreshAccounts(signal);
       setAccountsState(response, false, undefined);
       return response;
     } catch (error) {

@@ -7,7 +7,6 @@ type ToastContextType = {
   showInfo: (key: string, message: string) => void;
   showWarning: (key: string, message: string) => void;
   clearToast: (key: string) => void;
-  clearAllToasts: () => void;
 };
 
 const ToastContext = createContext<ToastContextType | null>(null);
@@ -23,7 +22,6 @@ export const ToastProvider = ({ children }: PropsWithChildren) => {
         showInfo: toast.showInfo,
         showWarning: toast.showWarning,
         clearToast: toast.clearToast,
-        clearAllToasts: toast.clearAllToasts,
       }}
     >
       {children}
