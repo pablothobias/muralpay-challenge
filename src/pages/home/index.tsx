@@ -1,14 +1,32 @@
 'use client';
 
-import { HomeHero } from '@/shared-ui';
+import { HomePage } from '@/shared-ui';
+import useAccountStore from '@/store/account';
+import useTransferStore from '@/store/transfer';
 import { containerStyles } from '@/styles/pages/home/styles';
-import withAuth from '@/utils/functions/withAuth';
+import { STATUS_TYPES } from '@/utils/constants';
+import withAuth from '@/utils/hoc/withAuth';
+import { useTheme } from '@emotion/react';
 
 const HomePageContainer = () => {
+  const theme = useTheme();
+
+  const accounts = useAccountStore((state) => state.accounts);
+  const transfers = useTransferStore((state) => state.transfers);
+
+  const totalBalance = accounts?.reduce((acc, account) => acc + account.balance.balance, 0) || 0;
+  const totalTransfers = transfers?.results?.length || 0;
+  const pendingTransfers =
+    transfers?.results?.filter((t) => t.status === STATUS_TYPES.PENDING).length || 0;
   return (
-    <main css={containerStyles}>
-      <HomeHero />
-    </main>
+    <section css={containerStyles}>
+      <HomePage
+        theme={theme}
+        totalBalance={totalBalance}
+        totalTransfers={totalTransfers}
+        pendingTransfers={pendingTransfers}
+      />
+    </section>
   );
 };
 

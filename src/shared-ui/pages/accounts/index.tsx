@@ -1,8 +1,10 @@
 import { Button, Icon, Input, LoadingSpinner } from '@/shared-ui';
 import { type AccountSchema } from '@/features/account/types';
 import dynamic from 'next/dynamic';
-import { type FieldErrors, type UseFormRegister } from 'react-hook-form';
+import { type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form';
 import { sectionContainer, sectionHeader } from './styles';
+import { useAccountActions } from '@/store/account/hooks';
+import { useToast } from '@/utils/context/ToastContext';
 import { useState } from 'react';
 
 const AccountList = dynamic(() => import('@/components/accounts/AccountList'), {
@@ -17,12 +19,30 @@ const Modal = dynamic(() => import('@/shared-ui/molecules/Modal'), {
 type AccountsProps = {
   register: UseFormRegister<AccountSchema>;
   errors: FieldErrors<AccountSchema>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleSubmit: any;
+  handleSubmit: (
+    onValid: (data: AccountSchema) => void,
+  ) => (event?: React.BaseSyntheticEvent) => void;
+  control: Control<AccountSchema>;
 };
 
-const AccountsPage = ({ register, errors, handleSubmit }: AccountsProps) => {
+const AccountsPage = ({ register, errors, handleSubmit, control }: AccountsProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { createAccount } = useAccountActions();
+  const { showSuccess, showError } = useToast();
+
+  const handleCreateAccount = async (data: AccountSchema) => {
+    try {
+      const controller = new AbortController();
+      const response = await createAccount(data, controller.signal);
+      setIsOpen(false);
+      if (response) showSuccess('account', 'Account created successfully!');
+    } catch (error) {
+      showError('account', (error as Error).message || 'Failed to create account');
+    } finally {
+      control._reset();
+    }
+  };
 
   return (
     <section css={sectionContainer}>
@@ -43,7 +63,7 @@ const AccountsPage = ({ register, errors, handleSubmit }: AccountsProps) => {
             <Button variant="warning" onClick={() => setIsOpen(false)}>
               Cancel
             </Button>
-            <Button variant="success" onClick={() => handleSubmit()}>
+            <Button variant="success" onClick={handleSubmit(handleCreateAccount)}>
               Save
             </Button>
           </>
@@ -53,7 +73,7 @@ const AccountsPage = ({ register, errors, handleSubmit }: AccountsProps) => {
           id="name"
           label="Name"
           type="text"
-          placeholder="John"
+          placeholder="John Doe..."
           {...register('name')}
           error={errors.name?.message}
         />

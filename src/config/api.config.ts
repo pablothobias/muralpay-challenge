@@ -48,10 +48,10 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
   const instance = axios.create({
     baseURL: config.baseURL,
     timeout: config.timeout || 10000,
-    headers: new AxiosHeaders({
+    headers: {
       ...DEFAULT_HEADERS,
       ...(config.headers || {}),
-    }),
+    },
   });
 
   instance.interceptors.request.use(createRequestInterceptor(), createErrorHandler('request'));
@@ -67,7 +67,7 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
 const apiClient = createApiClient({
   baseURL: process.env.NEXT_PUBLIC_BASE_API_URL as string,
   timeout: 10000,
-  headers: new AxiosHeaders({ ...DEFAULT_HEADERS }),
+  headers: DEFAULT_HEADERS,
 });
 
 export default apiClient;

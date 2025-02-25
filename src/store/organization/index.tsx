@@ -12,14 +12,21 @@ const useOrganizationStore = create<OrganizationState>()(
           loading: false,
           error: undefined,
           setLoggedOrganization: (organization, loading, error) =>
-            set({ loggedOrganization: organization!, loading, error }),
+            set({ loggedOrganization: organization, loading, error }),
           setOrganizationsState: (
             organizations: Organizations,
             loading: boolean,
             error: string | undefined,
           ) => set({ organizations, loading, error }),
-          onLogout: () =>
-            set({ organizations: { results: [], total: 0 }, loading: false, error: undefined }),
+          onLogout: () => {
+            set({
+              loggedOrganization: undefined,
+              organizations: { results: [], total: 0 },
+              loading: false,
+              error: undefined,
+            });
+            sessionStorage.clear();
+          },
         }),
         { name: 'organization', storage: createJSONStorage(() => sessionStorage) },
       ),

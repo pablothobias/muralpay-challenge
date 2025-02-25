@@ -1,122 +1,158 @@
+import { ThemeType } from '@/styles/theme';
 import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 type ButtonStyleProps = {
-  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'outlined';
   size: 'small' | 'medium' | 'large';
-  hasIcon: boolean;
+  theme: ThemeType;
 };
 
-const sizeStyles = {
+const sizeStyles = (theme: ThemeType) => ({
   small: css`
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-sm);
-    gap: var(--spacing-xs);
+    position: relative;
+    z-index: 2;
+    box-shadow: ${theme.shadows.lg};
+    padding: ${theme.spacing.xs} ${theme.spacing.sm};
+    font-size: ${theme.typography.fontSize.sm};
+    gap: ${theme.spacing.xs};
   `,
   medium: css`
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: var(--font-size-md);
-    gap: var(--spacing-sm);
+    position: relative;
+    z-index: 2;
+    box-shadow: ${theme.shadows.lg};
+    padding: ${theme.spacing.sm} ${theme.spacing.md};
+    font-size: ${theme.typography.fontSize.base};
+    gap: ${theme.spacing.sm};
   `,
   large: css`
-    padding: var(--spacing-md) var(--spacing-lg);
-    font-size: var(--font-size-lg);
-    gap: var(--spacing-md);
+    position: relative;
+    z-index: 2;
+    box-shadow: ${theme.shadows.lg};
+    padding: ${theme.spacing.md} ${theme.spacing.lg};
+    font-size: ${theme.typography.fontSize.lg};
+    gap: ${theme.spacing.md};
   `,
-};
+});
 
-const variantStyles = {
+const variantStyles = (theme: ThemeType) => ({
   primary: css`
-    background: var(--primary);
-    color: var(--primary-foreground);
+    background: transparent;
+    color: ${theme.colors.primary};
+    border: 1px solid ${theme.colors.primary};
 
     &:hover:not(:disabled) {
-      background: var(--primary-dark);
+      background: ${theme.colors.primary};
+      color: ${theme.colors.background};
     }
 
     &:disabled {
-      background: var(--muted);
+      opacity: 0.5;
       cursor: not-allowed;
     }
   `,
   secondary: css`
-    background: transparent;
-    color: var(--foreground);
-    border: 1px solid var(--border);
+    background: ${theme.colors.white};
+    color: ${colors.background.dark};
+    border: 1px solid ${theme.colors.muted};
 
     &:hover:not(:disabled) {
-      background: ${colors.muted.dark};
-      color: ${colors.muted.light};
+      background: ${theme.colors.neutral[400]};
+      color: ${theme.colors.muted};
     }
 
     &:disabled {
-      color: var(--muted-foreground);
+      opacity: 0.5;
       cursor: not-allowed;
     }
   `,
   success: css`
-    border: 1px solid ${colors.neutral[500]};
-    background: ${colors.background.light};
-    color: ${colors.background.dark};
+    background: transparent;
+    color: ${theme.colors.success};
+    border: 1px solid ${theme.colors.success};
 
     &:hover:not(:disabled) {
-      background: ${colors.success.dark};
-      color: ${colors.muted.light};
+      background: ${theme.colors.success};
+      color: ${theme.colors.background};
     }
 
     &:disabled {
-      color: var(--muted-foreground);
+      opacity: 0.5;
       cursor: not-allowed;
     }
   `,
   warning: css`
-    border: 1px solid ${colors.neutral[500]};
-    background: ${colors.background.light};
-    color: ${colors.background.dark};
+    background: transparent;
+    color: ${theme.colors.warning};
+    border: 1px solid ${theme.colors.warning};
 
     &:hover:not(:disabled) {
-      background: ${colors.warning.light};
-      color: ${colors.muted.light};
+      background: ${theme.colors.warning};
+      color: ${theme.colors.background};
     }
 
     &:disabled {
-      color: var(--muted-foreground);
+      opacity: 0.5;
       cursor: not-allowed;
     }
   `,
   danger: css`
-    border: 1px solid ${colors.neutral[500]};
-    background: ${colors.background.light};
-    color: ${colors.background.dark};
+    background: transparent;
+    color: ${theme.colors.error};
+    border: 1px solid ${theme.colors.error};
 
     &:hover:not(:disabled) {
-      background: ${colors.error.light};
-      color: ${colors.muted.light};
+      background: ${theme.colors.error};
+      color: ${theme.colors.background};
     }
 
     &:disabled {
-      color: var(--muted-foreground);
+      opacity: 0.5;
       cursor: not-allowed;
     }
   `,
+  outlined: css`
+    border: 1px solid ${theme.colors.foreground};
+    background: transparent;
+    color: ${theme.colors.background};
+
+    &:hover:not(:disabled) {
+      background: ${theme.colors.muted};
+      color: ${theme.colors.foreground};
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  `,
+});
+
+export const buttonStyles = ({ size, variant, theme }: ButtonStyleProps) => {
+  return css`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: ${theme.borderRadius.md};
+    font-family: ${theme.typography.fontFamily};
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+
+    ${sizeStyles(theme)[size]}
+    ${variantStyles(theme)[variant]}
+
+    svg {
+      width: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
+      height: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
+    }
+
+    &:hover {
+      svg {
+        color: ${theme.colors.background} !important;
+      }
+    }
+  `;
 };
-
-export const buttonStyles = ({ size, variant }: ButtonStyleProps) => css`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: var(--border-radius);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  white-space: nowrap;
-
-  ${sizeStyles[size]}
-  ${variantStyles[variant]}
-
-  svg {
-    width: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
-    height: ${size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'};
-  }
-`;

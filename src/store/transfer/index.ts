@@ -7,11 +7,14 @@ const useTransferStore = create<TransferState>()(
     subscribeWithSelector(
       persist(
         (set) => ({
-          transfers: { results: [], total: 0 },
+          transfers: undefined,
           loading: false,
-          error: null,
+          error: undefined,
           setTransfersState: (transfers, loading, error) => set({ transfers, loading, error }),
-          onLogout: () => set({ transfers: undefined, loading: false, error: null }),
+          onLogout: () => {
+            set({ transfers: undefined, loading: false, error: undefined });
+            sessionStorage.clear();
+          },
         }),
         { name: 'transfers', storage: createJSONStorage(() => sessionStorage) },
       ),

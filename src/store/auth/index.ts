@@ -15,16 +15,19 @@ const cookieStorage: PersistStorage<AuthState> = {
     }
   },
   setItem: (name, value) => {
-    if (typeof window !== 'undefined')
+    if (typeof window !== 'undefined') {
       Cookies.set(name, JSON.stringify(value), {
         expires: 1,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Strict',
         path: '/',
       });
+    }
   },
   removeItem: (name) => {
-    if (typeof window !== 'undefined') Cookies.remove(name);
+    if (typeof window !== 'undefined') {
+      Cookies.remove(name);
+    }
   },
 };
 
@@ -35,11 +38,11 @@ const useAuthStore = create<AuthState>()(
         (set) => ({
           user: null,
           isAuthenticated: false,
-          login: (user: User) => set({ user, isAuthenticated: true }),
-
+          login: (user: User) => {
+            set({ user, isAuthenticated: true });
+          },
           logout: () => {
             set({ user: null, isAuthenticated: false });
-
             cookieStorage.removeItem('auth-storage');
             cookieStorage.removeItem('user');
             cookieStorage.removeItem('on-behalf-of');

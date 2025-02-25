@@ -7,11 +7,12 @@ export const accountListContainerCss = (theme: ThemeType) => css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-x: auto;
   width: 100%;
   max-height: 70vh;
-  margin-top: var(--spacing-xl);
+  margin-top: ${theme.spacing.xl};
   border: 1px solid ${theme.colors.border};
-  border-radius: var(--border-radius);
+  border-radius: ${theme.borderRadius.md};
 
   h2 {
     color: ${theme.colors.foreground};
@@ -26,13 +27,14 @@ export const accountListHeaderCss = css`
   width: 100%;
   padding: var(--spacing-lg);
   box-shadow: 0 4px 4px -2px gray;
-  z-index: 10;
+  z-index: 2;
 `;
 
 export const contentCss = css`
   flex: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-xs);
 
   h3 {
@@ -50,17 +52,31 @@ export const contentCss = css`
 
 export const statusCss = (status: string) => css`
   border-radius: 50%;
-  background: ${status === 'ACTIVE' ? colors.success.light : colors.warning.light};
+  background: ${colors.neutral[50]};
   border: 1px solid ${status === 'ACTIVE' ? colors.success.light : colors.warning.light};
-  box-shadow: 0 0 0 2px ${status === 'ACTIVE' ? colors.success.light : colors.warning.light};
   width: 12px;
   height: 12px;
 `;
 
-export const statusFontCss = (status: string) => css`
+export const statusBadgeCss = (status: string) => css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 16px;
+  border: 1px solid ${status === 'ACTIVE' ? colors.success.light : colors.warning.light};
   font-weight: 500;
   font-size: var(--font-size-sm);
-  color: ${status === 'ACTIVE' ? colors.success.light : colors.warning.light};
+  background: ${status === 'ACTIVE' ? colors.success.light : colors.warning.light};
+  color: ${colors.neutral[50]};
+`;
+
+export const leftContentCss = css`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
 `;
 
 export const rightContentCss = css`
@@ -68,6 +84,7 @@ export const rightContentCss = css`
   align-items: flex-end;
   flex-direction: column;
   gap: var(--spacing-xs);
+  min-width: 120px;
 
   span {
     font-weight: 600;
@@ -78,24 +95,16 @@ export const rightContentCss = css`
   }
 `;
 
-export const emptyStateCss = (theme: ThemeType) => css`
+export const accountInfo = css`
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 50%;
-  background: ${theme.colors.muted};
-  padding: var(--spacing-lg);
-  border: 1px solid ${theme.colors.muted};
-  border-radius: var(--border-radius);
-`;
-
-export const accountBalance = css`
+  gap: var(--spacing-sm);
   font-weight: 700;
 `;
 
 export const accountItemRightRow = css`
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   justify-content: space-between;
 `;

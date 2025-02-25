@@ -1,12 +1,28 @@
+import { STATUS_TYPES } from '@/utils/constants';
+import { BLOCKCHAIN, CURRENCY, PAYMENT_RAILS } from '@/utils/constants';
 import { z } from 'zod';
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
 
-export const BlockchainEnum = z.enum(['POLYGON', 'ETHEREUM', 'BSC']);
-export const AccountStatusEnum = z.enum(['ACTIVATED', 'PENDING', 'DEACTIVATED']);
-export const CurrencyEnum = z.enum(['USD', 'EUR', 'GBP']);
-export const PaymentRailsEnum = z.enum(['ACH', 'WIRE', 'SEPA']);
+export const BlockchainEnum = z.enum([...Object.keys(BLOCKCHAIN)] as [
+  keyof typeof BLOCKCHAIN,
+  ...string[],
+]);
+
+export const AccountStatusEnum = z.enum([
+  STATUS_TYPES.ACTIVATED,
+  STATUS_TYPES.PENDING,
+  STATUS_TYPES.DEACTIVATED,
+]);
+export const CurrencyEnum = z.enum([...Object.keys(CURRENCY)] as [
+  keyof typeof CURRENCY,
+  ...string[],
+]);
+export const PaymentRailsEnum = z.enum([...Object.keys(PAYMENT_RAILS)] as [
+  keyof typeof PAYMENT_RAILS,
+  ...string[],
+]);
 
 export const balanceSchema = z.object({
   balance: z.number().min(0),

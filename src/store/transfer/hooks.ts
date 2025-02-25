@@ -6,22 +6,28 @@ import { Transfers } from './types';
 export const useTransferActions = () => {
   const setTransfersState = useTransferStore((state) => state.setTransfersState);
 
-  const refreshTransfers = async () => {
+  const refreshTransfers = async (signal?: AbortSignal) => {
+    if (signal?.aborted) return;
+
     try {
       setTransfersState(undefined, true, undefined);
-      const response = await TransferService.get();
-      setTransfersState(response, false, undefined);
-      return response;
+      const response = await TransferService.get(signal);
+      if (!signal?.aborted) {
+        setTransfersState(response, false, undefined);
+        return response;
+      }
     } catch (error) {
-      setTransfersState(undefined, false, (error as Error).message);
-      throw error;
+      if (!signal?.aborted) {
+        setTransfersState(undefined, false, (error as Error).message);
+        throw error;
+      }
     }
   };
 
-  const createTransfer = async (data: TransferSchema) => {
+  const createTransfer = async (data: TransferSchema, signal?: AbortSignal) => {
     try {
       setTransfersState(undefined, true, undefined);
-      await TransferService.create(data);
+      await TransferService.create(data, signal);
       const response: Transfers = await refreshTransfers();
       setTransfersState(response, false, undefined);
       return response;
@@ -31,10 +37,10 @@ export const useTransferActions = () => {
     }
   };
 
-  const executeTransfer = async (transferId: string) => {
+  const executeTransfer = async (transferId: string, signal?: AbortSignal) => {
     try {
       setTransfersState(undefined, true, undefined);
-      await TransferService.execute(transferId);
+      await TransferService.execute(transferId, signal);
       const response = await refreshTransfers();
       setTransfersState(response, false, undefined);
     } catch (error) {
@@ -43,11 +49,10 @@ export const useTransferActions = () => {
     }
   };
 
-  const cancelTransfer = async (transferId: string) => {
+  const cancelTransfer = async (transferId: string, signal?: AbortSignal) => {
     try {
-      const response = await TransferService.cancel(transferId);
+      await TransferService.cancel(transferId, signal);
       await refreshTransfers();
-      return response;
     } catch (error) {
       throw error;
     }
