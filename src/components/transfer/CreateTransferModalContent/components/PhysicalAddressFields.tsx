@@ -37,7 +37,7 @@ const addressFields: AddressField[] = [
   { id: 'city', label: 'City', placeholder: 'Enter city' },
   { id: 'state', label: 'State', placeholder: 'Enter state' },
   { id: 'country', label: 'Country', placeholder: 'Enter country' },
-  { id: 'postalCode', label: 'ZIP Code', placeholder: 'Enter ZIP code' },
+  { id: 'zip', label: 'ZIP Code', placeholder: 'Enter ZIP code' },
 ];
 
 export const PhysicalAddressFields = ({ register, index, errors }: FormFieldProps) => {

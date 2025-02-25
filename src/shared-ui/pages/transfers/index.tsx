@@ -153,8 +153,8 @@ const TransfersPage: FC = () => {
   const accounts = useAccountStore((state) => state.accounts);
   const { executeTransfer, cancelTransfer, refreshTransfers } = useTransferActions();
 
-  const { showSuccess, showError, clearAllToasts } = useToast();
-  const { setLoadingState, isLoading, clearLoadingState } = useLoading();
+  const { showSuccess, showError } = useToast();
+  const { setLoadingState, isLoading } = useLoading();
 
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 
@@ -164,10 +164,6 @@ const TransfersPage: FC = () => {
   const loading = useTransferStore((state) => state.loading);
 
   useEffect(() => {
-    setLoadingState('transfers', loading);
-  }, [loading, setLoadingState]);
-
-  useEffect(() => {
     setTransfersList(transfers?.results || []);
   }, [transfers]);
 
@@ -175,14 +171,17 @@ const TransfersPage: FC = () => {
     const controller = new AbortController();
 
     async function fetchTransfers() {
-      if (controller.signal.aborted) return;
+      if (loading) return;
 
+      setLoadingState('fetchTransfers', true);
       try {
-        await refreshTransfers();
+        await refreshTransfers(controller.signal);
       } catch (error) {
         if (!controller.signal.aborted) {
           showError('fetchTransfers', (error as Error).message);
         }
+      } finally {
+        setLoadingState('fetchTransfers', false);
       }
     }
 
@@ -190,10 +189,8 @@ const TransfersPage: FC = () => {
 
     return () => {
       controller.abort();
-      clearLoadingState('transfers');
-      clearAllToasts();
     };
-  }, [refreshTransfers, showError, clearLoadingState]);
+  }, []);
 
   const handleTransferAction = useCallback(
     async (
@@ -210,7 +207,7 @@ const TransfersPage: FC = () => {
         showError('transfer', errorMessage);
       }
     },
-    [showError, showSuccess],
+    [],
   );
 
   if (isLoading)
@@ -250,7 +247,7 @@ const TransfersPage: FC = () => {
                 <div css={cardMetadataCss}>
                   <IoTimeOutline size={16} />
                   <span>
-                    Created:{' '}
+                    Created:
                     {Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(
                       new Date(transfer.createdAt),
                     )}

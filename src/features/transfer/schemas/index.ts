@@ -40,7 +40,7 @@ export const physicalAddressSchema = z.object({
     .regex(/^[A-Z]{2}$/, 'Must be a valid ISO 3166-1 alpha-2 country code (e.g., US, GB, BR)'),
   state: z.string().min(1, 'State is required'),
   city: z.string().min(1, 'City is required'),
-  postalCode: z.string().min(1, 'Postal code is required'),
+  zip: z.string().min(1, 'Postal code is required'),
 });
 
 const baseRecipientSchema = {

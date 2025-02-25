@@ -33,7 +33,8 @@ const AccountsPage = ({ register, errors, handleSubmit, control }: AccountsProps
 
   const handleCreateAccount = async (data: AccountSchema) => {
     try {
-      const response = await createAccount(data);
+      const controller = new AbortController();
+      const response = await createAccount(data, controller.signal);
       setIsOpen(false);
       if (response) showSuccess('account', 'Account created successfully!');
     } catch (error) {

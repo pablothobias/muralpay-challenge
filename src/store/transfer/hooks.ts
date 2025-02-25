@@ -2,72 +2,61 @@ import TransferService from '@/features/transfer/services';
 import { TransferSchema } from '@/features/transfer/types';
 import useTransferStore from '.';
 import { Transfers } from './types';
-import { useCallback } from 'react';
 
 export const useTransferActions = () => {
   const setTransfersState = useTransferStore((state) => state.setTransfersState);
 
-  const makeRequest = useCallback(<T>(request: (signal: AbortSignal) => Promise<T>) => {
-    const controller = new AbortController();
-    const promise = request(controller.signal);
-    promise.catch(() => controller.abort());
-    return promise;
-  }, []);
+  const refreshTransfers = async (signal?: AbortSignal) => {
+    if (signal?.aborted) return;
 
-  const refreshTransfers = useCallback(async () => {
     try {
       setTransfersState(undefined, true, undefined);
-      const response = await makeRequest((signal) => TransferService.get(signal));
+      const response = await TransferService.get(signal);
+      if (!signal?.aborted) {
+        setTransfersState(response, false, undefined);
+        return response;
+      }
+    } catch (error) {
+      if (!signal?.aborted) {
+        setTransfersState(undefined, false, (error as Error).message);
+        throw error;
+      }
+    }
+  };
+
+  const createTransfer = async (data: TransferSchema, signal?: AbortSignal) => {
+    try {
+      setTransfersState(undefined, true, undefined);
+      await TransferService.create(data, signal);
+      const response: Transfers = await refreshTransfers();
       setTransfersState(response, false, undefined);
       return response;
     } catch (error) {
       setTransfersState(undefined, false, (error as Error).message);
       throw error;
     }
-  }, [makeRequest, setTransfersState]);
+  };
 
-  const createTransfer = useCallback(
-    async (data: TransferSchema) => {
-      try {
-        setTransfersState(undefined, true, undefined);
-        await makeRequest((signal) => TransferService.create(data, signal));
-        const response: Transfers = await refreshTransfers();
-        setTransfersState(response, false, undefined);
-        return response;
-      } catch (error) {
-        setTransfersState(undefined, false, (error as Error).message);
-        throw error;
-      }
-    },
-    [makeRequest, refreshTransfers, setTransfersState],
-  );
+  const executeTransfer = async (transferId: string, signal?: AbortSignal) => {
+    try {
+      setTransfersState(undefined, true, undefined);
+      await TransferService.execute(transferId, signal);
+      const response = await refreshTransfers();
+      setTransfersState(response, false, undefined);
+    } catch (error) {
+      setTransfersState(undefined, false, (error as Error).message);
+      throw error;
+    }
+  };
 
-  const executeTransfer = useCallback(
-    async (transferId: string) => {
-      try {
-        setTransfersState(undefined, true, undefined);
-        await makeRequest((signal) => TransferService.execute(transferId, signal));
-        const response = await refreshTransfers();
-        setTransfersState(response, false, undefined);
-      } catch (error) {
-        setTransfersState(undefined, false, (error as Error).message);
-        throw error;
-      }
-    },
-    [makeRequest, refreshTransfers, setTransfersState],
-  );
-
-  const cancelTransfer = useCallback(
-    async (transferId: string) => {
-      try {
-        await makeRequest((signal) => TransferService.cancel(transferId, signal));
-        await refreshTransfers();
-      } catch (error) {
-        throw error;
-      }
-    },
-    [makeRequest, refreshTransfers],
-  );
+  const cancelTransfer = async (transferId: string, signal?: AbortSignal) => {
+    try {
+      await TransferService.cancel(transferId, signal);
+      await refreshTransfers();
+    } catch (error) {
+      throw error;
+    }
+  };
 
   return {
     refreshTransfers,

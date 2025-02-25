@@ -1,4 +1,5 @@
 import { ThemeType } from '@/styles/theme';
+import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 
 type ButtonStyleProps = {
@@ -51,8 +52,8 @@ const variantStyles = (theme: ThemeType) => ({
     }
   `,
   secondary: css`
-    background: ${theme.colors.foreground};
-    color: ${theme.colors.background};
+    background: ${theme.colors.white};
+    color: ${colors.background.dark};
     border: 1px solid ${theme.colors.muted};
 
     &:hover:not(:disabled) {

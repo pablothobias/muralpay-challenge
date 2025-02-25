@@ -11,7 +11,11 @@ export const layoutStyles = css`
 
 export const mainStyles = css`
   flex: 1;
-  padding: 2rem;
+  padding: 0;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
 
   @media (min-width: 768px) {
     padding: 4rem;

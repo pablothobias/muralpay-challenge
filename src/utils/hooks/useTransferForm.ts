@@ -61,7 +61,7 @@ const recipientInfoToAppend: RecipientInfo = {
       city: '',
       state: '',
       country: '',
-      postalCode: '',
+      zip: '',
     },
   },
   walletDetails: {
@@ -71,41 +71,31 @@ const recipientInfoToAppend: RecipientInfo = {
 };
 
 export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn => {
-  const { setLoadingState, isLoading, clearAllLoadingStates } = useLoading();
-  const { showError, showSuccess, clearAllToasts } = useToast();
+  const { setLoadingState, isLoading } = useLoading();
+  const { showError, showSuccess } = useToast();
   const { createTransfer } = useTransferActions();
   const { refreshAccounts } = useAccountActions();
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   useEffect(() => {
-    let mounted = true;
+    const controller = new AbortController();
+    if (isLoading || controller.signal.aborted) return;
 
-    const fetchAccounts = async () => {
+    function fetchAccounts() {
+      if (isLoading || controller.signal.aborted) return;
       try {
-        if (mounted) {
-          try {
-            setLoadingState('fetchingAccounts', true);
-            await refreshAccounts();
-          } catch (error) {
-            showError('fetchAccounts', (error as Error).message);
-          } finally {
-            setLoadingState('fetchingAccounts', false);
-          }
-        }
+        setLoadingState('refreshAccounts', true);
+        refreshAccounts(controller.signal);
       } catch (error) {
-        if (mounted && error instanceof Error) {
-          showError('transferForm', error.message);
-        }
+        showError('refreshAccounts', (error as Error).message);
+      } finally {
+        setLoadingState('refreshAccounts', false);
       }
-    };
+    }
 
     fetchAccounts();
 
-    return () => {
-      clearAllLoadingStates();
-      clearAllToasts();
-      mounted = false;
-    };
+    return () => controller.abort();
   }, []);
 
   const { control, ...methods } = useForm<TransferSchema>({

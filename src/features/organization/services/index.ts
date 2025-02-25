@@ -18,9 +18,24 @@ const OrganizationService: OrganizationServiceType = {
   ): Promise<OrganizationResponse | undefined> => {
     try {
       const validatedData = organizationSchema.parse(data);
-      const response = await apiClient.post(API_ENDPOINTS.ORGANIZATION, validatedData, {
-        ...(signal && { signal }),
-      });
+      const response = await apiClient.post(
+        API_ENDPOINTS.ORGANIZATION,
+        {
+          ...validatedData,
+          email: validatedData.kycDelegatedData.email,
+          kycDelegatedData: {
+            ...validatedData.kycDelegatedData,
+            email: validatedData.kycDelegatedData.email,
+            physicalAddress: {
+              ...validatedData.kycDelegatedData.physicalAddress,
+              email: validatedData.kycDelegatedData.email,
+            },
+          },
+        },
+        {
+          ...(signal && { signal }),
+        },
+      );
       return organizationResponseSchema.parse(response.data);
     } catch (error) {
       return OrganizationService.handleError(error, 'Failed to create organization');

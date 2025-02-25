@@ -54,9 +54,17 @@ export const welcomeCardStyles = (theme: ThemeType) => css`
 
 export const cardGridStyles = css`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-rows: repeat(auto-fit, 1fr);
   gap: 1.5rem;
   width: 100%;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
 export const infoContainer = css`

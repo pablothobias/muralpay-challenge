@@ -1,87 +1,24 @@
-'use client';
-
 import { LoadingSpinner } from '@/shared-ui';
-import RegisterPage from '@/shared-ui/pages/register';
-import { organizationSchema } from '@/features/organization/schemas';
-import { OrganizationSchema } from '@/features/organization/types';
+import RegisterPage from '@/components/register/RegisterPage';
 import useAuthStore from '@/store/auth';
-import { AuthState } from '@/store/auth/types';
-import useOrganizationStore from '@/store/organization';
-import { useOrganizationActions } from '@/store/organization/hooks';
-import { OrganizationState } from '@/store/organization/types';
-import { useLoading } from '@/utils/context/LoadingContext';
-import { useToast } from '@/utils/context/ToastContext';
-import { useTheme } from '@emotion/react';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 
-const RegisterContainer = () => {
+const Register = () => {
+  const { isAuthenticated } = useAuthStore();
   const router = useRouter();
-  const theme = useTheme();
-  const { showSuccess, showError, clearAllToasts } = useToast();
-  const { isLoading, setLoadingState, clearLoadingState } = useLoading();
-
-  const { createOrganization } = useOrganizationActions();
-
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<OrganizationSchema>({
-    resolver: zodResolver(organizationSchema),
-  });
 
   useEffect(() => {
-    router.prefetch('/home');
-
-    const unsubscribe = useOrganizationStore.subscribe((state: OrganizationState) =>
-      setLoadingState('createOrganization', !!state.loading),
-    );
-
-    const unsubscribeAuth = useAuthStore.subscribe(
-      (state: AuthState) => state,
-      (state) => setIsAuthenticated(!!state.isAuthenticated),
-    );
-
-    return () => {
-      clearLoadingState('createOrganization');
-      unsubscribe();
-      unsubscribeAuth();
-      clearAllToasts();
-    };
-  }, [setLoadingState]);
-
-  const onSubmit = async (data: OrganizationSchema) => {
-    try {
-      const response = await createOrganization(data);
-      if (!response) throw new Error('Failed to create organization');
-      showSuccess('organization', 'Organization created successfully!');
-
+    if (isAuthenticated) {
       router.push('/home');
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to create organization';
-      showError('organization', message);
     }
-  };
+  }, [isAuthenticated, router]);
 
-  if (isLoading || typeof isAuthenticated !== 'undefined') return <LoadingSpinner />;
+  if (isAuthenticated) {
+    return <LoadingSpinner />;
+  }
 
-  return (
-    <RegisterPage
-      register={register}
-      handleSubmit={handleSubmit}
-      onSubmit={onSubmit}
-      errors={errors}
-      loading={isLoading}
-      watch={watch}
-      theme={theme}
-    />
-  );
+  return <RegisterPage />;
 };
 
-export default RegisterContainer;
+export default Register;

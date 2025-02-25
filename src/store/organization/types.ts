@@ -1,10 +1,10 @@
 import {
   type OrganizationEmptyState,
   type OrganizationResponse,
-  type OrganizationsListResponse,
+  type OrganizationListResponse,
 } from '@/features/organization/types';
 
-export type Organizations = OrganizationsListResponse | OrganizationEmptyState | undefined;
+export type Organizations = OrganizationListResponse | OrganizationEmptyState | undefined;
 export type Organization = OrganizationResponse | undefined;
 
 export type OrganizationState = {

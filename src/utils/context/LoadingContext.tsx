@@ -8,7 +8,6 @@ type LoadingContextType = {
   loadingStates: LoadingStates;
   setLoadingState: (key: string, isLoading: boolean) => void;
   clearLoadingState: (key: string) => void;
-  clearAllLoadingStates: () => void;
 };
 
 const LoadingContext = createContext<LoadingContextType | null>(null);
@@ -33,10 +32,6 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
     });
   }, []);
 
-  const clearAllLoadingStates = useCallback(() => {
-    setLoadingStates({});
-  }, []);
-
   return (
     <LoadingContext.Provider
       value={{
@@ -44,7 +39,6 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
         loadingStates,
         setLoadingState,
         clearLoadingState,
-        clearAllLoadingStates,
       }}
     >
       {children}

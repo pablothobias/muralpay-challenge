@@ -64,7 +64,7 @@ describe('TransferService', () => {
             city: 'Test City',
             state: 'TS',
             country: 'US',
-            postalCode: '12345',
+            zip: '12345',
           },
         },
       },

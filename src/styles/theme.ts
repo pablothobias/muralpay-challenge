@@ -3,6 +3,7 @@ import { borderRadius, breakpoints, colors, shadows, spacing, typography } from 
 
 export const lightTheme = {
   colors: {
+    white: colors.white.light,
     background: colors.background.light,
     foreground: colors.foreground.light,
     invertedLight: colors.invertedLight.light,
@@ -27,6 +28,7 @@ export const lightTheme = {
 
 export const darkTheme = {
   colors: {
+    white: colors.white.light,
     background: colors.background.dark,
     foreground: colors.foreground.dark,
     invertedLight: colors.invertedLight.dark,

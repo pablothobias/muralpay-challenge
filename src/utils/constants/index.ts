@@ -46,6 +46,8 @@ export const RECIPIENT_TYPE = {
   BUSINESS: 'BUSINESS',
 };
 
+export const ORGANIZATION_TYPE = RECIPIENT_TYPE;
+
 export const BLOCKCHAIN = {
   POLYGON: 'POLYGON',
   ETHEREUM: 'ETHEREUM',

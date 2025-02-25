@@ -20,5 +20,4 @@ export { default as GlobalLayout } from './templates/GlobalLayout';
 //pages
 export { default as AccountsPage } from './pages/accounts';
 export { default as AccountList } from './pages/accounts/';
-export { default as RegisterPage } from './pages/register';
 export { default as TransfersPage } from './pages/transfers';

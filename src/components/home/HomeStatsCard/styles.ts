@@ -7,9 +7,13 @@ export const statsCardStyles = (theme: ThemeType, variant?: string) => css`
   align-items: flex-start;
   gap: 1rem;
   transition: transform 0.3s ease;
-  max-width: 400px;
-  cursor: pointer;
+  max-width: 100%;
+  cursor: default;
   background: ${theme.colors.background};
+
+  @media (min-width: 640px) {
+    max-width: 400px;
+  }
 
   &:hover {
     transform: translateY(-5px);

@@ -63,8 +63,8 @@ const Status = ({ status }: { status: string }) => {
 const AccountList = () => {
   const theme = useTheme();
 
-  const { isLoading, setLoadingState, clearAllLoadingStates } = useLoading();
-  const { showError, clearAllToasts } = useToast();
+  const { isLoading, setLoadingState } = useLoading();
+  const { showError } = useToast();
 
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
@@ -82,11 +82,13 @@ const AccountList = () => {
       },
     );
 
+    const controller = new AbortController();
+
     async function fetchAccounts() {
-      if (isLoading) return;
+      if (isLoading || controller.signal.aborted) return;
       try {
         setLoadingState('refreshAccounts', true);
-        await refreshAccounts();
+        await refreshAccounts(controller.signal);
       } catch (error) {
         showError('fetchAccounts', (error as Error).message);
       } finally {
@@ -97,9 +99,8 @@ const AccountList = () => {
     fetchAccounts();
 
     return () => {
-      clearAllLoadingStates();
-      clearAllToasts();
       unsubscribe();
+      controller.abort();
     };
   }, []);
 

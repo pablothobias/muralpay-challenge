@@ -7,9 +7,7 @@ export const useOrganizationActions = () => {
   const { setLoggedOrganization } = useOrganizationStore((state) => state);
   const { login } = useAuthStore((state) => state);
 
-  const createOrganization = async (data: OrganizationSchema) => {
-    const { signal } = new AbortController();
-
+  const createOrganization = async (data: OrganizationSchema, signal?: AbortSignal) => {
     try {
       setLoggedOrganization(undefined, true, undefined);
       const response = await OrganizationService.create(data, signal);
