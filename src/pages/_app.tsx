@@ -4,7 +4,7 @@ import { globalStyles } from '@/styles/';
 import { ErrorBoundary } from '@/shared-ui/molecules/ErrorBoundary';
 import { LoadingProvider } from '@/utils/context/LoadingContext';
 import { ToastProvider } from '@/utils/context/ToastContext';
-import { ToggleThemeProvider } from '@/utils/context/ToggleThemeContext';
+import { ToggleThemeProvider } from '@/utils/context/ToggleThemeProvider';
 import { Global } from '@emotion/react';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';

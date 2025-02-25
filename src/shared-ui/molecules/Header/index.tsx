@@ -16,7 +16,7 @@ import {
   themeBtnStyles,
 } from './styles';
 import { useEffect, useState } from 'react';
-import { useToggleTheme } from '@/utils/context/ToggleThemeContext';
+import { useToggleTheme } from '@/utils/context/ToggleThemeProvider';
 import { useResponsive } from '@/utils/context/ResponsiveContext';
 import { IconProps } from '@/shared-ui/atoms/Icon';
 

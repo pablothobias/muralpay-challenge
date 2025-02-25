@@ -1,6 +1,8 @@
 import '@emotion/react';
 import { borderRadius, breakpoints, colors, shadows, spacing, typography } from './variables';
 
+export type ThemeType = typeof lightTheme;
+
 export const lightTheme = {
   colors: {
     white: colors.white.light,
@@ -50,8 +52,6 @@ export const darkTheme = {
   shadows: shadows.dark,
   breakpoints,
 };
-
-export type ThemeType = typeof lightTheme;
 
 declare module '@emotion/react' {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
