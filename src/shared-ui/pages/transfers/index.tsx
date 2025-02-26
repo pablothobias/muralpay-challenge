@@ -1,12 +1,3 @@
-import { Button, Icon, LoadingSpinner } from '@/shared-ui';
-import CreateTransferModalContent from '@/components/transfer/CreateTransferModalContent';
-import { TransferListResponseSchema, TransferResponse } from '@/features/transfer/types';
-import useAccountStore from '@/store/account';
-import useTransferStore from '@/store/transfer';
-import { useTransferActions } from '@/store/transfer/hooks';
-import { RECIPIENT_TRANSFER_TYPE, STATUS_TYPES } from '@/utils/constants';
-import { formatCurrency } from '@/utils/functions/formatCurrency';
-import dynamic from 'next/dynamic';
 import {
   type Dispatch,
   type FC,
@@ -16,6 +7,10 @@ import {
   useEffect,
   useState,
 } from 'react';
+
+import { useTheme } from '@emotion/react';
+import dynamic from 'next/dynamic';
+
 import {
   IoCardOutline,
   IoDocumentTextOutline,
@@ -24,7 +19,21 @@ import {
   IoTrendingUpOutline,
   IoWalletOutline,
 } from 'react-icons/io5';
+
 import { MdAccountBalanceWallet } from 'react-icons/md';
+
+import CreateTransferModalContent from '@/components/transfer/CreateTransferModalContent';
+import { TransferListResponseSchema, TransferResponse } from '@/features/transfer/types';
+import { Button, Icon, LoadingSpinner } from '@/shared-ui';
+import EmptyList from '@/shared-ui/molecules/EmptyList';
+import useAccountStore from '@/store/account';
+import useTransferStore from '@/store/transfer';
+import { useTransferActions } from '@/store/transfer/hooks';
+import { RECIPIENT_TRANSFER_TYPE, STATUS_TYPES } from '@/utils/constants';
+import { useLoading } from '@/utils/context/LoadingContext';
+import { useToast } from '@/utils/context/ToastContext';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
+
 import {
   amountTextCss,
   buttonCss,
@@ -44,14 +53,10 @@ import {
   transferCardCss,
   transferListCss,
 } from './styles';
-import { useToast } from '@/utils/context/ToastContext';
-import { useLoading } from '@/utils/context/LoadingContext';
-import { useTheme } from '@emotion/react';
-import EmptyList from '@/shared-ui/molecules/EmptyList';
 
 const Modal = dynamic(() => import('@/shared-ui/molecules/Modal'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => null,
 });
 
 const TransferListHeader = ({ setIsOpen }: { setIsOpen: Dispatch<SetStateAction<boolean>> }) => (
@@ -138,9 +143,10 @@ const RecipientInfoContent = memo((recipient: TransferResponse['recipientsInfo']
         <IoTimeOutline size={16} />
         <span>
           Created:
-          {Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(
-            new Date(recipient.createdAt),
-          )}
+          {Intl.DateTimeFormat('en-US', {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }).format(new Date(recipient.createdAt))}
         </span>
       </div>
     </div>
@@ -248,9 +254,9 @@ const TransfersPage: FC = () => {
                   <IoTimeOutline size={16} />
                   <span>
                     Created:
-                    {Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(
-                      new Date(transfer.createdAt),
-                    )}
+                    {Intl.DateTimeFormat('en-US', {
+                      dateStyle: 'medium',
+                    }).format(new Date(transfer.createdAt))}
                   </span>
                 </div>
                 <span css={statusBadgeCss(transfer.status)}>

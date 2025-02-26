@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import { create } from 'zustand';
 import { devtools, persist, PersistStorage, subscribeWithSelector } from 'zustand/middleware';
+
 import { type AuthState, type User } from './types';
 
 const cookieStorage: PersistStorage<AuthState> = {

@@ -1,10 +1,13 @@
-import { Input } from '@/shared-ui';
-import { FieldErrors, UseFormRegister, Path } from 'react-hook-form';
-import { TransferFormSchema } from '@/features/transfer/types';
-import { physicalAddressSchema } from '@/features/transfer/schemas';
-import { addressSectionStyles, addressTitleStyles, formGroupCss } from './styles';
 import { useTheme } from '@emotion/react';
+import { FieldErrors, UseFormRegister, Path } from 'react-hook-form';
+
 import { z } from 'zod';
+
+import { physicalAddressSchema } from '@/features/transfer/schemas';
+import { TransferFormSchema } from '@/features/transfer/types';
+import { Input } from '@/shared-ui';
+
+import { addressSectionStyles, addressTitleStyles, formGroupCss } from './styles';
 
 type FormFieldProps = {
   register: UseFormRegister<TransferFormSchema>;
@@ -32,8 +35,16 @@ type AddressField = {
 };
 
 const addressFields: AddressField[] = [
-  { id: 'address1', label: 'Address Line 1', placeholder: 'Enter street address' },
-  { id: 'address2', label: 'Address Line 2', placeholder: 'Enter apartment, suite, etc.' },
+  {
+    id: 'address1',
+    label: 'Address Line 1',
+    placeholder: 'Enter street address',
+  },
+  {
+    id: 'address2',
+    label: 'Address Line 2',
+    placeholder: 'Enter apartment, suite, etc.',
+  },
   { id: 'city', label: 'City', placeholder: 'Enter city' },
   { id: 'state', label: 'State', placeholder: 'Enter state' },
   { id: 'country', label: 'Country', placeholder: 'Enter country' },

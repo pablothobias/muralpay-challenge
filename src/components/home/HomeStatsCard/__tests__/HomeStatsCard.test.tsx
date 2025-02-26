@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import { TestProviders } from '@/utils/test/TestProviders';
-import HomeStatsCard from '../index';
+
 import { IconProps } from '@/shared-ui/atoms/Icon';
+import { TestProviders } from '@/utils/test/TestProviders';
+
+import HomeStatsCard from '../index';
 
 describe('HomeStatsCard', () => {
   const defaultProps = {

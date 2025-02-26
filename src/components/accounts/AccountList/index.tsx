@@ -1,7 +1,3 @@
-import { Button, Icon, List, LoadingSpinner } from '@/shared-ui';
-import { AccountResponse, AccountResponseArray } from '@/features/account/types';
-import { useTheme } from '@emotion/react';
-import dynamic from 'next/dynamic';
 import {
   type Dispatch,
   type ReactElement,
@@ -11,6 +7,21 @@ import {
   useEffect,
   useState,
 } from 'react';
+
+import { useTheme } from '@emotion/react';
+import dynamic from 'next/dynamic';
+
+import { AccountResponse, AccountResponseArray } from '@/features/account/types';
+import { Button, Icon, List } from '@/shared-ui';
+
+import useAccountStore from '@/store/account';
+import { useAccountActions } from '@/store/account/hooks';
+import { AccountState } from '@/store/account/types';
+import { STATUS_TYPES } from '@/utils/constants';
+import { useLoading } from '@/utils/context/LoadingContext';
+import { useToast } from '@/utils/context/ToastContext';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
+
 import {
   accountInfo,
   accountItemRightRow,
@@ -22,19 +33,12 @@ import {
   statusBadgeCss,
   statusCss,
 } from './styles';
-import useAccountStore from '@/store/account';
-import { AccountState } from '@/store/account/types';
-import { useLoading } from '@/utils/context/LoadingContext';
-import { STATUS_TYPES } from '@/utils/constants';
-import { formatCurrency } from '@/utils/functions/formatCurrency';
-import { useAccountActions } from '@/store/account/hooks';
-import { useToast } from '@/utils/context/ToastContext';
 
 const AccountInfoModalContent = dynamic(
   () => import('@/components/accounts/AccountInfoModalContent'),
   {
     ssr: false,
-    loading: () => <LoadingSpinner />,
+    loading: () => null,
   },
 );
 
@@ -42,13 +46,13 @@ const CreateTransferModalContent = dynamic(
   () => import('@/components/transfer/CreateTransferModalContent'),
   {
     ssr: false,
-    loading: () => <LoadingSpinner />,
+    loading: () => null,
   },
 );
 
 const Modal = dynamic(() => import('@/shared-ui/molecules/Modal'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => null,
 });
 
 type AccountRowProps = {
@@ -153,7 +157,8 @@ const AccountList = () => {
         </div>
         <div css={rightContentCss}>
           <span css={accountInfo} data-testid={`balance-${account.id}`}>
-            {formatCurrency(account.balance.balance, account.balance.tokenSymbol)}&nbsp;
+            {formatCurrency(account.balance.balance, account.balance.tokenSymbol)}
+            &nbsp;
             {account.balance.tokenSymbol}&nbsp;
             <Icon name="cash" />
           </span>

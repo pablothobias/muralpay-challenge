@@ -1,7 +1,9 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { backgroundStyles } from './styles';
+import { memo, useCallback, useEffect, useRef, useState, Suspense } from 'react';
+
 import useThemeStore from '@/store/theme';
 import { ThemeType } from '@/store/theme/types';
+
+import { backgroundStyles } from './styles';
 
 const ANIMATION_CLEANUP_DELAY = 300;
 
@@ -13,6 +15,15 @@ const BackgroundAnimation = memo(() => {
   const isActiveRef = useRef(false);
   const [theme, setTheme] = useState<ThemeType>(() => useThemeStore.getState().theme);
   const isDarkTheme = theme === 'dark';
+  const [isLowEndDevice, setIsLowEndDevice] = useState(false);
+
+  useEffect(() => {
+    // @ts-expect-error - deviceMemory is not in all browsers typings yet
+    const memory = navigator.deviceMemory;
+    if (memory && memory < 4) {
+      setIsLowEndDevice(true);
+    }
+  }, []);
 
   const activateAnimation = useCallback(() => {
     if (isDarkTheme) {
@@ -64,6 +75,10 @@ const BackgroundAnimation = memo(() => {
     [isDarkTheme, activateAnimation],
   );
 
+  const handleMouseLeave = useCallback(() => {
+    setTimeout(deactivateAnimation, ANIMATION_CLEANUP_DELAY);
+  }, [deactivateAnimation]);
+
   useEffect(() => {
     const unsubscribe = useThemeStore.subscribe(
       (state) => state.theme,
@@ -87,10 +102,6 @@ const BackgroundAnimation = memo(() => {
     };
   }, [deactivateAnimation]);
 
-  const handleMouseLeave = useCallback(() => {
-    setTimeout(deactivateAnimation, ANIMATION_CLEANUP_DELAY);
-  }, [deactivateAnimation]);
-
   useEffect(() => {
     const cleanupRaf = () => {
       if (rafRef.current) {
@@ -100,7 +111,9 @@ const BackgroundAnimation = memo(() => {
     };
 
     document.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseleave', handleMouseLeave, {
+      passive: true,
+    });
 
     return () => {
       cleanupRaf();
@@ -110,40 +123,52 @@ const BackgroundAnimation = memo(() => {
     };
   }, [handleMouseMove, handleMouseLeave, deactivateAnimation]);
 
+  if (isLowEndDevice) {
+    return null;
+  }
+
   return (
-    <div css={backgroundStyles}>
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          zIndex: 100,
-        }}
-      />
-      {!isDarkTheme ? (
+    <Suspense fallback={null}>
+      <div css={backgroundStyles}>
         <div
-          ref={lightAnimationRef}
-          className={`light-animation mounted${isActiveRef.current ? ' active' : ''}`}
           style={{
-            background: `linear-gradient(
-              45deg,
-              red,
-              blue,
-              green
-            )`,
-            opacity: isActiveRef.current ? 0.3 : 0,
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 100,
           }}
         />
-      ) : (
-        <>
+        {!isDarkTheme ? (
           <div
-            ref={spotlightRef}
-            className={`spotlight mounted${isActiveRef.current ? ' active' : ''}`}
+            ref={lightAnimationRef}
+            className={`light-animation mounted${isActiveRef.current ? ' active' : ''}`}
+            style={{
+              background: `linear-gradient(
+                45deg,
+                red,
+                blue,
+                green
+              )`,
+              opacity: isActiveRef.current ? 0.3 : 0,
+              willChange: 'opacity',
+            }}
           />
-          <div ref={glowRef} className={`glow mounted${isActiveRef.current ? ' active' : ''}`} />
-        </>
-      )}
-    </div>
+        ) : (
+          <>
+            <div
+              ref={spotlightRef}
+              className={`spotlight mounted${isActiveRef.current ? ' active' : ''}`}
+              style={{ willChange: 'transform' }}
+            />
+            <div
+              ref={glowRef}
+              className={`glow mounted${isActiveRef.current ? ' active' : ''}`}
+              style={{ willChange: 'transform' }}
+            />
+          </>
+        )}
+      </div>
+    </Suspense>
   );
 });
 

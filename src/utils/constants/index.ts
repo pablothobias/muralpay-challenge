@@ -11,7 +11,9 @@ export const ERROR_TYPES = {
   VALIDATION: 'validation',
   API_ERROR: 'api_error',
   UNKNOWN_ERROR: 'unknown_error',
-  NOT_FOUND: 'not_found',
+  AUTH_ERROR: 'auth_error',
+  NOT_FOUND_ERROR: 'not_found_error',
+  SERVER_ERROR: 'server_error',
 };
 
 export const CURRENCY = {

@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { screen, fireEvent, within } from '@testing-library/react';
-import { render as renderWithProviders } from '@/utils/test/TestProviders';
-import AccountList from '../index';
-import useAccountStore from '@/store/account';
+
 import { act } from '@testing-library/react';
+
 import { mockAccounts } from '@/mocks/store/account';
+import useAccountStore from '@/store/account';
+import { render as renderWithProviders } from '@/utils/test/TestProviders';
+
+import AccountList from '../index';
 
 type ReactProp = {
   children: React.ReactNode;
@@ -87,7 +90,11 @@ describe('AccountList', () => {
 
   describe('account list rendering', () => {
     beforeEach(() => {
-      useAccountStore.setState({ accounts: mockAccounts, loading: false, error: null });
+      useAccountStore.setState({
+        accounts: mockAccounts,
+        loading: false,
+        error: null,
+      });
     });
 
     it('should render all accounts with correct information', async () => {
@@ -156,7 +163,9 @@ describe('AccountList', () => {
         renderComponent();
       });
 
-      const transferButton = screen.getByRole('button', { name: /new transfer/i });
+      const transferButton = screen.getByRole('button', {
+        name: /new transfer/i,
+      });
       expect(transferButton).toBeInTheDocument();
 
       await act(async () => {

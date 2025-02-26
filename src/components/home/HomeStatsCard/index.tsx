@@ -1,7 +1,10 @@
-import { Card, Icon } from '@/shared-ui';
 import { useTheme } from '@emotion/react';
-import { statsCardStyles } from './styles';
+
+import { Card, Icon } from '@/shared-ui';
+
 import { IconProps } from '@/shared-ui/atoms/Icon';
+
+import { statsCardStyles } from './styles';
 
 type HomeStatsCardProps = {
   statsValue: string;

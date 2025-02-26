@@ -1,6 +1,7 @@
+import { css } from '@emotion/react';
+
 import { ThemeType } from '@/styles/theme';
 import { spacing, typography } from '@/styles/variables';
-import { css } from '@emotion/react';
 
 export const containerCss = (theme: ThemeType) => css`
   display: flex;

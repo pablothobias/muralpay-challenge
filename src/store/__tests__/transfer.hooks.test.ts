@@ -1,8 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
-import { useTransferActions } from '../transfer/hooks';
+
 import TransferService from '@/features/transfer/services';
 import { mockTransfers } from '@/mocks/store/transfer';
+
 import useTransferStore from '../transfer';
+import { useTransferActions } from '../transfer/hooks';
 
 jest.mock('@/features/transfer/services', () => ({
   get: jest.fn(),

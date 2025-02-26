@@ -1,18 +1,24 @@
-import { type FormData } from '@/features/organization/types';
-import { useOrganizationActions } from '@/store/organization/hooks';
-import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { Button, Card, Input, Select } from '@/shared-ui';
+
+import { useTheme } from '@emotion/react';
+import { useRouter } from 'next/router';
+
+import { type FormData } from '@/features/organization/types';
+import { Button, Card, Select } from '@/shared-ui';
+import { useOrganizationActions } from '@/store/organization/hooks';
+
 import { RECIPIENT_TYPE } from '@/utils/constants';
+
+import { useLoading } from '@/utils/context/LoadingContext';
+import { useToast } from '@/utils/context/ToastContext';
+
+import { useOrganizationForm } from '@/utils/hooks/useOrganizationForm';
+
 import { BusinessInfoFields } from './components/BusinessInfoFields';
-import { IndividualInfoFields } from './components/IndividualInfoFields';
 import { CommonFields } from './components/CommonFields';
+import { IndividualInfoFields } from './components/IndividualInfoFields';
 import { PhysicalAddressFields } from './components/PhysicalAddressFields';
 import { cardContainerCss, formCss, pageContainer, titleCss } from './styles';
-import { useToast } from '@/utils/context/ToastContext';
-import { useLoading } from '@/utils/context/LoadingContext';
-import { useOrganizationForm } from '../../../utils/hooks/useOrganizationForm';
-import { useTheme } from '@emotion/react';
 
 const RegisterPage = () => {
   const theme = useTheme();
@@ -54,13 +60,6 @@ const RegisterPage = () => {
       <Card variant="outlined" css={cardContainerCss}>
         <h1 css={titleCss(theme)}>Create a New Organization</h1>
         <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            id="name"
-            label="Name"
-            placeholder="Enter your name"
-            {...register('name')}
-            error={errors.name?.message}
-          />
           <Select
             id="organizationType"
             label="Organization Type"

@@ -1,6 +1,8 @@
-import { Input, Select } from '@/shared-ui';
 import { type UseFormRegister, type FieldErrors } from 'react-hook-form';
+
 import { type FormData } from '@/features/organization/types';
+import { Input, Select } from '@/shared-ui';
+
 import { sectionTitleCss } from '../styles';
 
 const COUNTRY_OPTIONS = [

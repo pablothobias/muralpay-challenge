@@ -1,7 +1,10 @@
-import { Input } from '@/shared-ui';
-import { type CommonFormFieldProps } from '../types';
 import { useCallback } from 'react';
+
+import { Input } from '@/shared-ui';
+
 import { RECIPIENT_TYPE } from '@/utils/constants';
+
+import { type CommonFormFieldProps } from '../types';
 
 export const CommonFields = ({ register, errors, organizationType }: CommonFormFieldProps) => {
   const isIndividual = organizationType === RECIPIENT_TYPE.INDIVIDUAL;

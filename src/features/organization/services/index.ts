@@ -1,7 +1,11 @@
+import { AxiosError } from 'axios';
+
+import { ZodError } from 'zod';
+
 import apiClient from '@/config/api.config';
 import { API_ENDPOINTS, ERROR_TYPES } from '@/utils/constants';
-import { AxiosError } from 'axios';
-import { ZodError } from 'zod';
+import logError from '@/utils/functions/logError';
+
 import { OrganizationServiceError, OrganizationValidationError } from '../errors';
 import { organizationResponseSchema, organizationSchema } from '../schemas';
 import {
@@ -9,7 +13,6 @@ import {
   type OrganizationResponse,
   type OrganizationSchema,
 } from '../types';
-import logError from '@/utils/functions/logError';
 
 const OrganizationService: OrganizationServiceType = {
   create: async (
@@ -18,24 +21,9 @@ const OrganizationService: OrganizationServiceType = {
   ): Promise<OrganizationResponse | undefined> => {
     try {
       const validatedData = organizationSchema.parse(data);
-      const response = await apiClient.post(
-        API_ENDPOINTS.ORGANIZATION,
-        {
-          ...validatedData,
-          email: validatedData.kycDelegatedData.email,
-          kycDelegatedData: {
-            ...validatedData.kycDelegatedData,
-            email: validatedData.kycDelegatedData.email,
-            physicalAddress: {
-              ...validatedData.kycDelegatedData.physicalAddress,
-              email: validatedData.kycDelegatedData.email,
-            },
-          },
-        },
-        {
-          ...(signal && { signal }),
-        },
-      );
+      const response = await apiClient.post(API_ENDPOINTS.ORGANIZATION, validatedData, {
+        ...(signal && { signal }),
+      });
       return organizationResponseSchema.parse(response.data);
     } catch (error) {
       return OrganizationService.handleError(error, 'Failed to create organization');

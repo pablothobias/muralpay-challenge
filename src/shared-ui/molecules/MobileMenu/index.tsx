@@ -1,7 +1,10 @@
 import { FC, useCallback, useEffect, useRef } from 'react';
-import { IoMenuOutline, IoCloseOutline } from 'react-icons/io5';
-import { Button } from '@/shared-ui';
+
 import { useTheme } from '@emotion/react';
+import { IoMenuOutline, IoCloseOutline } from 'react-icons/io5';
+
+import { Button } from '@/shared-ui';
+
 import {
   containerCss,
   menuButtonCss,
@@ -19,7 +22,7 @@ interface MobileMenuProps {
   title?: string;
 }
 
-export const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onOpen, children, title }) => {
+const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onOpen, children, title }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
 
@@ -110,3 +113,5 @@ export const MenuItem: FC<MenuItemProps> = ({ children, onClick, icon, disabled 
     </button>
   );
 };
+
+export default MobileMenu;

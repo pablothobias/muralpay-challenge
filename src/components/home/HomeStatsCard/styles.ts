@@ -1,5 +1,6 @@
-import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
+
+import { ThemeType } from '@/styles/theme';
 
 export const statsCardStyles = (theme: ThemeType, variant?: string) => css`
   padding: 1.5rem;
@@ -17,7 +18,7 @@ export const statsCardStyles = (theme: ThemeType, variant?: string) => css`
 
   &:hover {
     transform: translateY(-5px);
-    background: ${theme.colors.muted};
+    background: transparent;
 
     .stats-value {
       color: ${variant === 'warning' ? theme.colors.warning : theme.colors.secondary} !important;

@@ -1,18 +1,28 @@
-import { LoadingSpinner, Modal } from '@/shared-ui';
-import useAuthStore from '@/store/auth';
-import dynamic from 'next/dynamic';
-import { heroSectionStyles, welcomeCardStyles, cardGridStyles } from './styles';
-import { useRouter } from 'next/router';
-import { formatCurrency } from '@/utils/functions/formatCurrency';
-import HomeStatsCard from '../HomeStatsCard';
-import HomeActionCard from '../homeActionCards';
 import { useState } from 'react';
+
+import dynamic from 'next/dynamic';
+
+import { useRouter } from 'next/router';
+
 import CreateTransferModalContent from '@/components/transfer/CreateTransferModalContent';
+import useAuthStore from '@/store/auth';
+
 import { type ThemeType } from '@/styles/theme';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
+
+import { heroSectionStyles, welcomeCardStyles, cardGridStyles } from './styles';
+
+import HomeActionCard from '../homeActionCards';
+import HomeStatsCard from '../HomeStatsCard';
 
 const Card = dynamic(() => import('@/shared-ui/atoms/Card'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => null,
+});
+
+const Modal = dynamic(() => import('@/shared-ui/molecules/Modal'), {
+  ssr: false,
+  loading: () => null,
 });
 
 type HomePageProps = {

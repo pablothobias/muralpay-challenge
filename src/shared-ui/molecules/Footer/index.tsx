@@ -1,7 +1,9 @@
 import { useTheme } from '@emotion/react';
-import { footerStyles, socialMediaStyles } from './styles';
+
 import Icon from '@/shared-ui/atoms/Icon';
 import { useResponsive } from '@/utils/context/ResponsiveContext';
+
+import { footerStyles, socialMediaStyles } from './styles';
 
 const Footer = () => {
   const theme = useTheme();

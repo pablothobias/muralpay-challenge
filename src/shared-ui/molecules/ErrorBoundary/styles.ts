@@ -1,5 +1,6 @@
-import { spacing, typography } from '@/styles/variables';
 import { css, Theme } from '@emotion/react';
+
+import { spacing, typography } from '@/styles/variables';
 
 export const containerCss = (theme: Theme) => css`
   display: flex;

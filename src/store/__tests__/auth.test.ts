@@ -1,7 +1,10 @@
 import { act, renderHook } from '@testing-library/react';
-import useAuthStore from '../auth';
-import { mockUser } from '@/mocks/store/auth';
+
 import Cookies from 'js-cookie';
+
+import { mockUser } from '@/mocks/store/auth';
+
+import useAuthStore from '../auth';
 
 jest.mock('js-cookie', () => ({
   get: jest.fn(),

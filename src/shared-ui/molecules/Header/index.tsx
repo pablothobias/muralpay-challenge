@@ -1,13 +1,23 @@
-import { Icon } from '@/shared-ui';
-import { MobileMenu, MenuItem } from '@/shared-ui/molecules/MobileMenu';
-import useAuthStore from '@/store/auth';
-import useAccountStore from '@/store/account';
-import useOrganizationStore from '@/store/organization';
-import useTransferStore from '@/store/transfer';
+import { useEffect, useState } from 'react';
+
 import { useTheme } from '@emotion/react';
+
 import dynamic from 'next/dynamic';
+
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { Icon } from '@/shared-ui';
+import { IconProps } from '@/shared-ui/atoms/Icon';
+import MobileMenu, { MenuItem } from '@/shared-ui/molecules/MobileMenu';
+import useAccountStore from '@/store/account';
+import useAuthStore from '@/store/auth';
+import useOrganizationStore from '@/store/organization';
+import useTransferStore from '@/store/transfer';
+
+import { useResponsive } from '@/utils/context/ResponsiveContext';
+import { useToggleTheme } from '@/utils/context/ToggleThemeProvider';
+
 import {
   desktopNavStyles,
   headerStyles,
@@ -15,10 +25,6 @@ import {
   navLinkStyles,
   themeBtnStyles,
 } from './styles';
-import { useEffect, useState } from 'react';
-import { useToggleTheme } from '@/utils/context/ToggleThemeProvider';
-import { useResponsive } from '@/utils/context/ResponsiveContext';
-import { IconProps } from '@/shared-ui/atoms/Icon';
 
 const Button = dynamic(() => import('@/shared-ui/atoms/Button'), {
   ssr: false,
@@ -53,7 +59,12 @@ const Header = () => {
         { href: '/', icon: 'home', label: 'Home' },
         { href: '/accounts', icon: 'users', label: 'Accounts' },
         { href: '/transfers', icon: 'transfer', label: 'Transfers' },
-        { href: '/register', icon: 'logout', label: 'Logout', onClick: handleLogout },
+        {
+          href: '/register',
+          icon: 'logout',
+          label: 'Logout',
+          onClick: handleLogout,
+        },
       ]
     : [];
 
@@ -61,11 +72,14 @@ const Header = () => {
     <header css={headerStyles({ theme, isMobile })}>
       <div className="logo">
         <Image
-          src="/assets/images/logo.jpeg"
+          src="/assets/images/logo.webp"
           alt="Mural Pay Logo"
-          loading="lazy"
           width={50}
           height={50}
+          priority
+          quality={90}
+          placeholder="blur"
+          blurDataURL="data:image/webp;base64,UklGRlIAAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSBIAAAABF0AQJbQBHUBu7u7uBQEVABVWUDggBgAAADABAJ0BKhAAEAABQCYlpAADcAD++/1QAA=="
         />
       </div>
 

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
   BLOCKCHAIN,
   RECIPIENT_TYPE,
@@ -7,7 +9,6 @@ import {
   STATUS_TYPES,
   TRANSFER_RECIPIENT,
 } from '@/utils/constants';
-import { z } from 'zod';
 
 export const transferStatusEnum = z.enum([
   ...(Object.keys(STATUS_TYPES) as [keyof typeof STATUS_TYPES, ...string[]]),

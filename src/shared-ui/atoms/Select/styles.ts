@@ -1,5 +1,6 @@
-import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
+
+import { ThemeType } from '@/styles/theme';
 
 export const selectGroupCss = (theme: ThemeType) => css`
   display: flex;

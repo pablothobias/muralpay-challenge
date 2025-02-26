@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
+
+import { inter } from './fonts';
 import { ThemeType } from './theme';
 
 export const globalStyles = (theme: ThemeType) => css`
   :root {
+    --font-inter: ${inter.style.fontFamily};
     --primary: ${theme.colors.primary};
     --secondary: ${theme.colors.secondary};
     --background: ${theme.colors.background};

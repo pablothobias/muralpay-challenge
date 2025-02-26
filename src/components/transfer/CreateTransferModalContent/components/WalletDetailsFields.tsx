@@ -1,9 +1,11 @@
+import { useTheme } from '@emotion/react';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
+
+import { TransferFormSchema, BlockchainRecipient } from '@/features/transfer/types';
 import { Input, Select } from '@/shared-ui';
 import { BLOCKCHAIN } from '@/utils/constants';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { TransferFormSchema, BlockchainRecipient } from '@/features/transfer/types';
+
 import { formGroupCss } from './styles';
-import { useTheme } from '@emotion/react';
 
 type FormFieldProps = {
   register: UseFormRegister<TransferFormSchema>;

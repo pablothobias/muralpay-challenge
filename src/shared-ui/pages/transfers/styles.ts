@@ -1,5 +1,6 @@
-import { colors, spacing, typography } from '@/styles/variables';
 import { css, keyframes } from '@emotion/react';
+
+import { colors, spacing, typography } from '@/styles/variables';
 
 const fadeIn = keyframes`
 from {

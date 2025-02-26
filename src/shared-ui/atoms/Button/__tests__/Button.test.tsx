@@ -1,6 +1,8 @@
 import { screen, fireEvent } from '@testing-library/react';
-import Button from '../index';
+
 import { renderWithProviders } from '@/utils/test/TestProviders';
+
+import Button from '../index';
 
 describe('Button', () => {
   describe('rendering', () => {

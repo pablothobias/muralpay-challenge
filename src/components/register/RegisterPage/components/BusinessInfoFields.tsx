@@ -1,6 +1,8 @@
-import { Input, MaskInput, Select } from '@/shared-ui';
-import { type BusinessFormFieldProps } from '../types';
 import { useCallback } from 'react';
+
+import { Input, MaskInput, Select } from '@/shared-ui';
+
+import { type BusinessFormFieldProps } from '../types';
 
 export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFieldProps) => {
   const registerBusinessField = useCallback(
@@ -13,6 +15,16 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
 
   return (
     <>
+      <Input
+        id="businessName"
+        label="Legal Business Name"
+        type="text"
+        placeholder="Sun Tree Capital LLC"
+        required
+        {...registerBusinessField('businessName')}
+        error={errors.kycDelegatedData?.businessName?.message}
+        data-testid="business-name-input"
+      />
       <Input
         id="name"
         label="Organization Name"
@@ -32,16 +44,6 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
         {...registerBusinessField('lastName')}
         error={errors.lastName?.message}
         data-testid="last-name-input"
-      />
-      <Input
-        id="businessName"
-        label="Legal Business Name"
-        type="text"
-        placeholder="Sun Tree Capital LLC"
-        required
-        {...registerBusinessField('businessName')}
-        error={errors.kycDelegatedData?.businessName?.message}
-        data-testid="business-name-input"
       />
       <Select
         id="nationality"

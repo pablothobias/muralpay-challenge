@@ -1,7 +1,8 @@
-import { screen, renderWithProviders } from '@/utils/test/TestProviders';
-import AccountInfoModalContent from '../index';
 import { AccountResponse } from '@/features/account/types';
 import { mockAccount } from '@/mocks/store/account';
+import { screen, renderWithProviders } from '@/utils/test/TestProviders';
+
+import AccountInfoModalContent from '../index';
 
 describe('AccountInfoModalContent', () => {
   const renderComponent = (props: { account: AccountResponse | null }) => {

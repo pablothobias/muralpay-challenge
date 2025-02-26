@@ -76,7 +76,8 @@ export const colors = {
 };
 
 export const typography = {
-  fontFamily: "'Inter', sans-serif",
+  fontFamily:
+    'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   fontSize: {
     xs: '12px',
     sm: '14px',

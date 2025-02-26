@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
-import { buttonStyles } from './styles';
+
 import { useTheme } from '@emotion/react';
+
+import { buttonStyles } from './styles';
 
 export type ButtonProps = {
   children: ReactNode;

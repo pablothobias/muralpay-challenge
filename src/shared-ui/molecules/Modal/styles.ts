@@ -1,5 +1,6 @@
-import { ThemeType } from '@/styles/theme';
 import { css, keyframes } from '@emotion/react';
+
+import { ThemeType } from '@/styles/theme';
 
 const fadeIn = keyframes`
   from {

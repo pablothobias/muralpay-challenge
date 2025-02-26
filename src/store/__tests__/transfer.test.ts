@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
-import useTransferStore from '../transfer';
+
 import { mockTransfers } from '@/mocks/store/transfer';
+
+import useTransferStore from '../transfer';
 
 describe('Transfer Store', () => {
   beforeEach(() => {

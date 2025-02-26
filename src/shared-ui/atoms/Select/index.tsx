@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
-import { errorTextCss, selectGroupCss, selectStyles } from './styles';
+
 import { useTheme } from '@emotion/react';
+
+import { errorTextCss, selectGroupCss, selectStyles } from './styles';
 
 type SelectProps = {
   options: { value: string; label: string }[];

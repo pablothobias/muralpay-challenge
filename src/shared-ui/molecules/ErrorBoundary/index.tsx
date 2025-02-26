@@ -1,7 +1,10 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import Button from '@/shared-ui/atoms/Button';
-import { IoRefreshOutline } from 'react-icons/io5';
+
 import Image from 'next/image';
+import { IoRefreshOutline } from 'react-icons/io5';
+
+import Button from '@/shared-ui/atoms/Button';
+
 import {
   containerCss,
   contentWrapperCss,
@@ -29,7 +32,10 @@ const funnyMessages = [
   { message: 'Looks like our hamsters need a coffee break! ', emoji: '☕' },
   { message: "Houston, we've had a problem... ", emoji: '🚀' },
   { message: "404: Success not found. But we're working on it! ", emoji: '🔍' },
-  { message: 'Our code is playing hide and seek... and winning! ', emoji: '🙈' },
+  {
+    message: 'Our code is playing hide and seek... and winning! ',
+    emoji: '🙈',
+  },
 ];
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -99,8 +105,9 @@ export class ErrorBoundary extends Component<Props, State> {
               alt="Error Illustration"
               width={480}
               height={270}
-              unoptimized
-              priority
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
             />
           </span>
           <h1 css={(theme) => titleCss(theme)}>
