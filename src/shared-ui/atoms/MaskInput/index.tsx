@@ -1,7 +1,9 @@
 import { ForwardedRef, forwardRef, ReactElement } from 'react';
-import { Control, FieldValues, Path, useController } from 'react-hook-form';
-import { errorTextCss, inputGroupCss, StyledInputMask, StyledCurrencyInput } from './styles';
+
 import { useTheme } from '@emotion/react';
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
+
+import { errorTextCss, inputGroupCss, StyledInputMask, StyledCurrencyInput } from './styles';
 
 type MaskInputProps<T extends FieldValues> = {
   type: 'currency' | 'phone';

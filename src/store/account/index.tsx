@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+
 import { type AccountState } from './types';
 
 const useAccountStore = create<AccountState>()(

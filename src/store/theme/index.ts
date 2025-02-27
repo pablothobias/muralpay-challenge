@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+
 import { ThemeState, ThemeType } from './types';
 
 const getSystemThemePreference = (): ThemeType => {

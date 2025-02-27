@@ -1,5 +1,6 @@
-import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
+
+import { colors } from '@/styles/variables';
 
 export const backgroundStyles = css`
   position: fixed;

@@ -1,9 +1,10 @@
-import { ThemeType } from '@/styles/theme';
-import { colors } from '@/styles/variables';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import InputMask from 'react-input-mask-next';
 import CurrencyInput from 'react-currency-input-field';
+import InputMask from 'react-input-mask-next';
+
+import { ThemeType } from '@/styles/theme';
+import { colors } from '@/styles/variables';
 
 export const inputGroupCss = (theme: ThemeType) => css`
   display: flex;

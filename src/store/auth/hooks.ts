@@ -1,5 +1,6 @@
-import useAuthStore from '.';
 import { User } from './types';
+
+import useAuthStore from '.';
 
 export const useAuthActions = () => {
   const login = useAuthStore((state) => state.login);

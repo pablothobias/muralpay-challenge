@@ -1,8 +1,10 @@
+import { AxiosError } from 'axios';
+import { ZodError } from 'zod';
+
 import apiClient from '@/config/api.config';
 import { API_ENDPOINTS, ERROR_TYPES } from '@/utils/constants';
 import logError from '@/utils/functions/logError';
-import { AxiosError } from 'axios';
-import { ZodError } from 'zod';
+
 import { TransferServiceError, TransferValidationError } from '../errors';
 import { transferListResponseSchema, transferResponseSchema, transferSchema } from '../schemas';
 import {
@@ -87,7 +89,7 @@ const TransferService: TransferServiceType = {
 
     if (error instanceof AxiosError) {
       if (error.response?.status === 404) {
-        throw new TransferServiceError('Resource not found', ERROR_TYPES.NOT_FOUND, error);
+        throw new TransferServiceError('Resource not found', ERROR_TYPES.NOT_FOUND_ERROR, error);
       }
 
       if (error.response?.status === 400) {

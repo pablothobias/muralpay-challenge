@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
-import useAccountStore from '../account';
+
 import { mockAccount } from '@/mocks/store/account';
+
+import useAccountStore from '../account';
 import { AccountState } from '../account/types';
 
 describe('Account Store', () => {

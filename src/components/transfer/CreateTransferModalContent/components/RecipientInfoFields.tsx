@@ -1,10 +1,12 @@
-import { Input, MaskInput, Select } from '@/shared-ui';
-import { RECIPIENT_TRANSFER_TYPE, RECIPIENT_TYPE } from '@/utils/constants';
-import { formGroupCss } from './styles';
-import { type TransferSchema } from '@/features/transfer/types';
-import { type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form';
 import { useTheme } from '@emotion/react';
+import { type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form';
+
+import { type TransferSchema } from '@/features/transfer/types';
+import { Input, MaskInput, Select } from '@/shared-ui';
 import { ThemeType } from '@/styles/theme';
+import { RECIPIENT_TRANSFER_TYPE, RECIPIENT_TYPE } from '@/utils/constants';
+
+import { formGroupCss } from './styles';
 
 interface FormFieldProps {
   register: UseFormRegister<TransferSchema>;

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+
 import { Organizations, type OrganizationState } from './types';
 
 const useOrganizationStore = create<OrganizationState>()(
@@ -28,7 +29,10 @@ const useOrganizationStore = create<OrganizationState>()(
             sessionStorage.clear();
           },
         }),
-        { name: 'organization', storage: createJSONStorage(() => sessionStorage) },
+        {
+          name: 'organization',
+          storage: createJSONStorage(() => sessionStorage),
+        },
       ),
     ),
   ),

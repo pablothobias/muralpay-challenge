@@ -1,7 +1,10 @@
-import { Card, Icon } from '@/shared-ui';
 import { useTheme } from '@emotion/react';
-import { actionCardStyles } from './styles';
+
+import { Card, Icon } from '@/shared-ui';
+
 import { IconProps } from '@/shared-ui/atoms/Icon';
+
+import { actionCardStyles } from './styles';
 
 type HomeActionCardProps = {
   icon: IconProps['name'];

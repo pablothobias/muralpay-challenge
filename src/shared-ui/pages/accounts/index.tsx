@@ -1,19 +1,25 @@
-import { Button, Icon, Input, LoadingSpinner } from '@/shared-ui';
-import { type AccountSchema } from '@/features/account/types';
-import dynamic from 'next/dynamic';
-import { type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form';
-import { sectionContainer, sectionHeader } from './styles';
-import { useAccountActions } from '@/store/account/hooks';
-import { useToast } from '@/utils/context/ToastContext';
 import { useState } from 'react';
+
+import dynamic from 'next/dynamic';
+
+import { type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form';
+
+import { type AccountSchema } from '@/features/account/types';
+import { Button, Icon, Input } from '@/shared-ui';
+
+import { useAccountActions } from '@/store/account/hooks';
+
+import { useToast } from '@/utils/context/ToastContext';
+
+import { sectionContainer, sectionHeader } from './styles';
 
 const AccountList = dynamic(() => import('@/components/accounts/AccountList'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => null,
 });
 const Modal = dynamic(() => import('@/shared-ui/molecules/Modal'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => null,
 });
 
 type AccountsProps = {

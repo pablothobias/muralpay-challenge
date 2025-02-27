@@ -1,4 +1,3 @@
-import { colors } from '@/styles/variables';
 import {
   FiCheckCircle,
   FiCreditCard,
@@ -28,6 +27,8 @@ import {
   IoClose,
   IoSend,
 } from 'react-icons/io5';
+
+import { colors } from '@/styles/variables';
 
 export type IconProps = {
   name:

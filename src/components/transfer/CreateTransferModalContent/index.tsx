@@ -1,12 +1,15 @@
 import { useTheme } from '@emotion/react';
-import { Button, Icon, Input, Select } from '@/shared-ui';
-import { RecipientFormSection } from './components/RecipientFormSection';
-import { containerCss, ctaContainerCss, formTitleCss } from './styles';
-import { useTransferForm } from '../../../utils/hooks/useTransferForm';
+
 import { AccountResponse } from '@/features/account/types';
-import useAccountStore from '@/store/account';
-import { formGroupCss } from './components/styles';
 import { TransferSchema } from '@/features/transfer/types';
+import { Button, Icon, Input, Select } from '@/shared-ui';
+
+import useAccountStore from '@/store/account';
+import { useTransferForm } from '@/utils/hooks/useTransferForm';
+
+import { RecipientFormSection } from './components/RecipientFormSection';
+import { formGroupCss } from './components/styles';
+import { containerCss, ctaContainerCss, formTitleCss } from './styles';
 
 type CreateTransferModalContentProps = {
   setModalOpen: (bool: boolean) => void;

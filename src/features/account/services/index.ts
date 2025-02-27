@@ -1,11 +1,14 @@
+import { AxiosError } from 'axios';
+
+import { ZodError } from 'zod';
+
 import apiClient from '@/config/api.config';
 import { API_ENDPOINTS, ERROR_TYPES } from '@/utils/constants';
-import { AxiosError } from 'axios';
-import { ZodError } from 'zod';
+import logError from '@/utils/functions/logError';
+
 import { AccountServiceError, AccountValidationError } from '../errors';
 import { accountResponseArraySchema, accountResponseSchema, accountSchema } from '../schemas';
 import { AccountResponse, AccountResponseArray, AccountSchema } from '../types';
-import logError from '@/utils/functions/logError';
 
 const AccountService = {
   create: async (data: AccountSchema, signal?: AbortSignal): Promise<AccountResponse | null> => {

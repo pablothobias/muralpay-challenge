@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { RECIPIENT_TYPE } from '@/utils/constants';
 
 const VALIDATION_RULES = {

@@ -1,7 +1,9 @@
-import useAuthStore from '@/store/auth';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+
 import { type NextPage } from 'next';
+import { useRouter } from 'next/router';
+
+import useAuthStore from '@/store/auth';
 
 type UseAuthRedirectOptions = {
   isPrivate?: boolean;

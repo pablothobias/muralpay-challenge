@@ -1,5 +1,6 @@
-import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
+
+import { ThemeType } from '@/styles/theme';
 
 type FooterStylesProps = {
   theme: ThemeType;

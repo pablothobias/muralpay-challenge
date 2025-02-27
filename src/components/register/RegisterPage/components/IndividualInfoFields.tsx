@@ -1,6 +1,8 @@
-import { Input, MaskInput, Select } from '@/shared-ui';
-import { type IndividualFormFieldProps } from '../types';
 import { useCallback } from 'react';
+
+import { Input, MaskInput, Select } from '@/shared-ui';
+
+import { type IndividualFormFieldProps } from '../types';
 
 export const IndividualInfoFields = ({ register, errors, control }: IndividualFormFieldProps) => {
   const registerIndividualField = useCallback(

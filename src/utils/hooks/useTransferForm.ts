@@ -1,6 +1,7 @@
-import { TransferSchema } from '@/features/transfer/types';
-import { transferSchema } from '@/features/transfer/schemas';
+import { useEffect, useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   useForm,
   useFieldArray,
@@ -8,10 +9,13 @@ import {
   FieldArrayWithId,
   SubmitHandler,
 } from 'react-hook-form';
-import { useLoading } from '@/utils/context/LoadingContext';
-import { useEffect, useState } from 'react';
-import { useTransferActions } from '@/store/transfer/hooks';
+
+import { transferSchema } from '@/features/transfer/schemas';
+import { TransferSchema } from '@/features/transfer/types';
+
 import { useAccountActions } from '@/store/account/hooks';
+import { useTransferActions } from '@/store/transfer/hooks';
+import { useLoading } from '@/utils/context/LoadingContext';
 import { useToast } from '@/utils/context/ToastContext';
 
 type RecipientInfo = TransferSchema['recipientsInfo'][number];

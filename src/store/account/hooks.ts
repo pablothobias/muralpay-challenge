@@ -1,7 +1,9 @@
 import AccountService from '@/features/account/services';
 import { AccountSchema } from '@/features/account/types';
-import useAccountStore from '.';
+
 import { Accounts } from './types';
+
+import useAccountStore from '.';
 
 export const useAccountActions = () => {
   const setAccountsState = useAccountStore((state) => state.setAccountsState);

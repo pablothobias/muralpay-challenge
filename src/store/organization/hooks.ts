@@ -1,7 +1,9 @@
 import OrganizationService from '@/features/organization/services';
 import { OrganizationSchema } from '@/features/organization/types';
-import useOrganizationStore from '.';
+
 import useAuthStore from '../auth';
+
+import useOrganizationStore from '.';
 
 export const useOrganizationActions = () => {
   const { setLoggedOrganization } = useOrganizationStore((state) => state);

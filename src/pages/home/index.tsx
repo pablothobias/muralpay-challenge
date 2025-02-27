@@ -1,12 +1,22 @@
 'use client';
 
-import { HomePage } from '@/shared-ui';
+import { Suspense } from 'react';
+
+import { useTheme } from '@emotion/react';
+
+import dynamic from 'next/dynamic';
+
+import { LoadingSpinner } from '@/shared-ui';
 import useAccountStore from '@/store/account';
 import useTransferStore from '@/store/transfer';
 import { containerStyles } from '@/styles/pages/home/styles';
 import { STATUS_TYPES } from '@/utils/constants';
 import withAuth from '@/utils/hoc/withAuth';
-import { useTheme } from '@emotion/react';
+
+const HomePage = dynamic(() => import('@/components/home/HomePage'), {
+  loading: () => null,
+  ssr: true,
+});
 
 const HomePageContainer = () => {
   const theme = useTheme();
@@ -20,14 +30,19 @@ const HomePageContainer = () => {
     transfers?.results?.filter((t) => t.status === STATUS_TYPES.PENDING).length || 0;
   return (
     <section css={containerStyles}>
-      <HomePage
-        theme={theme}
-        totalBalance={totalBalance}
-        totalTransfers={totalTransfers}
-        pendingTransfers={pendingTransfers}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <HomePage
+          theme={theme}
+          totalBalance={totalBalance}
+          totalTransfers={totalTransfers}
+          pendingTransfers={pendingTransfers}
+        />
+      </Suspense>
     </section>
   );
 };
 
-export default withAuth(HomePageContainer, { isPrivate: true, redirectTo: '/register' });
+export default withAuth(HomePageContainer, {
+  isPrivate: true,
+  redirectTo: '/register',
+});

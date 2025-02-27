@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useContext } from 'react';
+
 import { useToastMessage } from '@/utils/hooks/useToastMessage';
 
 type ToastContextType = {

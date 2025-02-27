@@ -1,8 +1,15 @@
-import { LoadingSpinner } from '@/shared-ui';
-import RegisterPage from '@/components/register/RegisterPage';
-import useAuthStore from '@/store/auth';
+import { Suspense, useEffect } from 'react';
+
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+
+import { LoadingSpinner } from '@/shared-ui';
+import useAuthStore from '@/store/auth';
+
+const RegisterPage = dynamic(() => import('@/components/register/RegisterPage'), {
+  ssr: true,
+  loading: () => null,
+});
 
 const Register = () => {
   const { isAuthenticated } = useAuthStore();
@@ -18,7 +25,11 @@ const Register = () => {
     return <LoadingSpinner />;
   }
 
-  return <RegisterPage />;
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <RegisterPage />
+    </Suspense>
+  );
 };
 
 export default Register;

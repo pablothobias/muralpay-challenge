@@ -1,10 +1,12 @@
+import { ReactNode, Suspense } from 'react';
+
+import dynamic from 'next/dynamic';
+
 import Footer from '@/shared-ui/molecules/Footer';
 import Header from '@/shared-ui/molecules/Header';
-import { ReactNode } from 'react';
-import { layoutStyles, mainStyles } from './styles';
-import dynamic from 'next/dynamic';
-import LoadingSpinner from '@/shared-ui/atoms/LoadingSpinner';
 import { ResponsiveProvider } from '@/utils/context/ResponsiveContext';
+
+import { layoutStyles, mainStyles } from './styles';
 
 type LayoutProps = {
   children: ReactNode;
@@ -12,7 +14,7 @@ type LayoutProps = {
 
 const BackgroundAnimation = dynamic(() => import('@/shared-ui/molecules/BackgroundAnimation'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => null,
 });
 
 const GlobalLayout = ({ children }: LayoutProps) => {
@@ -20,9 +22,11 @@ const GlobalLayout = ({ children }: LayoutProps) => {
     <ResponsiveProvider>
       <div css={layoutStyles}>
         <Header />
-        <BackgroundAnimation />
         <main css={mainStyles}>{children}</main>
         <Footer />
+        <Suspense fallback={null}>
+          <BackgroundAnimation />
+        </Suspense>
       </div>
     </ResponsiveProvider>
   );

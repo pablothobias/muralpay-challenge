@@ -1,6 +1,8 @@
 import React, { forwardRef } from 'react';
-import { errorTextCss, inputGroupCss, inputStyles } from './styles';
+
 import { useTheme } from '@emotion/react';
+
+import { errorTextCss, inputGroupCss, inputStyles } from './styles';
 
 type InputProps = {
   type?: 'text' | 'password' | 'email' | 'number' | 'date' | 'time' | 'currency' | 'phone';

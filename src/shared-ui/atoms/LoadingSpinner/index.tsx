@@ -1,5 +1,6 @@
 import { useTheme } from '@emotion/react';
 import ClipLoader from 'react-spinners/ClipLoader';
+
 import { spinnerContainer } from './styles';
 
 type LoadingSpinnerProps = {

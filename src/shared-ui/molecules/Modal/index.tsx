@@ -1,8 +1,12 @@
-import { LoadingSpinner } from '@/shared-ui';
-import { useTheme } from '@emotion/react';
 import { ReactNode, useEffect, useRef } from 'react';
+
+import { useTheme } from '@emotion/react';
+
+import dynamic from 'next/dynamic';
 import { createPortal } from 'react-dom';
+
 import { IoClose } from 'react-icons/io5';
+
 import {
   closeButtonCss,
   modalBodyCss,
@@ -11,7 +15,6 @@ import {
   modalHeaderCss,
   modalOverlayCss,
 } from './styles';
-import dynamic from 'next/dynamic';
 
 export type ModalProps = {
   isOpen: boolean;
@@ -26,7 +29,7 @@ export type ModalProps = {
 
 const Card = dynamic(() => import('@/shared-ui/atoms/Card'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => null,
 });
 
 const Modal = ({

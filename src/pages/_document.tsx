@@ -1,9 +1,10 @@
+import React from 'react';
+
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import createEmotionServer from '@emotion/server/create-instance';
 import { AppProps } from 'next/app';
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
-import React from 'react';
 
 function createEmotionCache() {
   return createCache({ key: 'css', prepend: true });
@@ -44,7 +45,24 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          {/* Preconnect to critical domains */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+          {/* Preload critical fonts with display swap */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+            rel="stylesheet"
+          />
+
+          {/* Preload logo for faster LCP */}
+          <link rel="preload" href="/assets/images/logo.webp" as="image" type="image/webp" />
+
+          {/* Meta tags for performance */}
+          <meta name="theme-color" content="#ffffff" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        </Head>
         <body>
           <Main />
           <NextScript />
