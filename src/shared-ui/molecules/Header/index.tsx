@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
-
 import { useTheme } from '@emotion/react';
 
 import dynamic from 'next/dynamic';
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { Icon } from '@/shared-ui';
 import { IconProps } from '@/shared-ui/atoms/Icon';
@@ -34,9 +33,9 @@ const Header = () => {
   const theme = useTheme();
   const { toggleTheme } = useToggleTheme();
   const { isAuthenticated, logout } = useAuthStore();
-  const onLogoutAccount = useAccountStore((state) => state.onLogout);
-  const onLogoutTransfer = useTransferStore((state) => state.onLogout);
-  const onLogoutOrganization = useOrganizationStore((state) => state.onLogout);
+  const onLogoutAccount = useAccountStore(state => state.onLogout);
+  const onLogoutTransfer = useTransferStore(state => state.onLogout);
+  const onLogoutOrganization = useOrganizationStore(state => state.onLogout);
   const [isAuthenticatedValue, setIsAuthenticatedValue] = useState(isAuthenticated);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isMobile } = useResponsive();
@@ -84,44 +83,50 @@ const Header = () => {
       </div>
 
       <nav css={desktopNavStyles}>
-        {navigationItems.map((item) => (
+        {navigationItems.map(item => (
           <Link key={item.href} href={item.href} css={navLinkStyles(theme)} onClick={item.onClick}>
             <Icon name={item.icon as IconProps['name']} size={15} color={theme.colors.primary} />
             <span>{item.label}</span>
           </Link>
         ))}
-        <Button onClick={toggleTheme} variant="secondary" css={themeBtnStyles}>
+        <Button onClick={toggleTheme} variant="secondary" additionalStyles={themeBtnStyles}>
           <Icon name="refresh" size={15} color={theme.colors.primary} />
           <span>Theme</span>
         </Button>
       </nav>
 
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-        onOpen={() => setIsMobileMenuOpen(true)}
-      >
-        {navigationItems.map((item) => (
-          <MenuItem
-            key={item.href}
-            onClick={() => {
-              item.onClick?.();
-              setIsMobileMenuOpen(false);
-            }}
-          >
-            <Link href={item.href} css={mobileNavLinkStyles(theme)}>
-              <Icon name={item.icon as IconProps['name']} size={20} color={theme.colors.primary} />
-              <span>{item.label}</span>
-            </Link>
+      {isMobile && (
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+          onOpen={() => setIsMobileMenuOpen(true)}
+        >
+          {navigationItems.map(item => (
+            <MenuItem
+              key={item.href}
+              onClick={() => {
+                item.onClick?.();
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              <Link href={item.href} css={mobileNavLinkStyles(theme)}>
+                <Icon
+                  name={item.icon as IconProps['name']}
+                  size={20}
+                  color={theme.colors.primary}
+                />
+                <span>{item.label}</span>
+              </Link>
+            </MenuItem>
+          ))}
+          <MenuItem onClick={toggleTheme}>
+            <div css={mobileNavLinkStyles(theme)}>
+              <Icon name="refresh" size={20} color={theme.colors.primary} />
+              <span>Theme</span>
+            </div>
           </MenuItem>
-        ))}
-        <MenuItem onClick={toggleTheme}>
-          <div css={mobileNavLinkStyles(theme)}>
-            <Icon name="refresh" size={20} color={theme.colors.primary} />
-            <span>Theme</span>
-          </div>
-        </MenuItem>
-      </MobileMenu>
+        </MobileMenu>
+      )}
     </header>
   );
 };

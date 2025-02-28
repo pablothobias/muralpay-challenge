@@ -1,6 +1,5 @@
-import { ReactNode, Suspense } from 'react';
-
 import dynamic from 'next/dynamic';
+import { ReactNode, Suspense } from 'react';
 
 import Footer from '@/shared-ui/molecules/Footer';
 import Header from '@/shared-ui/molecules/Header';

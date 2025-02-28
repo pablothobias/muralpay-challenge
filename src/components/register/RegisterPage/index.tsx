@@ -1,16 +1,9 @@
-import { useCallback } from 'react';
-
 import { useTheme } from '@emotion/react';
-import { useRouter } from 'next/router';
 
-import { type FormData } from '@/features/organization/types';
+import { type FormData as OrganizationFormData } from '@/features/organization/types';
 import { Button, Card, Select } from '@/shared-ui';
-import { useOrganizationActions } from '@/store/organization/hooks';
 
-import { RECIPIENT_TYPE } from '@/utils/constants';
-
-import { useLoading } from '@/utils/context/LoadingContext';
-import { useToast } from '@/utils/context/ToastContext';
+import { ORGANIZATION_TYPE } from '@/utils/constants';
 
 import { useOrganizationForm } from '@/utils/hooks/useOrganizationForm';
 
@@ -20,40 +13,29 @@ import { IndividualInfoFields } from './components/IndividualInfoFields';
 import { PhysicalAddressFields } from './components/PhysicalAddressFields';
 import { cardContainerCss, formCss, pageContainer, titleCss } from './styles';
 
-const RegisterPage = () => {
-  const theme = useTheme();
-  const router = useRouter();
-  const { showSuccess, showError } = useToast();
-  const { isLoading, setLoadingState } = useLoading();
-  const { createOrganization } = useOrganizationActions();
+type OrganizationFormHookResult = ReturnType<typeof useOrganizationForm>;
 
+type RegisterPageProps = {
+  organizationForm: OrganizationFormHookResult;
+  onSubmit: (data: OrganizationFormData) => void;
+  isLoading: boolean;
+};
+
+const RegisterPage = ({ organizationForm, onSubmit, isLoading }: RegisterPageProps) => {
+  const theme = useTheme();
   const {
     register,
     handleSubmit,
     control,
     errors,
+    touchedFields,
     organizationType,
     isIndividual,
     onOrganizationTypeChange,
-  } = useOrganizationForm();
+  } = organizationForm;
 
-  const onSubmit = useCallback(async (data: FormData) => {
-    const controller = new AbortController();
-
-    if (isLoading || controller.signal.aborted) return;
-
-    try {
-      setLoadingState('createOrganization', true);
-      await createOrganization(data, controller.signal);
-      showSuccess('createOrganization', 'Organization created successfully!');
-      router.push('/home');
-    } catch (error) {
-      showError('createOrganization', 'Failed to create organization');
-      console.error('Failed to create organization:', error);
-    } finally {
-      setLoadingState('createOrganization', false);
-    }
-  }, []);
+  const hasValidationErrors = Object.keys(errors).length > 0;
+  const shouldDisableSubmit = isLoading || hasValidationErrors;
 
   return (
     <div css={pageContainer}>
@@ -65,13 +47,13 @@ const RegisterPage = () => {
             label="Organization Type"
             placeholder="Select an organization type"
             options={[
-              { value: RECIPIENT_TYPE.BUSINESS, label: 'Business' },
-              { value: RECIPIENT_TYPE.INDIVIDUAL, label: 'Individual' },
+              { value: ORGANIZATION_TYPE.BUSINESS, label: 'Business' },
+              { value: ORGANIZATION_TYPE.INDIVIDUAL, label: 'Individual' },
             ]}
             {...register('organizationType', {
-              onChange: (e) => onOrganizationTypeChange(e.target.value),
+              onChange: e => onOrganizationTypeChange(e.target.value),
             })}
-            error={errors.organizationType?.message}
+            error={touchedFields.organizationType ? errors.organizationType?.message : undefined}
           />
 
           {organizationType && (
@@ -87,7 +69,7 @@ const RegisterPage = () => {
                 organizationType={organizationType}
               />
               <PhysicalAddressFields register={register} errors={errors} />
-              {Object.keys(errors).length > 0 && (
+              {hasValidationErrors && (
                 <div css={{ color: 'red', marginBottom: '1rem' }}>
                   Please fix the errors before submitting the form.
                 </div>
@@ -97,7 +79,7 @@ const RegisterPage = () => {
                 type="submit"
                 variant="secondary"
                 size="medium"
-                disabled={isLoading || Object.keys(errors).length > 0}
+                disabled={shouldDisableSubmit}
               >
                 Create Organization
               </Button>

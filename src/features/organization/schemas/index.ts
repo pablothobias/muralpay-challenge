@@ -87,11 +87,11 @@ const baseKycData = {
     .string()
     .min(VALIDATION_RULES.TAX_ID.MIN_LENGTH, ERROR_MESSAGES.taxId.tooShort)
     .max(VALIDATION_RULES.TAX_ID.MAX_LENGTH, ERROR_MESSAGES.taxId.tooLong)
-    .refine((val) => /^\d+$/.test(val), ERROR_MESSAGES.taxId.invalid),
+    .refine(val => /^\d+$/.test(val), ERROR_MESSAGES.taxId.invalid),
   formationDate: z
     .string()
     .min(1, ERROR_MESSAGES.formationDate.required)
-    .refine((date) => !isNaN(Date.parse(date)), ERROR_MESSAGES.formationDate.invalid)
+    .refine(date => !isNaN(Date.parse(date)), ERROR_MESSAGES.formationDate.invalid)
     .refine(isValidPastDate, ERROR_MESSAGES.formationDate.future),
   nationality: z.string().min(2),
   physicalAddress: physicalAddressSchema,

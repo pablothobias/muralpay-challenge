@@ -1,6 +1,6 @@
+import { useTheme } from '@emotion/react';
 import { FC, useCallback, useEffect, useRef } from 'react';
 
-import { useTheme } from '@emotion/react';
 import { IoMenuOutline, IoCloseOutline } from 'react-icons/io5';
 
 import { Button } from '@/shared-ui';

@@ -1,6 +1,5 @@
+import { SerializedStyles, useTheme } from '@emotion/react';
 import { ReactNode } from 'react';
-
-import { useTheme } from '@emotion/react';
 
 import { buttonStyles } from './styles';
 
@@ -13,6 +12,7 @@ export type ButtonProps = {
   disabled?: boolean;
   icon?: ReactNode;
   iconPosition?: 'left' | 'right';
+  additionalStyles?: SerializedStyles;
   className?: string;
 };
 
@@ -25,6 +25,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   icon,
   iconPosition = 'left',
+  additionalStyles,
   className,
 }: ButtonProps) => {
   const theme = useTheme();
@@ -38,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      css={buttonStyles({ size, variant, theme })}
+      css={[buttonStyles({ size, variant, theme, additionalStyles })]}
       type={type}
       disabled={disabled}
       onClick={onClick}

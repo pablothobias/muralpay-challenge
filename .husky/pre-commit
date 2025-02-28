@@ -1,3 +1,4 @@
-npm test
-npx lint-staged
+# Run lint-staged to handle code formatting and linting
 npm run format
+npm run type-check
+npx lint-staged

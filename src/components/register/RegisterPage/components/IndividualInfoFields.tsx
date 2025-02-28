@@ -4,11 +4,39 @@ import { Input, MaskInput, Select } from '@/shared-ui';
 
 import { type IndividualFormFieldProps } from '../types';
 
+type TouchedIndividualFields = {
+  name?: boolean;
+  lastName?: boolean;
+  organizationType?: boolean;
+  kycDelegatedData?: {
+    email?: boolean;
+    phoneNumber?: boolean;
+    taxId?: boolean;
+    formationDate?: boolean;
+    nationality?: boolean;
+    physicalAddress?: {
+      address1?: boolean;
+      address2?: boolean;
+      country?: boolean;
+      state?: boolean;
+      city?: boolean;
+      zip?: boolean;
+    };
+  };
+};
+
 export const IndividualInfoFields = ({ register, errors, control }: IndividualFormFieldProps) => {
   const registerIndividualField = useCallback(
-    (fieldName: 'lastName' | 'name') => register(fieldName),
+    (fieldName: 'name' | 'lastName') => register(fieldName),
     [register],
   );
+
+  const touchedFields = (control?._formState?.touchedFields || {}) as TouchedIndividualFields;
+
+  const isTouchedName = Boolean(touchedFields.name);
+  const isTouchedLastName = Boolean(touchedFields.lastName);
+  const isTouchedNationality = Boolean(touchedFields.kycDelegatedData?.nationality);
+  const isTouchedPhoneNumber = Boolean(touchedFields.kycDelegatedData?.phoneNumber);
 
   return (
     <>
@@ -16,11 +44,11 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
         id="name"
         label="First Name"
         type="text"
-        placeholder="John Doe"
+        placeholder="John"
         required
         {...registerIndividualField('name')}
-        error={errors.name?.message}
-        data-testid="name-input"
+        error={isTouchedName ? errors.name?.message : undefined}
+        data-testid="first-name-input"
       />
       <Input
         id="lastName"
@@ -29,7 +57,7 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
         placeholder="Doe"
         required
         {...registerIndividualField('lastName')}
-        error={errors.lastName?.message}
+        error={isTouchedLastName ? errors.lastName?.message : undefined}
         data-testid="last-name-input"
       />
       <Select
@@ -42,7 +70,7 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
           { value: 'colombian', label: 'Colombia' },
         ]}
         {...register('kycDelegatedData.nationality')}
-        error={errors.kycDelegatedData?.nationality?.message}
+        error={isTouchedNationality ? errors.kycDelegatedData?.nationality?.message : undefined}
       />
       <MaskInput
         type="phone"
@@ -50,7 +78,7 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
         control={control!}
         label="Phone Number"
         placeholder="Select phone number"
-        error={errors.kycDelegatedData?.phoneNumber?.message}
+        error={isTouchedPhoneNumber ? errors.kycDelegatedData?.phoneNumber?.message : undefined}
         data-testid="phone-number-input"
       />
     </>

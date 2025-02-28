@@ -96,7 +96,7 @@ describe('Transfer Store', () => {
 
       await act(async () => {
         useTransferStore.setState(initialState);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise(resolve => setTimeout(resolve, 0));
       });
 
       expect(result.current.transfers).toEqual(mockTransfers);

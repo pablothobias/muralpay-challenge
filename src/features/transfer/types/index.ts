@@ -3,7 +3,6 @@ import { z } from 'zod';
 import {
   recipientInfoSchema,
   transferCurrencyEnum,
-  transferListResponseSchema,
   transferRecipientEnum,
   transferResponseSchema,
   transferSchema,
@@ -18,10 +17,24 @@ export type TRANSFER_STATUSEnum = z.infer<typeof transferStatusEnum>;
 export type TransferCurrencyEnum = z.infer<typeof transferCurrencyEnum>;
 export type TransferRecipientEnum = z.infer<typeof transferRecipientEnum>;
 export type RecipientInfoSchema = z.infer<typeof recipientInfoSchema>;
-export type TransferListResponseSchema = z.infer<typeof transferListResponseSchema>;
 
 export type BankRecipient = z.infer<typeof bankRecipientSchema>;
 export type BlockchainRecipient = z.infer<typeof blockchainRecipientSchema>;
+
+export type BlockchainDetails = {
+  walletAddress: string;
+  blockchain: string;
+};
+
+export type FiatDetails = {
+  currencyCode: string;
+  fiatAmount: number;
+  withdrawalRequestStatus: string;
+  transactionFee: number;
+  exchangeFeePercentage: number;
+  exchangeRate: number;
+  feeTotal: number;
+};
 
 export type TransferFormSchema = {
   payoutAccountId: string;
@@ -29,10 +42,14 @@ export type TransferFormSchema = {
   recipientsInfo: (BankRecipient | BlockchainRecipient)[];
 };
 
+export type TransferListResponseSchema =
+  | TransferResponse[]
+  | { results: TransferResponse[]; total: number };
+
 export type TransferServiceType = {
-  create(data: TransferSchema, signal?: AbortSignal): Promise<TransferResponse | undefined>;
-  get(signal?: AbortSignal): Promise<TransferListResponseSchema | undefined>;
-  execute(id: string, signal?: AbortSignal): Promise<TransferResponse | undefined>;
-  cancel(id: string, signal?: AbortSignal): Promise<TransferResponse | undefined>;
-  handleError(error: unknown, defaultMessage: string): undefined;
+  create(_data: TransferSchema, _signal?: AbortSignal): Promise<TransferResponse | undefined>;
+  get(_signal?: AbortSignal): Promise<TransferListResponseSchema | undefined>;
+  execute(_id: string, _signal?: AbortSignal): Promise<TransferResponse | undefined>;
+  cancel(_id: string, _signal?: AbortSignal): Promise<TransferResponse | undefined>;
+  handleError(_error: unknown, _defaultMessage: string): undefined;
 };

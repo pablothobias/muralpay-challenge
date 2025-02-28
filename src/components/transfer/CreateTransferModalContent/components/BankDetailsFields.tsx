@@ -144,7 +144,7 @@ const BankDetailsFields = ({ register, index, errors }: FormFieldProps) => {
 
   return (
     <>
-      {fields.map((field) => renderField(field))}
+      {fields.map(field => renderField(field))}
       <span css={formGroupCss(theme)}>
         <PhysicalAddressFields register={register} index={index} errors={errors} />
       </span>

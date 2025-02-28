@@ -1,3 +1,5 @@
+import { useTheme } from '@emotion/react';
+import dynamic from 'next/dynamic';
 import {
   type Dispatch,
   type ReactElement,
@@ -8,19 +10,18 @@ import {
   useState,
 } from 'react';
 
-import { useTheme } from '@emotion/react';
-import dynamic from 'next/dynamic';
-
 import { AccountResponse, AccountResponseArray } from '@/features/account/types';
 import { Button, Icon, List } from '@/shared-ui';
 
 import useAccountStore from '@/store/account';
 import { useAccountActions } from '@/store/account/hooks';
 import { AccountState } from '@/store/account/types';
+import { breakpoints } from '@/styles/variables';
 import { STATUS_TYPES } from '@/utils/constants';
 import { useLoading } from '@/utils/context/LoadingContext';
 import { useToast } from '@/utils/context/ToastContext';
 import { formatCurrency } from '@/utils/functions/formatCurrency';
+import { useMediaQuery } from '@/utils/hooks/useMediaQuery';
 
 import {
   accountInfo,
@@ -29,6 +30,9 @@ import {
   accountListHeaderCss,
   contentCss,
   leftContentCss,
+  mobileAccountAddressCss,
+  mobileAccountItemCss,
+  mobileNewTransferButtonCss,
   rightContentCss,
   statusBadgeCss,
   statusCss,
@@ -66,6 +70,7 @@ const Status = ({ status }: { status: string }) => {
 
 const AccountList = () => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(`(max-width: ${breakpoints.md})`);
 
   const { isLoading, setLoadingState } = useLoading();
   const { showError } = useToast();
@@ -89,12 +94,19 @@ const AccountList = () => {
     const controller = new AbortController();
 
     async function fetchAccounts() {
-      if (isLoading || controller.signal.aborted) return;
+      if (controller.signal.aborted) return;
       try {
         setLoadingState('refreshAccounts', true);
         await refreshAccounts(controller.signal);
       } catch (error) {
-        showError('fetchAccounts', (error as Error).message);
+        if (
+          !controller.signal.aborted &&
+          error instanceof Error &&
+          error.name !== 'CanceledError' &&
+          error.message !== 'canceled'
+        ) {
+          showError('fetchAccounts', (error as Error).message);
+        }
       } finally {
         setLoadingState('refreshAccounts', false);
       }
@@ -109,7 +121,7 @@ const AccountList = () => {
   }, []);
 
   const selectAccount = (accountId: string) => {
-    setSelectedAccount(() => accounts!.find((acc) => acc.id === accountId));
+    setSelectedAccount(() => accounts!.find(acc => acc.id === accountId));
     setIsAccountModalOpen(true);
   };
 
@@ -150,7 +162,11 @@ const AccountList = () => {
 
   const mountAccountsRows = (account: AccountResponse) => ({
     element: (
-      <div css={contentCss} role="button" data-testid={`account-address-${account.id}`}>
+      <div
+        css={[contentCss, mobileAccountItemCss(theme)]}
+        role="button"
+        data-testid={`account-address-${account.id}`}
+      >
         <div css={leftContentCss}>
           <h3>{account.name}</h3>
           <p>{account.blockchain}</p>
@@ -162,8 +178,12 @@ const AccountList = () => {
             {account.balance.tokenSymbol}&nbsp;
             <Icon name="cash" />
           </span>
-          <span css={accountInfo} data-testid={`address-${account.id}`}>
-            {account.address}&nbsp; <Icon name="card" />
+          <span css={[accountInfo, mobileAccountAddressCss]} data-testid={`address-${account.id}`}>
+            {isMobile
+              ? `${account.address.substring(0, 10)}...${account.address.substring(account.address.length - 6)}`
+              : account.address}
+            &nbsp;
+            <Icon name="card" />
           </span>
           <div css={accountItemRightRow}>
             <span
@@ -181,8 +201,8 @@ const AccountList = () => {
   });
 
   useEffect(() => {
-    if (accounts) setAccountRows([...accounts!.map((account) => mountAccountsRows(account))]);
-  }, [accounts]);
+    if (accounts) setAccountRows([...accounts!.map(account => mountAccountsRows(account))]);
+  }, [accounts, isMobile]);
 
   return (
     <div css={accountListContainerCss(theme)}>
@@ -192,6 +212,7 @@ const AccountList = () => {
           variant="secondary"
           onClick={() => setIsTransferModalOpen(true)}
           icon={<Icon name="swap" />}
+          additionalStyles={mobileNewTransferButtonCss}
         >
           New Transfer
         </Button>
@@ -205,14 +226,14 @@ const AccountList = () => {
         title: 'New Transfer',
         isOpen: isTransferModalOpen,
         setOpen: setIsTransferModalOpen,
-        size: 'extraLarge',
+        size: isMobile ? 'large' : 'extraLarge',
         content: <CreateTransferModalContent setModalOpen={setIsTransferModalOpen} />,
       })}
       {renderModal({
         title: selectedAccount?.name || '',
         isOpen: isAccountModalOpen,
         setOpen: setIsAccountModalOpen,
-        size: 'large',
+        size: isMobile ? 'medium' : 'large',
         content: <AccountInfoModalContent account={selectedAccount!} />,
       })}
     </div>

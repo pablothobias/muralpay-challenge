@@ -36,10 +36,10 @@ export const modalOverlayCss = css`
   animation: ${fadeIn} 0.2s ease-out;
 `;
 
-export const modalContentWrapperCss = (theme: ThemeType) => css`
+export const modalContentWrapperCss = (theme: ThemeType, isMobile: boolean) => css`
   position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: ${isMobile ? '100%' : '90vw'};
+  max-height: ${isMobile ? '100%' : '90vw'};
   overflow-y: auto;
   animation: ${slideIn} 0.3s ease-out;
 
@@ -74,7 +74,7 @@ export const closeButtonCss = (theme: ThemeType) => css`
   border-radius: var(--border-radius);
 
   &:hover {
-    background: 'red';
+    background: ${theme.colors.muted};
   }
 
   &:focus {

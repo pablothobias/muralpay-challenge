@@ -4,6 +4,28 @@ import { Input, MaskInput, Select } from '@/shared-ui';
 
 import { type BusinessFormFieldProps } from '../types';
 
+type TouchedBusinessFields = {
+  name?: boolean;
+  lastName?: boolean;
+  organizationType?: boolean;
+  kycDelegatedData?: {
+    businessName?: boolean;
+    email?: boolean;
+    phoneNumber?: boolean;
+    taxId?: boolean;
+    formationDate?: boolean;
+    nationality?: boolean;
+    physicalAddress?: {
+      address1?: boolean;
+      address2?: boolean;
+      country?: boolean;
+      state?: boolean;
+      city?: boolean;
+      zip?: boolean;
+    };
+  };
+};
+
 export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFieldProps) => {
   const registerBusinessField = useCallback(
     (fieldName: 'businessName' | 'name' | 'lastName') =>
@@ -12,6 +34,14 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
         : register(fieldName),
     [register],
   );
+
+  const touchedFields = (control?._formState?.touchedFields || {}) as TouchedBusinessFields;
+
+  const isTouchedBusinessName = Boolean(touchedFields.kycDelegatedData?.businessName);
+  const isTouchedName = Boolean(touchedFields.name);
+  const isTouchedLastName = Boolean(touchedFields.lastName);
+  const isTouchedNationality = Boolean(touchedFields.kycDelegatedData?.nationality);
+  const isTouchedPhoneNumber = Boolean(touchedFields.kycDelegatedData?.phoneNumber);
 
   return (
     <>
@@ -22,7 +52,7 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
         placeholder="Sun Tree Capital LLC"
         required
         {...registerBusinessField('businessName')}
-        error={errors.kycDelegatedData?.businessName?.message}
+        error={isTouchedBusinessName ? errors.kycDelegatedData?.businessName?.message : undefined}
         data-testid="business-name-input"
       />
       <Input
@@ -32,7 +62,7 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
         placeholder="Sun Tree Capital LLC"
         required
         {...registerBusinessField('name')}
-        error={errors.name?.message}
+        error={isTouchedName ? errors.name?.message : undefined}
         data-testid="name-input"
       />
       <Input
@@ -42,7 +72,7 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
         placeholder="Doe"
         required
         {...registerBusinessField('lastName')}
-        error={errors.lastName?.message}
+        error={isTouchedLastName ? errors.lastName?.message : undefined}
         data-testid="last-name-input"
       />
       <Select
@@ -55,7 +85,7 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
           { value: 'colombian', label: 'Colombia' },
         ]}
         {...register('kycDelegatedData.nationality')}
-        error={errors.kycDelegatedData?.nationality?.message}
+        error={isTouchedNationality ? errors.kycDelegatedData?.nationality?.message : undefined}
       />
       <MaskInput
         type="phone"
@@ -63,7 +93,7 @@ export const BusinessInfoFields = ({ register, errors, control }: BusinessFormFi
         control={control!}
         label="Phone Number"
         placeholder="Select phone number"
-        error={errors.kycDelegatedData?.phoneNumber?.message}
+        error={isTouchedPhoneNumber ? errors.kycDelegatedData?.phoneNumber?.message : undefined}
         data-testid="phone-number-input"
       />
     </>

@@ -1,5 +1,5 @@
-import { ErrorTest } from '@/components/test/ErrorTest';
 import { ErrorBoundary } from '@/shared-ui/molecules/ErrorBoundary';
+import { ErrorTest } from '@/utils/test/ErrorTest';
 
 export default function TestErrorPage() {
   return (

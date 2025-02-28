@@ -6,7 +6,7 @@ import { Accounts } from './types';
 import useAccountStore from '.';
 
 export const useAccountActions = () => {
-  const setAccountsState = useAccountStore((state) => state.setAccountsState);
+  const setAccountsState = useAccountStore(state => state.setAccountsState);
 
   const refreshAccounts = async (signal?: AbortSignal) => {
     try {
@@ -15,7 +15,13 @@ export const useAccountActions = () => {
       setAccountsState(response, false, undefined);
       return response;
     } catch (error) {
-      setAccountsState([], false, (error as Error).message);
+      if (
+        error instanceof Error &&
+        error.name !== 'CanceledError' &&
+        error.message !== 'canceled'
+      ) {
+        setAccountsState([], false, (error as Error).message);
+      }
       throw error;
     }
   };
@@ -28,7 +34,13 @@ export const useAccountActions = () => {
       setAccountsState(response, false, undefined);
       return response;
     } catch (error) {
-      setAccountsState([], false, (error as Error).message);
+      if (
+        error instanceof Error &&
+        error.name !== 'CanceledError' &&
+        error.message !== 'canceled'
+      ) {
+        setAccountsState([], false, (error as Error).message);
+      }
       throw error;
     }
   };

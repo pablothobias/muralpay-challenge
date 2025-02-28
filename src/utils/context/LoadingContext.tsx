@@ -15,19 +15,19 @@ const LoadingContext = createContext<LoadingContextType | null>(null);
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
   const [loadingStates, setLoadingStates] = useState<LoadingStates>({});
 
-  const isLoading = Object.values(loadingStates).some((state) => state === true);
+  const isLoading = Object.values(loadingStates).some(state => state === true);
 
-  const setLoadingState = useCallback((key: string, isLoading: boolean) => {
-    setLoadingStates((prev) => ({
+  const setLoadingState = useCallback((_key: string, _isLoading: boolean) => {
+    setLoadingStates(prev => ({
       ...prev,
-      [key]: isLoading,
+      [_key]: _isLoading,
     }));
   }, []);
 
-  const clearLoadingState = useCallback((key: string) => {
-    setLoadingStates((prev) => {
+  const clearLoadingState = useCallback((_key: string) => {
+    setLoadingStates(prev => {
       const newState = { ...prev };
-      delete newState[key];
+      delete newState[_key];
       return newState;
     });
   }, []);

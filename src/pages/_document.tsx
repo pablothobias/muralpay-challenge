@@ -1,10 +1,9 @@
-import React from 'react';
-
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import createEmotionServer from '@emotion/server/create-instance';
 import { AppProps } from 'next/app';
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import React from 'react';
 
 function createEmotionCache() {
   return createCache({ key: 'css', prepend: true });
@@ -19,7 +18,7 @@ export default class MyDocument extends Document {
 
     ctx.renderPage = () =>
       originalRenderPage({
-        enhanceApp: (App: React.ComponentType<AppProps>) => (props) => (
+        enhanceApp: (App: React.ComponentType<AppProps>) => props => (
           <CacheProvider value={cache}>
             <App {...props} />
           </CacheProvider>
@@ -28,7 +27,7 @@ export default class MyDocument extends Document {
 
     const initialProps = await Document.getInitialProps(ctx);
     const emotionStyles = extractCriticalToChunks(initialProps.html);
-    const emotionStyleTags = emotionStyles.styles.map((style) => (
+    const emotionStyleTags = emotionStyles.styles.map(style => (
       <style
         key={style.key}
         data-emotion={`${style.key} ${style.ids.join(' ')}`}

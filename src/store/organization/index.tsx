@@ -7,7 +7,7 @@ const useOrganizationStore = create<OrganizationState>()(
   devtools(
     subscribeWithSelector(
       persist(
-        (set) => ({
+        set => ({
           loggedOrganization: undefined,
           organizations: { results: [], total: 0 },
           loading: false,

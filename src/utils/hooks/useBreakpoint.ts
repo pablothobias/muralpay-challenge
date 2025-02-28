@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export const breakpoints = {
+  xsMobile: 300,
   mobile: 480,
   tablet: 768,
   laptop: 1024,
@@ -10,6 +11,7 @@ export const breakpoints = {
 export type Breakpoint = keyof typeof breakpoints;
 
 export type BreakpointState = {
+  isXsMobile: boolean;
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
@@ -49,6 +51,7 @@ export const useBreakpoint = (): BreakpointState => {
           : 'desktop';
 
   return {
+    isXsMobile: windowWidth <= breakpoints.xsMobile,
     isMobile: windowWidth <= breakpoints.mobile,
     isTablet: windowWidth > breakpoints.mobile && windowWidth <= breakpoints.tablet,
     isDesktop: windowWidth > breakpoints.tablet,
