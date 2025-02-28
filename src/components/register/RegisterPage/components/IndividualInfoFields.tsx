@@ -25,7 +25,16 @@ type TouchedIndividualFields = {
   };
 };
 
-export const IndividualInfoFields = ({ register, errors, control }: IndividualFormFieldProps) => {
+export interface IndividualInfoFieldsProps extends IndividualFormFieldProps {
+  disabled?: boolean;
+}
+
+export const IndividualInfoFields = ({
+  register,
+  errors,
+  control,
+  disabled = false,
+}: IndividualInfoFieldsProps) => {
   const registerIndividualField = useCallback(
     (fieldName: 'name' | 'lastName') => register(fieldName),
     [register],
@@ -48,6 +57,7 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
         required
         {...registerIndividualField('name')}
         error={isTouchedName ? errors.name?.message : undefined}
+        disabled={disabled}
         data-testid="first-name-input"
       />
       <Input
@@ -58,6 +68,7 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
         required
         {...registerIndividualField('lastName')}
         error={isTouchedLastName ? errors.lastName?.message : undefined}
+        disabled={disabled}
         data-testid="last-name-input"
       />
       <Select
@@ -71,6 +82,7 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
         ]}
         {...register('kycDelegatedData.nationality')}
         error={isTouchedNationality ? errors.kycDelegatedData?.nationality?.message : undefined}
+        disabled={disabled}
       />
       <MaskInput
         type="phone"
@@ -79,6 +91,7 @@ export const IndividualInfoFields = ({ register, errors, control }: IndividualFo
         label="Phone Number"
         placeholder="Select phone number"
         error={isTouchedPhoneNumber ? errors.kycDelegatedData?.phoneNumber?.message : undefined}
+        disabled={disabled}
         data-testid="phone-number-input"
       />
     </>

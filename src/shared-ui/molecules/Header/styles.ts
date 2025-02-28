@@ -57,6 +57,10 @@ export const mobileNavLinkStyles = (theme: ThemeType) => css`
   padding: 0.5rem;
   border-radius: 4px;
   transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${theme.colors.neutral[100]};
+  }
 `;
 
 export const navLinkStyles = (theme: ThemeType) => css`

@@ -14,9 +14,14 @@ const COUNTRY_OPTIONS = [
 type PhysicalAddressFieldsProps = {
   register: UseFormRegister<FormData>;
   errors: FieldErrors<FormData>;
+  disabled?: boolean;
 };
 
-export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressFieldsProps) => {
+export const PhysicalAddressFields = ({
+  register,
+  errors,
+  disabled = false,
+}: PhysicalAddressFieldsProps) => {
   const isTouchedAddress1 = Boolean(errors.kycDelegatedData?.physicalAddress?.address1);
   const isTouchedAddress2 = Boolean(errors.kycDelegatedData?.physicalAddress?.address2);
   const isTouchedCountry = Boolean(errors.kycDelegatedData?.physicalAddress?.country);
@@ -38,6 +43,7 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
             ? errors.kycDelegatedData?.physicalAddress?.address1?.message
             : undefined
         }
+        disabled={disabled}
       />
 
       <Input
@@ -51,6 +57,7 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
             ? errors.kycDelegatedData?.physicalAddress?.address2?.message
             : undefined
         }
+        disabled={disabled}
       />
 
       <Select
@@ -62,6 +69,7 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         error={
           isTouchedCountry ? errors.kycDelegatedData?.physicalAddress?.country?.message : undefined
         }
+        disabled={disabled}
       />
 
       <Input
@@ -73,6 +81,7 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         error={
           isTouchedState ? errors.kycDelegatedData?.physicalAddress?.state?.message : undefined
         }
+        disabled={disabled}
       />
 
       <Input
@@ -82,6 +91,7 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         placeholder="San Francisco"
         {...register('kycDelegatedData.physicalAddress.city')}
         error={isTouchedCity ? errors.kycDelegatedData?.physicalAddress?.city?.message : undefined}
+        disabled={disabled}
       />
 
       <Input
@@ -91,6 +101,7 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         placeholder="94105"
         {...register('kycDelegatedData.physicalAddress.zip')}
         error={isTouchedZip ? errors.kycDelegatedData?.physicalAddress?.zip?.message : undefined}
+        disabled={disabled}
       />
     </>
   );

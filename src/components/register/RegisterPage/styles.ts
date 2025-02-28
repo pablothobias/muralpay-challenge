@@ -48,3 +48,13 @@ export const sectionTitleCss = css`
   font-size: 1.1rem;
   font-weight: 500;
 `;
+
+export const warningMessageCss = (theme: ThemeType) => css`
+  background-color: ${theme.colors.warning}20;
+  color: ${theme.colors.warning};
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin: 16px 0;
+  font-weight: 500;
+  border-left: 4px solid ${theme.colors.warning};
+`;
