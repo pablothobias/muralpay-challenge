@@ -6,7 +6,7 @@ interface HeadProps {
 
 export default function Head({ children }: HeadProps) {
   useEffect(() => {
-    React.Children.forEach(children, (child) => {
+    React.Children.forEach(children, child => {
       if (!React.isValidElement(child)) return;
 
       if (child.type === 'title' && child.props.children) {

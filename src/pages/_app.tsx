@@ -1,12 +1,11 @@
 'use client';
 
-import { type FC, Suspense } from 'react';
-
 import { Global } from '@emotion/react';
 
 import dynamic from 'next/dynamic';
 
 import Head from 'next/head';
+import { type FC, Suspense } from 'react';
 
 import { LoadingSpinner } from '@/shared-ui';
 import { ErrorBoundary } from '@/shared-ui/molecules/ErrorBoundary';
@@ -25,7 +24,7 @@ const GlobalLayout = dynamic(() => import('@/shared-ui/templates/GlobalLayout'),
   loading: () => null,
 });
 
-const ToastContainer = dynamic(() => import('react-toastify').then((mod) => mod.ToastContainer), {
+const ToastContainer = dynamic(() => import('react-toastify').then(mod => mod.ToastContainer), {
   ssr: false,
   loading: () => null,
 });

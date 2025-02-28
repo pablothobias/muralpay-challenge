@@ -5,7 +5,7 @@ import { devtools, persist, PersistStorage, subscribeWithSelector } from 'zustan
 import { type AuthState, type User } from './types';
 
 const cookieStorage: PersistStorage<AuthState> = {
-  getItem: (name) => {
+  getItem: name => {
     const storedValue = Cookies.get(name);
     if (!storedValue || typeof window === 'undefined') return null;
     try {
@@ -25,7 +25,7 @@ const cookieStorage: PersistStorage<AuthState> = {
       });
     }
   },
-  removeItem: (name) => {
+  removeItem: name => {
     if (typeof window !== 'undefined') {
       Cookies.remove(name);
     }
@@ -36,7 +36,7 @@ const useAuthStore = create<AuthState>()(
   devtools(
     subscribeWithSelector(
       persist(
-        (set) => ({
+        set => ({
           user: null,
           isAuthenticated: false,
           login: (user: User) => {

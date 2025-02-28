@@ -14,7 +14,7 @@ beforeEach(() => {
   document.title = '';
 
   const metaTags = document.querySelectorAll('meta');
-  metaTags.forEach((tag) => {
+  metaTags.forEach(tag => {
     if (tag.parentNode) {
       tag.parentNode.removeChild(tag);
     }
@@ -29,7 +29,7 @@ declare global {
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query) => ({
+  value: jest.fn().mockImplementation(query => ({
     matches: false,
     media: query,
     onchange: null,
@@ -60,7 +60,7 @@ const suppressedMessages = [
 const shouldSuppress = (message: unknown) => {
   return (
     typeof message === 'string' &&
-    suppressedMessages.some((suppressedMessage) => message.includes(suppressedMessage))
+    suppressedMessages.some(suppressedMessage => message.includes(suppressedMessage))
   );
 };
 

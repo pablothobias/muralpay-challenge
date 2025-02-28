@@ -67,7 +67,7 @@ export const PhysicalAddressFields = ({ register, index, errors }: FormFieldProp
     <div css={addressSectionStyles(theme)}>
       <h4 css={addressTitleStyles(theme)}>Physical Address</h4>
       <div>
-        {addressFields.map((field) => (
+        {addressFields.map(field => (
           <div key={field.id} css={formGroupCss(theme)}>
             <Input
               id={`recipientsInfo.${index}.bankDetails.physicalAddress.${field.id}`}

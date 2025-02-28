@@ -38,16 +38,6 @@ const config = [
       prettier: eslintPluginPrettier,
     },
     rules: {
-      'prettier/prettier': [
-        'error',
-        {
-          semi: true,
-          singleQuote: true,
-          trailingComma: 'all',
-          printWidth: 80,
-          tabWidth: 2,
-        },
-      ],
       'import/order': [
         'error',
         {
@@ -66,18 +56,17 @@ const config = [
             order: 'asc',
           },
           'newlines-between': 'always-and-inside-groups',
-          pathGroups: [
-            {
-              pattern: 'react',
-              group: 'external',
-              position: 'before',
-            },
-            {
-              group: 'internal',
-              pattern: 'generated/*',
-            },
-          ],
-          pathGroupsExcludedImportTypes: ['builtin'],
+        },
+      ],
+
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^[A-Z][A-Z_]+$',
         },
       ],
     },

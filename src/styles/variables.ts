@@ -103,11 +103,10 @@ export const spacing = {
 
 export const breakpoints = {
   xs: '320px',
-  sm: '640px',
+  sm: '480px',
   md: '768px',
   lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
+  xl: '1200px',
 };
 
 export const borderRadius = {

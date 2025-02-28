@@ -14,6 +14,10 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
     [register],
   );
 
+  const isTouchedEmail = Boolean(errors.kycDelegatedData?.email);
+  const isTouchedTaxId = Boolean(errors.kycDelegatedData?.taxId);
+  const isTouchedFormationDate = Boolean(errors.kycDelegatedData?.formationDate);
+
   return (
     <>
       <Input
@@ -23,7 +27,7 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         placeholder="contact@example.com"
         required
         {...registerCommonField('email')}
-        error={errors.kycDelegatedData?.email?.message}
+        error={isTouchedEmail ? errors.kycDelegatedData?.email?.message : undefined}
         data-testid="email-input"
       />
 
@@ -34,7 +38,7 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         placeholder={isIndividual ? 'SSN or Tax ID' : 'EIN or Tax ID'}
         required
         {...registerCommonField('taxId')}
-        error={errors.kycDelegatedData?.taxId?.message}
+        error={isTouchedTaxId ? errors.kycDelegatedData?.taxId?.message : undefined}
         data-testid="tax-id-input"
       />
 
@@ -44,7 +48,7 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         type="date"
         required
         {...registerCommonField('formationDate')}
-        error={errors.kycDelegatedData?.formationDate?.message}
+        error={isTouchedFormationDate ? errors.kycDelegatedData?.formationDate?.message : undefined}
         data-testid="formation-date-input"
       />
     </>

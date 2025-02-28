@@ -1,6 +1,5 @@
-import { forwardRef } from 'react';
-
 import { useTheme } from '@emotion/react';
+import { forwardRef } from 'react';
 
 import { errorTextCss, selectGroupCss, selectStyles } from './styles';
 
@@ -35,7 +34,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           data-testid={id}
           {...props}
         >
-          {[placeholderOption, ...options].map((option) => (
+          {[placeholderOption, ...options].map(option => (
             <option className="option" key={option.value} value={option.value}>
               {option.label}
             </option>

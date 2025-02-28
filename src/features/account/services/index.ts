@@ -44,7 +44,24 @@ const AccountService = {
     }
   },
   handleError: (error: unknown, defaultMessage: string) => {
-    logError(error, 'AccountService.create');
+    // Don't log cancellation errors
+    if (
+      error instanceof Error &&
+      (error.name === 'CanceledError' ||
+        error.name === 'AbortError' ||
+        error.message === 'canceled')
+    ) {
+      throw error; // Just rethrow without transforming
+    }
+
+    // Special handling for Axios cancellation errors
+    if (error instanceof AxiosError && error.message === 'canceled') {
+      const cancelError = new Error('canceled');
+      cancelError.name = 'CanceledError';
+      throw cancelError;
+    }
+
+    logError(error, 'AccountService');
 
     if (error instanceof AxiosError)
       throw new AccountServiceError(

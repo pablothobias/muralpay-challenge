@@ -81,6 +81,16 @@ const TransferService: TransferServiceType = {
     }
   },
   handleError: (error: unknown, defaultMessage: string): never => {
+    // Don't log or throw for cancellation errors
+    if (
+      error instanceof Error &&
+      (error.name === 'CanceledError' ||
+        error.name === 'AbortError' ||
+        error.message === 'canceled')
+    ) {
+      throw error; // Just rethrow without transforming
+    }
+
     logError(error, 'TransferService');
 
     if (error instanceof ZodError) {

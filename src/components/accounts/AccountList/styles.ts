@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { ThemeType } from '@/styles/theme';
-import { colors } from '@/styles/variables';
+import { breakpoints, colors } from '@/styles/variables';
 
 export const accountListContainerCss = (theme: ThemeType) => css`
   display: flex;
@@ -18,6 +18,13 @@ export const accountListContainerCss = (theme: ThemeType) => css`
   h2 {
     color: ${theme.colors.foreground};
   }
+
+  @media (max-width: ${breakpoints.md}) {
+    margin-top: ${theme.spacing.md};
+    max-height: 80vh;
+    border: none;
+    border-radius: 0;
+  }
 `;
 
 export const accountListHeaderCss = css`
@@ -29,6 +36,16 @@ export const accountListHeaderCss = css`
   padding: var(--spacing-lg);
   box-shadow: 0 4px 4px -2px gray;
   z-index: 2;
+
+  @media (max-width: ${breakpoints.md}) {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+
+    h2 {
+      margin: 0;
+    }
+  }
 `;
 
 export const contentCss = css`
@@ -48,6 +65,12 @@ export const contentCss = css`
     margin: 0;
     font-size: var(--font-size-xs);
     color: var(--muted-foreground);
+  }
+
+  @media (max-width: ${breakpoints.md}) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
   }
 `;
 
@@ -78,6 +101,10 @@ export const leftContentCss = css`
   flex-direction: column;
   align-items: flex-start;
   gap: var(--spacing-xs);
+
+  @media (max-width: ${breakpoints.md}) {
+    width: 100%;
+  }
 `;
 
 export const rightContentCss = css`
@@ -94,6 +121,12 @@ export const rightContentCss = css`
   small {
     color: var(--muted-foreground);
   }
+
+  @media (max-width: ${breakpoints.md}) {
+    width: 100%;
+    align-items: flex-start;
+    margin-top: var(--spacing-sm);
+  }
 `;
 
 export const accountInfo = css`
@@ -101,6 +134,14 @@ export const accountInfo = css`
   align-items: center;
   gap: var(--spacing-sm);
   font-weight: 700;
+
+  @media (max-width: ${breakpoints.md}) {
+    font-size: var(--font-size-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
 `;
 
 export const accountItemRightRow = css`
@@ -108,4 +149,33 @@ export const accountItemRightRow = css`
   align-items: center;
   gap: var(--spacing-md);
   justify-content: space-between;
+
+  @media (max-width: ${breakpoints.md}) {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: var(--spacing-xs);
+  }
+`;
+
+export const mobileAccountAddressCss = css`
+  @media (max-width: ${breakpoints.md}) {
+    font-size: var(--font-size-xs);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+  }
+`;
+
+export const mobileNewTransferButtonCss = css`
+  @media (max-width: ${breakpoints.md}) {
+    width: 100%;
+  }
+`;
+
+export const mobileAccountItemCss = (theme: ThemeType) => css`
+  @media (max-width: ${breakpoints.md}) {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid ${theme.colors.border};
+  }
 `;

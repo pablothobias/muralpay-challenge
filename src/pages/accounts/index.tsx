@@ -1,8 +1,7 @@
-import { Suspense } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { accountSchema } from '@/features/account/schemas';

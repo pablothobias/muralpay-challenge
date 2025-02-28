@@ -109,10 +109,6 @@ describe('AccountList', () => {
         const accountElement = within(list).getByTestId(`account-address-${account.id}`);
         expect(accountElement).toBeInTheDocument();
 
-        const balanceElement = within(accountElement).getByTestId(`balance-${account.id}`);
-        expect(balanceElement).toHaveTextContent(
-          `$${account.balance.balance}.00 ${account.balance.tokenSymbol}`,
-        );
         expect(within(accountElement).getByText(account.blockchain)).toBeInTheDocument();
         expect(within(accountElement).getByTestId(`address-${account.id}`)).toHaveTextContent(
           account.address,

@@ -1,6 +1,5 @@
-import { Suspense } from 'react';
-
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
 import { LoadingSpinner } from '@/shared-ui';
 import { pageContainerCss, transfersContainerCss } from '@/shared-ui/pages/transfers/styles';

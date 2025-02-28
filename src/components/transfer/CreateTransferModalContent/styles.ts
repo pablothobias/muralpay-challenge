@@ -44,10 +44,15 @@ export const selectCss = (theme: ThemeType) => css`
   }
 `;
 
-export const ctaContainerCss = css`
+export const ctaContainerCss = (isDesktop: boolean, isTablet: boolean) => css`
   display: flex;
+  justify-content: ${isDesktop || isTablet ? 'flex-start' : 'center'};
+  flex-wrap: wrap;
   gap: ${spacing.md};
-  justify-content: flex-start;
   width: 100%;
   margin-top: ${spacing.lg};
+`;
+
+export const commonTransferButtonCss = css`
+  width: 175px;
 `;

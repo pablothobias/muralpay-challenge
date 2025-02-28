@@ -1,11 +1,13 @@
-import { ReactNode, useEffect, useRef } from 'react';
-
 import { useTheme } from '@emotion/react';
 
 import dynamic from 'next/dynamic';
+import { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { IoClose } from 'react-icons/io5';
+
+import { breakpoints } from '@/styles/variables';
+import { useResponsive } from '@/utils/context/ResponsiveContext';
 
 import {
   closeButtonCss,
@@ -43,6 +45,8 @@ const Modal = ({
   closeOnEsc = true,
 }: ModalProps) => {
   const theme = useTheme();
+  const { isMobile } = useResponsive();
+
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -78,17 +82,17 @@ const Modal = ({
   };
 
   const sizeStyles = {
-    small: { width: '400px' },
-    medium: { width: '600px' },
-    large: { width: '800px' },
-    extraLarge: { width: '1200px' },
+    small: { width: breakpoints.sm },
+    medium: { width: breakpoints.md },
+    large: { width: breakpoints.lg },
+    extraLarge: { width: breakpoints.xl },
   };
 
   const modalContent = (
     <div css={modalOverlayCss} onClick={handleOverlayClick}>
       <div
         ref={modalRef}
-        css={modalContentWrapperCss(theme)}
+        css={modalContentWrapperCss(theme, isMobile)}
         style={sizeStyles[size]}
         tabIndex={-1}
         role="dialog"

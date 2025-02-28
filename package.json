@@ -10,9 +10,10 @@
     "dev:analyze": "ANALYZE=true next dev",
     "start": "next start",
     "lint": "next lint --dir src",
-    "lint:fix": "eslint --fix \"src/**/*.{ts,tsx}\" --max-warnings=10",
+    "lint:fix": "eslint --fix \"src/**/*.{ts,tsx}\" --max-warnings=0",
     "prettier:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "format": "prettier --write .",
+    "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format": "npm run prettier:check",
     "fix-all": "npm run format && npm run lint:fix",
     "type-check": "tsc --noEmit",
     "test": "jest --detectOpenHandles --forceExit ",
@@ -76,9 +77,12 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "**/*": [
-      "npm run lint",
-      "npm run format"
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
     ]
   }
 }

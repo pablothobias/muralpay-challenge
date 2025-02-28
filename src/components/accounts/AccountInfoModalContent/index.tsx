@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { useTheme } from '@emotion/react';
+import React from 'react';
 
 import { AccountResponse } from '@/features/account/types';
 

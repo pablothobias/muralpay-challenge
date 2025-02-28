@@ -7,7 +7,7 @@ const useAccountStore = create<AccountState>()(
   devtools(
     subscribeWithSelector(
       persist(
-        (set) => ({
+        set => ({
           accounts: [],
           loading: false,
           error: null,

@@ -81,8 +81,8 @@ const BackgroundAnimation = memo(() => {
 
   useEffect(() => {
     const unsubscribe = useThemeStore.subscribe(
-      (state) => state.theme,
-      (newTheme) => {
+      state => state.theme,
+      newTheme => {
         deactivateAnimation();
         setTheme(newTheme);
         isActiveRef.current = false;

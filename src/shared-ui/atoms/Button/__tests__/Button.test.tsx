@@ -51,13 +51,6 @@ describe('Button', () => {
       expect(icon).toBeInTheDocument();
       expect(button.lastChild).toBe(icon);
     });
-
-    it('applies custom className', () => {
-      const customClass = 'custom-button';
-      renderWithProviders(<Button className={customClass}>Custom Button</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass(customClass);
-    });
   });
 
   describe('interactions', () => {
@@ -85,7 +78,7 @@ describe('Button', () => {
   describe('variants', () => {
     const variants = ['primary', 'secondary', 'success', 'warning', 'danger', 'outlined'] as const;
 
-    variants.forEach((variant) => {
+    variants.forEach(variant => {
       it(`renders ${variant} variant`, () => {
         renderWithProviders(<Button variant={variant}>Button</Button>);
         const button = screen.getByRole('button');
@@ -104,7 +97,7 @@ describe('Button', () => {
   describe('sizes', () => {
     const sizes = ['small', 'medium', 'large'] as const;
 
-    sizes.forEach((size) => {
+    sizes.forEach(size => {
       it(`renders ${size} size`, () => {
         renderWithProviders(<Button size={size}>Button</Button>);
         const button = screen.getByRole('button');

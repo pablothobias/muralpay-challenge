@@ -6,8 +6,8 @@ import useAuthStore from '../auth';
 import useOrganizationStore from '.';
 
 export const useOrganizationActions = () => {
-  const { setLoggedOrganization } = useOrganizationStore((state) => state);
-  const { login } = useAuthStore((state) => state);
+  const { setLoggedOrganization } = useOrganizationStore(state => state);
+  const { login } = useAuthStore(state => state);
 
   const createOrganization = async (data: OrganizationSchema, signal?: AbortSignal) => {
     try {

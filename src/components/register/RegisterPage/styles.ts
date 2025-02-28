@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 import { ThemeType } from '@/styles/theme';
+import { breakpoints } from '@/styles/variables';
 
 export const pageContainer = css`
   display: flex;
@@ -8,7 +9,7 @@ export const pageContainer = css`
   align-items: center;
   padding: 0;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${breakpoints.md}) {
     padding: 2rem;
   }
 `;
@@ -16,9 +17,13 @@ export const pageContainer = css`
 export const cardContainerCss = css`
   width: 100%;
   max-width: 600px;
-  padding: 1rem;
+  padding: 0;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${breakpoints.sm}) {
+    padding: 1rem;
+  }
+
+  @media (min-width: ${breakpoints.md}) {
     padding: 2rem;
   }
 `;

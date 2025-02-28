@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
 
 import {
   useForm,
@@ -130,13 +129,13 @@ export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn =>
 
   const handleAddRecipient = () => {
     append(recipientInfoToAppend);
-    setSelectedIndex((index) => index + 1);
+    setSelectedIndex(index => index + 1);
   };
 
   const handleRemoveRecipient = (index: number) => {
     if (selectedIndex < 0) return;
 
-    setSelectedIndex((index) => index - 1);
+    setSelectedIndex(index => index - 1);
     remove(index);
   };
 

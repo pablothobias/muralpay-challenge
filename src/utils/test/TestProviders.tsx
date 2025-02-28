@@ -1,10 +1,9 @@
-import { type ReactNode } from 'react';
-
 import { Global } from '@emotion/react';
 
 import { ThemeProvider } from '@emotion/react';
 
 import { render } from '@testing-library/react';
+import { type ReactNode } from 'react';
 
 import { ErrorBoundary } from '@/shared-ui/molecules/ErrorBoundary';
 import { globalStyles } from '@/styles';
@@ -12,7 +11,7 @@ import { darkTheme, lightTheme, ThemeType } from '@/styles/theme';
 import { LoadingProvider } from '@/utils/context/LoadingContext';
 import { ToastProvider } from '@/utils/context/ToastContext';
 
-import { createMockStore } from './helpers';
+import { createMockStore } from './TestHelpers';
 
 export const mockUseThemeStore = createMockStore(() => ({
   theme: lightTheme,
