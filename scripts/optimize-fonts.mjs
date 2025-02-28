@@ -22,10 +22,10 @@ const downloadFont = () => {
   };
 
   https
-    .get(url, options, (res) => {
+    .get(url, options, res => {
       let css = '';
 
-      res.on('data', (chunk) => {
+      res.on('data', chunk => {
         css += chunk;
       });
 
@@ -47,7 +47,7 @@ const downloadFont = () => {
         console.log('Font URL found:', woff2Url);
 
         https
-          .get(woff2Url, options, (res) => {
+          .get(woff2Url, options, res => {
             if (res.statusCode !== 200) {
               console.error(`❌ Failed to download font: HTTP ${res.statusCode}`);
               return;
@@ -58,7 +58,7 @@ const downloadFont = () => {
 
             res.pipe(writeStream);
 
-            writeStream.on('error', (error) => {
+            writeStream.on('error', error => {
               console.error('❌ Error writing font file:', error);
               if (fs.existsSync(dest)) {
                 fs.unlinkSync(dest);
@@ -86,12 +86,12 @@ const downloadFont = () => {
               }
             });
           })
-          .on('error', (error) => {
+          .on('error', error => {
             console.error('❌ Error downloading font:', error);
           });
       });
     })
-    .on('error', (error) => {
+    .on('error', error => {
       console.error('❌ Error fetching Google Fonts CSS:', error);
     });
 };

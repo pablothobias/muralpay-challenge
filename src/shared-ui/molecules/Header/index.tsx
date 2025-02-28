@@ -16,6 +16,7 @@ import useTransferStore from '@/store/transfer';
 
 import { useResponsive } from '@/utils/context/ResponsiveContext';
 import { useToggleTheme } from '@/utils/context/ToggleThemeProvider';
+import { useMediaQuery } from '@/utils/hooks/useMediaQuery';
 
 import {
   desktopNavStyles,
@@ -38,14 +39,16 @@ const Header = () => {
   const onLogoutOrganization = useOrganizationStore(state => state.onLogout);
   const [isAuthenticatedValue, setIsAuthenticatedValue] = useState(isAuthenticated);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const { isMobile } = useResponsive();
+  const isMobileView = useMediaQuery('(max-width: 767px)');
+  const showMobileMenu = isMobile || isMobileView;
 
   useEffect(() => {
     setIsAuthenticatedValue(isAuthenticated);
   }, [isAuthenticated]);
 
   const handleLogout = () => {
-    logout();
     logout();
     onLogoutAccount();
     onLogoutTransfer();
@@ -68,7 +71,7 @@ const Header = () => {
     : [];
 
   return (
-    <header css={headerStyles({ theme, isMobile })}>
+    <header css={headerStyles({ theme, isMobile: showMobileMenu })}>
       <div className="logo">
         <Image
           src="/assets/images/logo.webp"
@@ -95,7 +98,7 @@ const Header = () => {
         </Button>
       </nav>
 
-      {isMobile && (
+      {showMobileMenu && (
         <MobileMenu
           isOpen={isMobileMenuOpen}
           onClose={() => setIsMobileMenuOpen(false)}

@@ -1,4 +1,5 @@
 import { useTheme } from '@emotion/react';
+import { UseFormRegister } from 'react-hook-form';
 
 import { type FormData as OrganizationFormData } from '@/features/organization/types';
 import { Button, Card, Select } from '@/shared-ui';
@@ -11,7 +12,7 @@ import { BusinessInfoFields } from './components/BusinessInfoFields';
 import { CommonFields } from './components/CommonFields';
 import { IndividualInfoFields } from './components/IndividualInfoFields';
 import { PhysicalAddressFields } from './components/PhysicalAddressFields';
-import { cardContainerCss, formCss, pageContainer, titleCss } from './styles';
+import { cardContainerCss, formCss, pageContainer, titleCss, warningMessageCss } from './styles';
 
 type OrganizationFormHookResult = ReturnType<typeof useOrganizationForm>;
 
@@ -35,7 +36,15 @@ const RegisterPage = ({ organizationForm, onSubmit, isLoading }: RegisterPagePro
   } = organizationForm;
 
   const hasValidationErrors = Object.keys(errors).length > 0;
-  const shouldDisableSubmit = isLoading || hasValidationErrors;
+  const shouldDisableSubmit = isLoading || hasValidationErrors || isIndividual;
+
+  // Create a wrapper register function that adds the disabled attribute when isIndividual is true
+  const registerField: UseFormRegister<OrganizationFormData> = (name, options = {}) => {
+    return register(name, {
+      ...options,
+      disabled: isIndividual ? true : options.disabled,
+    });
+  };
 
   return (
     <div css={pageContainer}>
@@ -56,20 +65,37 @@ const RegisterPage = ({ organizationForm, onSubmit, isLoading }: RegisterPagePro
             error={touchedFields.organizationType ? errors.organizationType?.message : undefined}
           />
 
+          {isIndividual && (
+            <div css={warningMessageCss(theme)}>
+              Individual organizations are not supported at this time. Please select Business to
+              continue.
+            </div>
+          )}
+
           {organizationType && (
             <>
               {isIndividual ? (
-                <IndividualInfoFields register={register} errors={errors} control={control} />
+                <IndividualInfoFields
+                  register={registerField}
+                  errors={errors}
+                  control={control}
+                  disabled={true}
+                />
               ) : (
-                <BusinessInfoFields register={register} errors={errors} control={control!} />
+                <BusinessInfoFields register={registerField} errors={errors} control={control!} />
               )}
               <CommonFields
-                register={register}
+                register={registerField}
                 errors={errors}
                 organizationType={organizationType}
+                disabled={isIndividual}
               />
-              <PhysicalAddressFields register={register} errors={errors} />
-              {hasValidationErrors && (
+              <PhysicalAddressFields
+                register={registerField}
+                errors={errors}
+                disabled={isIndividual}
+              />
+              {hasValidationErrors && !isIndividual && (
                 <div css={{ color: 'red', marginBottom: '1rem' }}>
                   Please fix the errors before submitting the form.
                 </div>

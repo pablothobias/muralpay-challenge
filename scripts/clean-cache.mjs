@@ -33,7 +33,7 @@ async function cleanCache() {
   console.log('Cache cleaning completed!');
 }
 
-cleanCache().catch((error) => {
+cleanCache().catch(error => {
   console.error('Error cleaning cache:', error);
   process.exit(1);
 });

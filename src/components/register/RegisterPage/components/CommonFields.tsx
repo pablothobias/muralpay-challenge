@@ -6,7 +6,16 @@ import { RECIPIENT_TYPE } from '@/utils/constants';
 
 import { type CommonFormFieldProps } from '../types';
 
-export const CommonFields = ({ register, errors, organizationType }: CommonFormFieldProps) => {
+export interface CommonFieldsProps extends CommonFormFieldProps {
+  disabled?: boolean;
+}
+
+export const CommonFields = ({
+  register,
+  errors,
+  organizationType,
+  disabled = false,
+}: CommonFieldsProps) => {
   const isIndividual = organizationType === RECIPIENT_TYPE.INDIVIDUAL;
 
   const registerCommonField = useCallback(
@@ -28,6 +37,7 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         required
         {...registerCommonField('email')}
         error={isTouchedEmail ? errors.kycDelegatedData?.email?.message : undefined}
+        disabled={disabled}
         data-testid="email-input"
       />
 
@@ -39,6 +49,7 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         required
         {...registerCommonField('taxId')}
         error={isTouchedTaxId ? errors.kycDelegatedData?.taxId?.message : undefined}
+        disabled={disabled}
         data-testid="tax-id-input"
       />
 
@@ -49,6 +60,7 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         required
         {...registerCommonField('formationDate')}
         error={isTouchedFormationDate ? errors.kycDelegatedData?.formationDate?.message : undefined}
+        disabled={disabled}
         data-testid="formation-date-input"
       />
     </>
