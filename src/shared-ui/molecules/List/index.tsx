@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import dynamic from 'next/dynamic';
 import { ReactElement } from 'react';
+
 import { listContainerCss, listItemCss, loadingContainerCss } from './styles';
 import EmptyList from '../EmptyList';
 

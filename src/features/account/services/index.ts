@@ -1,11 +1,14 @@
+import { AxiosError } from 'axios';
+
+import { ZodError } from 'zod';
+
 import apiClient from '@/config/api.config';
 import { API_ENDPOINTS, ERROR_TYPES } from '@/utils/constants';
-import { AxiosError } from 'axios';
-import { ZodError } from 'zod';
+import logError from '@/utils/functions/logError';
+
 import { AccountServiceError, AccountValidationError } from '../errors';
 import { accountResponseArraySchema, accountResponseSchema, accountSchema } from '../schemas';
 import { AccountResponse, AccountResponseArray, AccountSchema } from '../types';
-import logError from '@/utils/functions/logError';
 
 const AccountService = {
   create: async (data: AccountSchema, signal?: AbortSignal): Promise<AccountResponse | null> => {
@@ -41,7 +44,24 @@ const AccountService = {
     }
   },
   handleError: (error: unknown, defaultMessage: string) => {
-    logError(error, 'AccountService.create');
+    // Don't log cancellation errors
+    if (
+      error instanceof Error &&
+      (error.name === 'CanceledError' ||
+        error.name === 'AbortError' ||
+        error.message === 'canceled')
+    ) {
+      throw error; // Just rethrow without transforming
+    }
+
+    // Special handling for Axios cancellation errors
+    if (error instanceof AxiosError && error.message === 'canceled') {
+      const cancelError = new Error('canceled');
+      cancelError.name = 'CanceledError';
+      throw cancelError;
+    }
+
+    logError(error, 'AccountService');
 
     if (error instanceof AxiosError)
       throw new AccountServiceError(

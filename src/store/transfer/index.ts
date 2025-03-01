@@ -1,13 +1,16 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+
+import { mockTransfers } from '@/mocks/store/transfer';
+
 import { TransferState } from './types';
 
 const useTransferStore = create<TransferState>()(
   devtools(
     subscribeWithSelector(
       persist(
-        (set) => ({
-          transfers: undefined,
+        set => ({
+          transfers: mockTransfers,
           loading: false,
           error: undefined,
           setTransfersState: (transfers, loading, error) => set({ transfers, loading, error }),

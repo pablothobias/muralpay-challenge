@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+
 import { ThemeState, ThemeType } from './types';
 
 const getSystemThemePreference = (): ThemeType => {
@@ -11,7 +12,7 @@ const useThemeStore = create<ThemeState>()(
   devtools(
     subscribeWithSelector(
       persist(
-        (set) => ({
+        set => ({
           theme: getSystemThemePreference(),
           setTheme: (theme: ThemeType) => set({ theme }),
           onLogout: () => {
@@ -22,7 +23,7 @@ const useThemeStore = create<ThemeState>()(
         {
           name: 'theme',
           storage: createJSONStorage(() => localStorage),
-          onRehydrateStorage: () => (state) => {
+          onRehydrateStorage: () => state => {
             if (!state?.theme) {
               state?.setTheme(getSystemThemePreference());
             }

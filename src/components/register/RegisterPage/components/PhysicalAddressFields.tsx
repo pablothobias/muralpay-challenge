@@ -1,6 +1,8 @@
-import { Input, Select } from '@/shared-ui';
 import { type UseFormRegister, type FieldErrors } from 'react-hook-form';
+
 import { type FormData } from '@/features/organization/types';
+import { Input, Select } from '@/shared-ui';
+
 import { sectionTitleCss } from '../styles';
 
 const COUNTRY_OPTIONS = [
@@ -12,9 +14,21 @@ const COUNTRY_OPTIONS = [
 type PhysicalAddressFieldsProps = {
   register: UseFormRegister<FormData>;
   errors: FieldErrors<FormData>;
+  disabled?: boolean;
 };
 
-export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressFieldsProps) => {
+export const PhysicalAddressFields = ({
+  register,
+  errors,
+  disabled = false,
+}: PhysicalAddressFieldsProps) => {
+  const isTouchedAddress1 = Boolean(errors.kycDelegatedData?.physicalAddress?.address1);
+  const isTouchedAddress2 = Boolean(errors.kycDelegatedData?.physicalAddress?.address2);
+  const isTouchedCountry = Boolean(errors.kycDelegatedData?.physicalAddress?.country);
+  const isTouchedState = Boolean(errors.kycDelegatedData?.physicalAddress?.state);
+  const isTouchedCity = Boolean(errors.kycDelegatedData?.physicalAddress?.city);
+  const isTouchedZip = Boolean(errors.kycDelegatedData?.physicalAddress?.zip);
+
   return (
     <>
       <h3 css={sectionTitleCss}>Physical Address</h3>
@@ -24,7 +38,12 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         type="text"
         placeholder="123 Main St"
         {...register('kycDelegatedData.physicalAddress.address1')}
-        error={errors.kycDelegatedData?.physicalAddress?.address1?.message}
+        error={
+          isTouchedAddress1
+            ? errors.kycDelegatedData?.physicalAddress?.address1?.message
+            : undefined
+        }
+        disabled={disabled}
       />
 
       <Input
@@ -33,7 +52,12 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         type="text"
         placeholder="Apt 4B"
         {...register('kycDelegatedData.physicalAddress.address2')}
-        error={errors.kycDelegatedData?.physicalAddress?.address2?.message}
+        error={
+          isTouchedAddress2
+            ? errors.kycDelegatedData?.physicalAddress?.address2?.message
+            : undefined
+        }
+        disabled={disabled}
       />
 
       <Select
@@ -42,7 +66,10 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         placeholder="Select a country"
         options={COUNTRY_OPTIONS}
         {...register('kycDelegatedData.physicalAddress.country')}
-        error={errors.kycDelegatedData?.physicalAddress?.country?.message}
+        error={
+          isTouchedCountry ? errors.kycDelegatedData?.physicalAddress?.country?.message : undefined
+        }
+        disabled={disabled}
       />
 
       <Input
@@ -51,7 +78,10 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         type="text"
         placeholder="California"
         {...register('kycDelegatedData.physicalAddress.state')}
-        error={errors.kycDelegatedData?.physicalAddress?.state?.message}
+        error={
+          isTouchedState ? errors.kycDelegatedData?.physicalAddress?.state?.message : undefined
+        }
+        disabled={disabled}
       />
 
       <Input
@@ -60,7 +90,8 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         type="text"
         placeholder="San Francisco"
         {...register('kycDelegatedData.physicalAddress.city')}
-        error={errors.kycDelegatedData?.physicalAddress?.city?.message}
+        error={isTouchedCity ? errors.kycDelegatedData?.physicalAddress?.city?.message : undefined}
+        disabled={disabled}
       />
 
       <Input
@@ -69,7 +100,8 @@ export const PhysicalAddressFields = ({ register, errors }: PhysicalAddressField
         type="text"
         placeholder="94105"
         {...register('kycDelegatedData.physicalAddress.zip')}
-        error={errors.kycDelegatedData?.physicalAddress?.zip?.message}
+        error={isTouchedZip ? errors.kycDelegatedData?.physicalAddress?.zip?.message : undefined}
+        disabled={disabled}
       />
     </>
   );

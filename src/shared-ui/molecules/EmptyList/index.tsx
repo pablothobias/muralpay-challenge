@@ -1,6 +1,8 @@
 import Icon from '@/shared-ui/atoms/Icon';
-import { emptyStateCss } from './styles';
+
 import { type ThemeType } from '@/styles/theme';
+
+import { emptyStateCss } from './styles';
 
 type EmptyListProps = {
   theme: ThemeType;

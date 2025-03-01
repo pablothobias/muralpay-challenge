@@ -1,7 +1,9 @@
-import { ForwardedRef, forwardRef, ReactElement } from 'react';
-import { Control, FieldValues, Path, useController } from 'react-hook-form';
-import { errorTextCss, inputGroupCss, StyledInputMask, StyledCurrencyInput } from './styles';
 import { useTheme } from '@emotion/react';
+import { ForwardedRef, forwardRef, ReactElement } from 'react';
+
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
+
+import { errorTextCss, inputGroupCss, StyledInputMask, StyledCurrencyInput } from './styles';
 
 type MaskInputProps<T extends FieldValues> = {
   type: 'currency' | 'phone';
@@ -11,11 +13,12 @@ type MaskInputProps<T extends FieldValues> = {
   control: Control<T>;
   value?: string;
   error?: string;
+  disabled?: boolean;
 };
 
 const MaskInput = forwardRef(
   <T extends FieldValues>(
-    { type = 'phone', label, name, control, error, ...props }: MaskInputProps<T>,
+    { type = 'phone', label, name, control, error, disabled, ...props }: MaskInputProps<T>,
     ref: ForwardedRef<HTMLInputElement>,
   ) => {
     const { field } = useController({ name, control });
@@ -29,6 +32,7 @@ const MaskInput = forwardRef(
           id={`${name}-id`}
           mask="+99 99999-9999"
           theme={theme}
+          disabled={disabled}
           {...props}
           {...field}
           placeholder="+01123456789"
@@ -46,6 +50,7 @@ const MaskInput = forwardRef(
           defaultValue={0}
           decimalsLimit={2}
           ref={ref}
+          disabled={disabled}
           onValueChange={(_value, _name, values) => field.onChange(values?.float || 0)}
         />,
       ],

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
   BLOCKCHAIN,
   RECIPIENT_TYPE,
@@ -7,7 +9,6 @@ import {
   STATUS_TYPES,
   TRANSFER_RECIPIENT,
 } from '@/utils/constants';
-import { z } from 'zod';
 
 export const transferStatusEnum = z.enum([
   ...(Object.keys(STATUS_TYPES) as [keyof typeof STATUS_TYPES, ...string[]]),
@@ -101,6 +102,21 @@ export const recipientInfoSchema = z.discriminatedUnion('recipientTransferType',
   bankRecipientSchema,
 ]);
 
+export const blockchainDetailsSchema = z.object({
+  walletAddress: z.string().min(1, 'Wallet address is required'),
+  blockchain: blockchainEnum,
+});
+
+export const fiatDetailsSchema = z.object({
+  currencyCode: z.string(), // Accept any currency code string
+  fiatAmount: z.number(),
+  withdrawalRequestStatus: z.string(),
+  transactionFee: z.number().optional(),
+  exchangeFeePercentage: z.number().optional(),
+  exchangeRate: z.number().optional(),
+  feeTotal: z.number().optional(),
+});
+
 export const transferSchema = z.object({
   payoutAccountId: z.string().min(1, 'Payout account is required'),
   memo: z.string().optional(),
@@ -127,11 +143,17 @@ export const transferResponseSchema = z.object({
       currencyCode: transferCurrencyEnum.optional(),
       bankDetails: bankDetailsSchema.optional(),
       walletDetails: walletDetailsSchema.optional(),
+      blockchainDetails: blockchainDetailsSchema.optional(),
+      fiatDetails: fiatDetailsSchema.optional(),
     }),
   ),
 });
 
-export const transferListResponseSchema = z.object({
-  results: z.array(transferResponseSchema),
-  total: z.number(),
-});
+// Support both array and object with results property
+export const transferListResponseSchema = z.union([
+  z.array(transferResponseSchema),
+  z.object({
+    results: z.array(transferResponseSchema),
+    total: z.number(),
+  }),
+]);

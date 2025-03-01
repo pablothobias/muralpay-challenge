@@ -1,7 +1,8 @@
-import useThemeStore from '@/store/theme';
-import { darkTheme, lightTheme, ThemeType } from '@/styles/theme';
 import { ThemeProvider } from '@emotion/react';
 import { createContext, useContext, useEffect, useState } from 'react';
+
+import useThemeStore from '@/store/theme';
+import { darkTheme, lightTheme, ThemeType } from '@/styles/theme';
 
 export const ToggleThemeContext = createContext<{
   toggleTheme: () => void;
@@ -24,8 +25,8 @@ export const ToggleThemeProvider = ({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const unsubscribe = useThemeStore.subscribe(
-      (state) => state.theme,
-      (newTheme) => {
+      state => state.theme,
+      newTheme => {
         if (newTheme === 'dark' && theme !== darkTheme) {
           setTheme(darkTheme);
         } else if (newTheme === 'light' && theme !== lightTheme) {
@@ -40,7 +41,9 @@ export const ToggleThemeProvider = ({ children }: { children: React.ReactNode })
   const toggleTheme = () => {
     const newTheme = theme === lightTheme ? darkTheme : lightTheme;
     setTheme(newTheme);
-    useThemeStore.setState({ theme: newTheme === darkTheme ? 'dark' : 'light' });
+    useThemeStore.setState({
+      theme: newTheme === darkTheme ? 'dark' : 'light',
+    });
   };
 
   return (

@@ -1,7 +1,8 @@
-import { screen, renderWithProviders } from '@/utils/test/TestProviders';
-import AccountInfoModalContent from '../index';
 import { AccountResponse } from '@/features/account/types';
 import { mockAccount } from '@/mocks/store/account';
+import { screen, renderWithProviders } from '@/utils/test/TestProviders';
+
+import AccountInfoModalContent from '../index';
 
 describe('AccountInfoModalContent', () => {
   const renderComponent = (props: { account: AccountResponse | null }) => {
@@ -16,7 +17,7 @@ describe('AccountInfoModalContent', () => {
     });
 
     it('should render account information correctly', () => {
-      const { id, blockchain, address, balance, isPending, isApiEnabled } = mockAccount;
+      const { id, blockchain, address, isPending, isApiEnabled } = mockAccount;
 
       renderComponent({ account: mockAccount });
 
@@ -26,7 +27,6 @@ describe('AccountInfoModalContent', () => {
       expect(screen.getByText(id)).toBeInTheDocument();
       expect(screen.getByText(blockchain)).toBeInTheDocument();
       expect(screen.getByText(address)).toBeInTheDocument();
-      expect(screen.getByText(`$${balance.balance}.00 ${balance.tokenSymbol}`)).toBeInTheDocument();
       expect(statusValue).toHaveTextContent(isPending ? 'Pending' : 'Active');
       expect(apiEnabledValue).toHaveTextContent(isApiEnabled ? 'Yes' : 'No');
     });

@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { matchers } from '@emotion/jest';
 import { createSerializer } from '@emotion/jest';
-import * as emotion from '@emotion/react';
 import { configure } from '@testing-library/react';
 
 jest.setTimeout(10000);
@@ -9,6 +8,17 @@ jest.setTimeout(10000);
 configure({
   asyncUtilTimeout: 5000,
   testIdAttribute: 'data-testid',
+});
+
+beforeEach(() => {
+  document.title = '';
+
+  const metaTags = document.querySelectorAll('meta');
+  metaTags.forEach(tag => {
+    if (tag.parentNode) {
+      tag.parentNode.removeChild(tag);
+    }
+  });
 });
 
 declare global {
@@ -19,7 +29,7 @@ declare global {
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query) => ({
+  value: jest.fn().mockImplementation(query => ({
     matches: false,
     media: query,
     onchange: null,
@@ -50,7 +60,7 @@ const suppressedMessages = [
 const shouldSuppress = (message: unknown) => {
   return (
     typeof message === 'string' &&
-    suppressedMessages.some((suppressed) => message.includes(suppressed))
+    suppressedMessages.some(suppressedMessage => message.includes(suppressedMessage))
   );
 };
 
@@ -71,9 +81,5 @@ afterAll(() => {
   console.warn = originalConsole.warn;
 });
 
-expect.addSnapshotSerializer(
-  createSerializer({
-    ...(emotion as unknown as Parameters<typeof createSerializer>[0]),
-  }),
-);
 expect.extend(matchers);
+expect.addSnapshotSerializer(createSerializer());

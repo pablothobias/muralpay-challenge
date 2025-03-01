@@ -1,15 +1,31 @@
-import { Input } from '@/shared-ui';
-import { type CommonFormFieldProps } from '../types';
 import { useCallback } from 'react';
+
+import { Input } from '@/shared-ui';
+
 import { RECIPIENT_TYPE } from '@/utils/constants';
 
-export const CommonFields = ({ register, errors, organizationType }: CommonFormFieldProps) => {
+import { type CommonFormFieldProps } from '../types';
+
+export interface CommonFieldsProps extends CommonFormFieldProps {
+  disabled?: boolean;
+}
+
+export const CommonFields = ({
+  register,
+  errors,
+  organizationType,
+  disabled = false,
+}: CommonFieldsProps) => {
   const isIndividual = organizationType === RECIPIENT_TYPE.INDIVIDUAL;
 
   const registerCommonField = useCallback(
     (fieldName: 'email' | 'taxId' | 'formationDate') => register(`kycDelegatedData.${fieldName}`),
     [register],
   );
+
+  const isTouchedEmail = Boolean(errors.kycDelegatedData?.email);
+  const isTouchedTaxId = Boolean(errors.kycDelegatedData?.taxId);
+  const isTouchedFormationDate = Boolean(errors.kycDelegatedData?.formationDate);
 
   return (
     <>
@@ -20,7 +36,8 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         placeholder="contact@example.com"
         required
         {...registerCommonField('email')}
-        error={errors.kycDelegatedData?.email?.message}
+        error={isTouchedEmail ? errors.kycDelegatedData?.email?.message : undefined}
+        disabled={disabled}
         data-testid="email-input"
       />
 
@@ -31,7 +48,8 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         placeholder={isIndividual ? 'SSN or Tax ID' : 'EIN or Tax ID'}
         required
         {...registerCommonField('taxId')}
-        error={errors.kycDelegatedData?.taxId?.message}
+        error={isTouchedTaxId ? errors.kycDelegatedData?.taxId?.message : undefined}
+        disabled={disabled}
         data-testid="tax-id-input"
       />
 
@@ -41,7 +59,8 @@ export const CommonFields = ({ register, errors, organizationType }: CommonFormF
         type="date"
         required
         {...registerCommonField('formationDate')}
-        error={errors.kycDelegatedData?.formationDate?.message}
+        error={isTouchedFormationDate ? errors.kycDelegatedData?.formationDate?.message : undefined}
+        disabled={disabled}
         data-testid="formation-date-input"
       />
     </>

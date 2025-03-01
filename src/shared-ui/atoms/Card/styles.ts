@@ -1,6 +1,7 @@
+import { css } from '@emotion/react';
+
 import { ThemeType } from '@/styles/theme';
 import { colors } from '@/styles/variables';
-import { css } from '@emotion/react';
 
 export const cardWrapperCss = (theme: ThemeType) => css`
   background-color: ${theme.colors.foreground};

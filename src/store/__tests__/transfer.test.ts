@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
-import useTransferStore from '../transfer';
+
 import { mockTransfers } from '@/mocks/store/transfer';
+
+import useTransferStore from '../transfer';
 
 describe('Transfer Store', () => {
   beforeEach(() => {
@@ -94,7 +96,7 @@ describe('Transfer Store', () => {
 
       await act(async () => {
         useTransferStore.setState(initialState);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise(resolve => setTimeout(resolve, 0));
       });
 
       expect(result.current.transfers).toEqual(mockTransfers);

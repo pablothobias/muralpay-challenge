@@ -1,5 +1,7 @@
-import { ThemeType } from '@/styles/theme';
 import { css } from '@emotion/react';
+
+import { ThemeType } from '@/styles/theme';
+import { breakpoints } from '@/styles/variables';
 
 export const pageContainer = css`
   display: flex;
@@ -7,7 +9,7 @@ export const pageContainer = css`
   align-items: center;
   padding: 0;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${breakpoints.md}) {
     padding: 2rem;
   }
 `;
@@ -15,9 +17,13 @@ export const pageContainer = css`
 export const cardContainerCss = css`
   width: 100%;
   max-width: 600px;
-  padding: 1rem;
+  padding: 0;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${breakpoints.sm}) {
+    padding: 1rem;
+  }
+
+  @media (min-width: ${breakpoints.md}) {
     padding: 2rem;
   }
 `;
@@ -41,4 +47,14 @@ export const sectionTitleCss = css`
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
   font-weight: 500;
+`;
+
+export const warningMessageCss = (theme: ThemeType) => css`
+  background-color: ${theme.colors.warning}20;
+  color: ${theme.colors.warning};
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin: 16px 0;
+  font-weight: 500;
+  border-left: 4px solid ${theme.colors.warning};
 `;

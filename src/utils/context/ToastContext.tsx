@@ -1,12 +1,13 @@
 import { createContext, PropsWithChildren, useContext } from 'react';
+
 import { useToastMessage } from '@/utils/hooks/useToastMessage';
 
 type ToastContextType = {
-  showSuccess: (key: string, message: string) => void;
-  showError: (key: string, message: string) => void;
-  showInfo: (key: string, message: string) => void;
-  showWarning: (key: string, message: string) => void;
-  clearToast: (key: string) => void;
+  showSuccess: (_key: string, _message: string) => void;
+  showError: (_key: string, _message: string) => void;
+  showInfo: (_key: string, _message: string) => void;
+  showWarning: (_key: string, _message: string) => void;
+  clearToast: (_key: string) => void;
 };
 
 const ToastContext = createContext<ToastContextType | null>(null);

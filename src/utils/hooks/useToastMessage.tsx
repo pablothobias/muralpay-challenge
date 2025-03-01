@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+
 import { toast, ToastOptions } from 'react-toastify';
 
 type ToastType = 'success' | 'error' | 'info' | 'warning';
@@ -44,14 +45,14 @@ export const useToastMessage = (initialStates: ToastStates = {}, options: UseToa
   }, [toastStates, shouldToast, toastConfig]);
 
   const showToast = useCallback((key: string, type: ToastType, message: string) => {
-    setToastStates((prev) => ({
+    setToastStates(prev => ({
       ...prev,
       [key]: { type, message },
     }));
   }, []);
 
   const clearToast = useCallback((key: string) => {
-    setToastStates((prev) => {
+    setToastStates(prev => {
       const newState = { ...prev };
       delete newState[key];
       return newState;

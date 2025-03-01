@@ -1,8 +1,8 @@
-import { TransferListResponseSchema } from '@/features/transfer/types';
+import { TransferResponse } from '@/features/transfer/types';
 
 export type Transfers =
-  | TransferListResponseSchema
-  | { results: TransferListResponseSchema['results'] | []; total: number }
+  | TransferResponse[]
+  | { results: TransferResponse[] | []; total: number }
   | undefined;
 
 export type TransferState = {

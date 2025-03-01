@@ -8,6 +8,8 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@emotion/styled$': '<rootDir>/node_modules/@emotion/styled',
     '^@emotion/react$': '<rootDir>/node_modules/@emotion/react',
+    '^next/font/google$': '<rootDir>/src/__mocks__/next/font/google.ts',
+    '^next/head$': '<rootDir>/src/__mocks__/next/head.tsx',
   },
   testEnvironment: 'jest-environment-jsdom',
   transform: {

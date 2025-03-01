@@ -1,8 +1,10 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
 import { organizationSchema } from '@/features/organization/schemas';
 import { type FormData, type FormDataByType } from '@/features/organization/types';
 import { ORGANIZATION_TYPE } from '@/utils/constants';
+import { useToast } from '@/utils/context/ToastContext';
 
 type OrganizationTypeValue = keyof typeof ORGANIZATION_TYPE;
 
@@ -35,26 +37,40 @@ const getDefaultValues = (type: OrganizationTypeValue): FormDataByType[typeof ty
 };
 
 export const useOrganizationForm = () => {
+  const { showWarning } = useToast();
+
   const {
     register,
     handleSubmit,
     watch,
     control,
-    formState: { errors },
+    formState: { errors, touchedFields },
     reset,
     setValue,
     trigger,
   } = useForm<FormData>({
     resolver: zodResolver(organizationSchema),
-    mode: 'onChange',
+    mode: 'onTouched',
+    defaultValues: { organizationType: '' as OrganizationTypeValue },
   });
 
   const organizationType = watch('organizationType') as OrganizationTypeValue;
   const isIndividual = organizationType === ORGANIZATION_TYPE.INDIVIDUAL;
 
   const onOrganizationTypeChange = async (value: OrganizationTypeValue) => {
-    reset(getDefaultValues(value));
-    await trigger();
+    reset(getDefaultValues(value), {
+      keepDefaultValues: true,
+      keepIsSubmitted: false,
+      keepTouched: false,
+      keepErrors: false,
+    });
+
+    if (value === ORGANIZATION_TYPE.INDIVIDUAL) {
+      showWarning(
+        'individualTypeNotSupported',
+        'Individual organization type is not fully implemented due to API documentation issues. Some features may not work correctly.',
+      );
+    }
   };
 
   return {
@@ -69,5 +85,6 @@ export const useOrganizationForm = () => {
     organizationType,
     isIndividual,
     onOrganizationTypeChange,
+    touchedFields,
   };
 };

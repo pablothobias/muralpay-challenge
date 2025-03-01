@@ -76,7 +76,8 @@ export const colors = {
 };
 
 export const typography = {
-  fontFamily: "'Inter', sans-serif",
+  fontFamily:
+    'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   fontSize: {
     xs: '12px',
     sm: '14px',
@@ -102,11 +103,10 @@ export const spacing = {
 
 export const breakpoints = {
   xs: '320px',
-  sm: '640px',
+  sm: '480px',
   md: '768px',
   lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
+  xl: '1200px',
 };
 
 export const borderRadius = {

@@ -1,16 +1,17 @@
 import { css } from '@emotion/react';
+
 import { ThemeType } from '@/styles/theme';
 
 export const menuButtonCss = css`
-  display: none;
   padding: 8px;
   border-radius: 8px;
   transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  @media (max-width: 767px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  @media (min-width: 768px) {
+    display: none;
   }
 
   &:hover {
@@ -98,6 +99,10 @@ export const menuItemCss = (theme: ThemeType) => css`
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${theme.colors.neutral[100]};
+  }
 
   &:disabled {
     opacity: 0.5;

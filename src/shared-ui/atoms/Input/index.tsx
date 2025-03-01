@@ -1,6 +1,7 @@
-import React, { forwardRef } from 'react';
-import { errorTextCss, inputGroupCss, inputStyles } from './styles';
 import { useTheme } from '@emotion/react';
+import React, { forwardRef } from 'react';
+
+import { errorTextCss, inputGroupCss, inputStyles } from './styles';
 
 type InputProps = {
   type?: 'text' | 'password' | 'email' | 'number' | 'date' | 'time' | 'currency' | 'phone';
@@ -10,10 +11,11 @@ type InputProps = {
   id: string;
   value?: string;
   error?: string;
+  disabled?: boolean;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ type = 'text', label, id, placeholder, value, onChange, error, ...props }, ref) => {
+  ({ type = 'text', label, id, placeholder, value, onChange, error, disabled, ...props }, ref) => {
     const theme = useTheme();
 
     return (
@@ -33,6 +35,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           onChange={onChange}
           step="any"
           ref={ref}
+          disabled={disabled}
           {...props}
         />
         {error && <p css={errorTextCss(theme)}>{error}</p>}

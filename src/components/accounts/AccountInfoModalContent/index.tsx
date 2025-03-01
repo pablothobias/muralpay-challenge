@@ -1,8 +1,11 @@
-import { AccountResponse } from '@/features/account/types';
 import { useTheme } from '@emotion/react';
 import React from 'react';
-import { containerCss, contentCss, infoItemCss } from './styles';
+
+import { AccountResponse } from '@/features/account/types';
+
 import { formatCurrency } from '@/utils/functions/formatCurrency';
+
+import { containerCss, contentCss, infoItemCss } from './styles';
 
 export interface AccountInfoModalContentProps {
   account?: AccountResponse | null;
@@ -28,7 +31,8 @@ const AccountInfoModalContent: React.FC<AccountInfoModalContentProps> = ({ accou
         <div css={infoItemCss(theme)}>
           <strong>Balance:</strong>{' '}
           <span>
-            {formatCurrency(account.balance.balance, account.balance.tokenSymbol)}&nbsp;
+            {formatCurrency(account.balance.balance, account.balance.tokenSymbol)}
+            &nbsp;
             {account.balance.tokenSymbol}&nbsp;
           </span>
         </div>

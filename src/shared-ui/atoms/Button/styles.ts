@@ -1,11 +1,13 @@
+import { css, SerializedStyles } from '@emotion/react';
+
 import { ThemeType } from '@/styles/theme';
 import { colors } from '@/styles/variables';
-import { css } from '@emotion/react';
 
 type ButtonStyleProps = {
   variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'outlined';
   size: 'small' | 'medium' | 'large';
   theme: ThemeType;
+  additionalStyles?: SerializedStyles;
 };
 
 const sizeStyles = (theme: ThemeType) => ({
@@ -128,7 +130,7 @@ const variantStyles = (theme: ThemeType) => ({
   `,
 });
 
-export const buttonStyles = ({ size, variant, theme }: ButtonStyleProps) => {
+export const buttonStyles = ({ size, variant, theme, additionalStyles }: ButtonStyleProps) => {
   return css`
     display: inline-flex;
     align-items: center;
@@ -140,6 +142,7 @@ export const buttonStyles = ({ size, variant, theme }: ButtonStyleProps) => {
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     white-space: nowrap;
+    ${additionalStyles}
 
     ${sizeStyles(theme)[size]}
     ${variantStyles(theme)[variant]}

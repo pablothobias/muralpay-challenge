@@ -1,7 +1,10 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
-import Button from '@/shared-ui/atoms/Button';
-import { IoRefreshOutline } from 'react-icons/io5';
 import Image from 'next/image';
+import { Component, ErrorInfo, ReactNode } from 'react';
+
+import { IoRefreshOutline } from 'react-icons/io5';
+
+import Button from '@/shared-ui/atoms/Button';
+
 import {
   containerCss,
   contentWrapperCss,
@@ -29,7 +32,10 @@ const funnyMessages = [
   { message: 'Looks like our hamsters need a coffee break! ', emoji: '☕' },
   { message: "Houston, we've had a problem... ", emoji: '🚀' },
   { message: "404: Success not found. But we're working on it! ", emoji: '🔍' },
-  { message: 'Our code is playing hide and seek... and winning! ', emoji: '🙈' },
+  {
+    message: 'Our code is playing hide and seek... and winning! ',
+    emoji: '🙈',
+  },
 ];
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -91,23 +97,24 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     return (
-      <div css={(theme) => containerCss(theme)}>
+      <div css={theme => containerCss(theme)}>
         <div css={contentWrapperCss}>
-          <span css={(theme) => illustrationCss(theme)}>
+          <span css={theme => illustrationCss(theme)}>
             <Image
               src="/assets/images/error.gif"
               alt="Error Illustration"
               width={480}
               height={270}
-              unoptimized
-              priority
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
             />
           </span>
-          <h1 css={(theme) => titleCss(theme)}>
+          <h1 css={theme => titleCss(theme)}>
             <span>{message}</span>
             <strong>{emoji}</strong>
           </h1>
-          <p css={(theme) => messageCss(theme)}>
+          <p css={theme => messageCss(theme)}>
             Don&apos;t worry, our team of expert debug ninjas are already on the case! 🥷
             <br />
             In the meantime, you can try refreshing the page or starting over.
@@ -122,7 +129,7 @@ export class ErrorBoundary extends Component<Props, State> {
           </div>
 
           {process.env.NODE_ENV === 'development' && error && (
-            <div css={(theme) => errorDetailsCss(theme)}>
+            <div css={theme => errorDetailsCss(theme)}>
               <pre>{error.toString()}</pre>
               {errorInfo && <pre>{errorInfo.componentStack}</pre>}
             </div>

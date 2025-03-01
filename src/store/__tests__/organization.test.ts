@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
-import useOrganizationStore from '../organization';
+
 import { mockOrganization, mockOrganizations } from '@/mocks/store/organization';
+
+import useOrganizationStore from '../organization';
 
 describe('Organization Store', () => {
   beforeEach(() => {

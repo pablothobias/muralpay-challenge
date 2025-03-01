@@ -1,6 +1,7 @@
+import { z } from 'zod';
+
 import { STATUS_TYPES } from '@/utils/constants';
 import { BLOCKCHAIN, CURRENCY, PAYMENT_RAILS } from '@/utils/constants';
-import { z } from 'zod';
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;

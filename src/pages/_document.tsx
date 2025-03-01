@@ -18,7 +18,7 @@ export default class MyDocument extends Document {
 
     ctx.renderPage = () =>
       originalRenderPage({
-        enhanceApp: (App: React.ComponentType<AppProps>) => (props) => (
+        enhanceApp: (App: React.ComponentType<AppProps>) => props => (
           <CacheProvider value={cache}>
             <App {...props} />
           </CacheProvider>
@@ -27,7 +27,7 @@ export default class MyDocument extends Document {
 
     const initialProps = await Document.getInitialProps(ctx);
     const emotionStyles = extractCriticalToChunks(initialProps.html);
-    const emotionStyleTags = emotionStyles.styles.map((style) => (
+    const emotionStyleTags = emotionStyles.styles.map(style => (
       <style
         key={style.key}
         data-emotion={`${style.key} ${style.ids.join(' ')}`}
@@ -44,7 +44,24 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          {/* Preconnect to critical domains */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+          {/* Preload critical fonts with display swap */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+            rel="stylesheet"
+          />
+
+          {/* Preload logo for faster LCP */}
+          <link rel="preload" href="/assets/images/logo.webp" as="image" type="image/webp" />
+
+          {/* Meta tags for performance */}
+          <meta name="theme-color" content="#ffffff" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        </Head>
         <body>
           <Main />
           <NextScript />

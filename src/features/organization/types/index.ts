@@ -1,6 +1,8 @@
 import { z } from 'zod';
-import { organizationSchema } from '../schemas';
+
 import { RECIPIENT_TYPE } from '@/utils/constants';
+
+import { organizationSchema } from '../schemas';
 
 type BaseKycData = {
   email: string;

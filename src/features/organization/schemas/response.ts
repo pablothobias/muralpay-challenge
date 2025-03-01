@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { organizationTypeSchema } from './shared';
 
 const RESPONSE_VALIDATION = {

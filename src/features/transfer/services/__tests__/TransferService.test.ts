@@ -1,9 +1,13 @@
-import apiClient from '@/config/api.config';
-import TransferService from '../index';
-import { API_ENDPOINTS, CURRENCY, RECIPIENT_TYPE, STATUS_TYPES } from '@/utils/constants';
-import { TransferValidationError } from '../../errors';
 import { AxiosError, AxiosResponse } from 'axios';
+
 import { ZodError } from 'zod';
+
+import apiClient from '@/config/api.config';
+
+import { TransferValidationError } from '@/features/transfer/errors';
+import { API_ENDPOINTS, CURRENCY, RECIPIENT_TYPE, STATUS_TYPES } from '@/utils/constants';
+
+import TransferService from '../index';
 
 jest.mock('@/config/api.config', () => ({
   post: jest.fn(),

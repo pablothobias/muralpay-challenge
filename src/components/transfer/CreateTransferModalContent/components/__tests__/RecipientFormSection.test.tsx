@@ -1,10 +1,13 @@
-import { screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { renderWithProviders, TestProviders } from '@/utils/test/TestProviders';
-import { RecipientFormSection } from '../RecipientFormSection';
-import { useForm, UseFormReturn } from 'react-hook-form';
-import { TransferFormSchema } from '@/features/transfer/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { screen, fireEvent, waitFor, act } from '@testing-library/react';
+
+import { useForm, UseFormReturn } from 'react-hook-form';
+
 import { transferSchema } from '@/features/transfer/schemas';
+import { TransferFormSchema } from '@/features/transfer/types';
+import { renderWithProviders, TestProviders } from '@/utils/test/TestProviders';
+
+import { RecipientFormSection } from '../RecipientFormSection';
 
 describe('RecipientFormSection', () => {
   const renderComponent = () => {

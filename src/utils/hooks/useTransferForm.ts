@@ -1,6 +1,6 @@
-import { TransferSchema } from '@/features/transfer/types';
-import { transferSchema } from '@/features/transfer/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
+
 import {
   useForm,
   useFieldArray,
@@ -8,10 +8,13 @@ import {
   FieldArrayWithId,
   SubmitHandler,
 } from 'react-hook-form';
-import { useLoading } from '@/utils/context/LoadingContext';
-import { useEffect, useState } from 'react';
-import { useTransferActions } from '@/store/transfer/hooks';
+
+import { transferSchema } from '@/features/transfer/schemas';
+import { TransferSchema } from '@/features/transfer/types';
+
 import { useAccountActions } from '@/store/account/hooks';
+import { useTransferActions } from '@/store/transfer/hooks';
+import { useLoading } from '@/utils/context/LoadingContext';
 import { useToast } from '@/utils/context/ToastContext';
 
 type RecipientInfo = TransferSchema['recipientsInfo'][number];
@@ -126,13 +129,13 @@ export const useTransferForm = (onSuccess: () => void): UseTransferFormReturn =>
 
   const handleAddRecipient = () => {
     append(recipientInfoToAppend);
-    setSelectedIndex((index) => index + 1);
+    setSelectedIndex(index => index + 1);
   };
 
   const handleRemoveRecipient = (index: number) => {
     if (selectedIndex < 0) return;
 
-    setSelectedIndex((index) => index - 1);
+    setSelectedIndex(index => index - 1);
     remove(index);
   };
 

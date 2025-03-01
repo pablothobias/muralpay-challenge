@@ -1,4 +1,5 @@
 import { createContext, useContext, type PropsWithChildren } from 'react';
+
 import { useBreakpoint, type BreakpointState } from '../hooks/useBreakpoint';
 
 const ResponsiveContext = createContext<BreakpointState | null>(null);

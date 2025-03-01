@@ -1,12 +1,16 @@
 import { useTheme } from '@emotion/react';
-import { Button, Icon, Input, Select } from '@/shared-ui';
-import { RecipientFormSection } from './components/RecipientFormSection';
-import { containerCss, ctaContainerCss, formTitleCss } from './styles';
-import { useTransferForm } from '../../../utils/hooks/useTransferForm';
+
 import { AccountResponse } from '@/features/account/types';
-import useAccountStore from '@/store/account';
-import { formGroupCss } from './components/styles';
 import { TransferSchema } from '@/features/transfer/types';
+import { Button, Icon, Input, Select } from '@/shared-ui';
+
+import useAccountStore from '@/store/account';
+import { useBreakpoint } from '@/utils/hooks/useBreakpoint';
+import { useTransferForm } from '@/utils/hooks/useTransferForm';
+
+import { RecipientFormSection } from './components/RecipientFormSection';
+import { formGroupCss } from './components/styles';
+import { commonTransferButtonCss, containerCss, ctaContainerCss, formTitleCss } from './styles';
 
 type CreateTransferModalContentProps = {
   setModalOpen: (bool: boolean) => void;
@@ -15,6 +19,8 @@ type CreateTransferModalContentProps = {
 const CreateTransferModalContent = ({ setModalOpen }: CreateTransferModalContentProps) => {
   const theme = useTheme();
   const { accounts } = useAccountStore();
+
+  const { isDesktop, isTablet } = useBreakpoint();
 
   const {
     register,
@@ -74,28 +80,45 @@ const CreateTransferModalContent = ({ setModalOpen }: CreateTransferModalContent
           />
         ))}
 
-        <div css={ctaContainerCss}>
-          <Button type="button" variant="primary" onClick={handleAddRecipient} disabled={isLoading}>
+        <div css={ctaContainerCss(isDesktop, isTablet)}>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={handleAddRecipient}
+            disabled={isLoading}
+            additionalStyles={commonTransferButtonCss}
+          >
             <Icon name="plus" color={theme.colors.primary} size={20} />
             Add Recipient
           </Button>
-          {selectedIndex >= 0 && (
-            <Button
-              type="button"
-              variant="danger"
-              onClick={() => handleRemoveRecipient(selectedIndex)}
-            >
-              <Icon name="trash" color={theme.colors.error} size={20} />
-              Remove last recipient
-            </Button>
-          )}
-          <Button type="submit" variant="success" disabled={isLoading || selectedIndex < 0}>
+
+          <Button
+            type="button"
+            variant="danger"
+            onClick={() => handleRemoveRecipient(selectedIndex)}
+            disabled={selectedIndex <= 0}
+            additionalStyles={commonTransferButtonCss}
+          >
+            <Icon name="trash" color={theme.colors.error} size={20} />
+            Remove Recipient
+          </Button>
+          <Button
+            type="submit"
+            variant="success"
+            disabled={isLoading || selectedIndex < 0}
+            additionalStyles={commonTransferButtonCss}
+          >
             <Icon name="send" color={theme.colors.success} size={20} />
             Send Transfer
           </Button>
-          <Button type="button" variant="warning" onClick={() => setModalOpen(false)}>
+          <Button
+            type="button"
+            variant="warning"
+            onClick={() => setModalOpen(false)}
+            additionalStyles={commonTransferButtonCss}
+          >
             <Icon name="close" color={theme.colors.warning} size={20} />
-            Cancel
+            Cancel Transfer
           </Button>
         </div>
       </form>

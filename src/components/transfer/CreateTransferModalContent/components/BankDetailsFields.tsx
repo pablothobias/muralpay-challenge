@@ -1,10 +1,12 @@
+import { useTheme } from '@emotion/react';
+import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
+
+import { TransferFormSchema, BankRecipient } from '@/features/transfer/types';
 import { Input, Select } from '@/shared-ui';
 import { DOC_TYPE, TRANSFER_RECIPIENT } from '@/utils/constants';
-import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
-import { TransferFormSchema, BankRecipient } from '@/features/transfer/types';
-import { formGroupCss } from './styles';
+
 import { PhysicalAddressFields } from './PhysicalAddressFields';
-import { useTheme } from '@emotion/react';
+import { formGroupCss } from './styles';
 
 type FormFieldProps = {
   register: UseFormRegister<TransferFormSchema>;
@@ -142,7 +144,7 @@ const BankDetailsFields = ({ register, index, errors }: FormFieldProps) => {
 
   return (
     <>
-      {fields.map((field) => renderField(field))}
+      {fields.map(field => renderField(field))}
       <span css={formGroupCss(theme)}>
         <PhysicalAddressFields register={register} index={index} errors={errors} />
       </span>

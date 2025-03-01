@@ -1,10 +1,12 @@
 import TransferService from '@/features/transfer/services';
 import { TransferSchema } from '@/features/transfer/types';
-import useTransferStore from '.';
+
 import { Transfers } from './types';
 
+import useTransferStore from '.';
+
 export const useTransferActions = () => {
-  const setTransfersState = useTransferStore((state) => state.setTransfersState);
+  const setTransfersState = useTransferStore(state => state.setTransfersState);
 
   const refreshTransfers = async (signal?: AbortSignal) => {
     if (signal?.aborted) return;

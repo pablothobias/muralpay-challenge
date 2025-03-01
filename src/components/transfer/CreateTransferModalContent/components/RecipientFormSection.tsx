@@ -1,10 +1,12 @@
+import { useTheme } from '@emotion/react';
 import { Control, FieldErrors, UseFormRegister, useWatch } from 'react-hook-form';
+
 import { TransferFormSchema } from '@/features/transfer/types';
+
 import BankDetailsFields from './BankDetailsFields';
 import { recipientsInfoContainerCss, formTitleCss } from '../styles';
-import WalletDetailsFields from './WalletDetailsFields';
 import RecipientInfoFields from './RecipientInfoFields';
-import { useTheme } from '@emotion/react';
+import WalletDetailsFields from './WalletDetailsFields';
 
 type RecipientFormSectionProps = {
   register: UseFormRegister<TransferFormSchema>;

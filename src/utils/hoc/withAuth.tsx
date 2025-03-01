@@ -1,7 +1,8 @@
-import useAuthStore from '@/store/auth';
+import { type NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { type NextPage } from 'next';
+
+import useAuthStore from '@/store/auth';
 
 type UseAuthRedirectOptions = {
   isPrivate?: boolean;
@@ -12,7 +13,7 @@ const withAuth = (
   { isPrivate = false, redirectTo = '/register' }: UseAuthRedirectOptions,
 ) => {
   const AuthenticatedComponent = () => {
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
     const router = useRouter();
 
     useEffect(() => {

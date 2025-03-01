@@ -11,17 +11,20 @@ export const ERROR_TYPES = {
   VALIDATION: 'validation',
   API_ERROR: 'api_error',
   UNKNOWN_ERROR: 'unknown_error',
-  NOT_FOUND: 'not_found',
+  AUTH_ERROR: 'auth_error',
+  NOT_FOUND_ERROR: 'not_found_error',
+  SERVER_ERROR: 'server_error',
 };
 
 export const CURRENCY = {
   COP: 'COP',
   USD: 'USD',
-  USDC: 'USD',
+  USDC: 'USDC',
   EUR: 'EUR',
   XBT: 'XBT',
   GBP: 'GBP',
   BTC: 'BTC',
+  BRL: 'BRL',
 };
 
 export const DOC_TYPE = {
@@ -34,6 +37,7 @@ export const currencyFlags: Record<string, string> = {
   COP: '🇨🇴',
   USD: '🇺🇸',
   EUR: '🇪🇺',
+  BRL: '🇧🇷',
 };
 
 export const RECIPIENT_TRANSFER_TYPE = {
@@ -65,10 +69,12 @@ export const PAYMENT_RAILS = {
 export const mapToCurrencyLocaleValues: Record<string, string> = {
   USD: 'en-US',
   USDC: 'en-US',
-  EUR: 'pt_PT',
+  EUR: 'pt-PT',
   XBT: 'en-US',
   BTC: 'en-US',
   GBP: 'en-GB',
+  COP: 'es-CO',
+  BRL: 'pt-BR',
 };
 
 export enum STATUS_TYPES {
